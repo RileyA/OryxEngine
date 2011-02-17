@@ -1,0 +1,6 @@
+env = Environment(CPPDEFINES=['ORYX_BUILD_DLL','LINUX']);
+env.SharedLibrary('OryxEngine',['OryxColour.cpp','OryxEngine.cpp','OryxGameState.cpp',
+	'OryxTimeManager.cpp','OryxVector2.cpp','OryxVector3.cpp','Oryxdllmain.cpp',
+	'OryxStringUtils.cpp','OryxLogger.cpp','OryxBucket.cpp','OryxEventHandler.cpp',
+	'OryxObject.cpp','OryxSignal.cpp','OryxSlot.cpp','OryxBox.cpp','OryxRay.cpp',
+	'OryxIntersect.cpp','OryxMatrix4.cpp','OryxMatrix3.cpp','OryxQuaternion.cpp'])

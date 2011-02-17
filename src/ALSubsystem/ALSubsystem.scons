@@ -1,0 +1,2 @@
+env = Environment();
+env.SharedLibrary('ALSubsystem',['ALdllmain.cpp','ALSubsystem.cpp','ActiveSound.cpp','BufferedSound.cpp','OggStream.cpp','SoundPtr.cpp'],CPPPATH=['../src'],LIBS=['openal','alut','ogg','vorbis','vorbisenc','vorbisfile','OryxEngine'],LIBPATH='../bin')

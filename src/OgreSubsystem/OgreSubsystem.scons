@@ -1,0 +1,2 @@
+env = Environment();
+env.SharedLibrary('OgreSubsystem',['Camera.cpp','Gorilla.cpp','GUI.cpp','GUIElement.cpp','GUIEmpty.cpp','GUIRectangle.cpp','GUIScreen.cpp','GUIButton.cpp','GUIStaticText.cpp','GUIText.cpp','Light.cpp','Mesh.cpp','OgreConversions.cpp','Ogredllmain.cpp','OgreSubsystem.cpp','ParticleSystem.cpp','SceneNode.cpp','Decal.cpp'],CPPPATH=['../src','/usr/include/OGRE'],LIBS=['OgreMain','OryxEngine'],LIBPATH=['../bin'])

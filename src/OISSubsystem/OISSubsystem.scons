@@ -1,0 +1,2 @@
+env = Environment(CPPDEFINES=['BUILD_OIS_DLL','LINUX']);
+env.SharedLibrary('OISSubsystem',['OISdllmain.cpp','OISSubsystem.cpp','OISListener.cpp'],CPPPATH=['../src','/usr/include/OIS'],LIBS=['OIS','OryxEngine'],LIBPATH=['../bin'])
