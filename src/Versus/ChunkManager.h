@@ -42,13 +42,14 @@ namespace Oryx
 		void generate(Vector3 pos);
 		void killBlocks(Vector3 p,float radius);
 
-		Chunk* getChunk(int x,int y,int z);
-		Chunk* createChunk(int x,int y,int z);
+		Chunk* getChunk(ChunkCoords c);
+		Chunk* createChunk(ChunkCoords c);
 
 	private:
 
-		std::map<int,std::map<int,std::map<int,Chunk*> > > mChunks;
+		std::map<ChunkCoords,Chunk*> mChunks;
 		int radius;
+		ChunkCoords mLast;
 
 	};
 }

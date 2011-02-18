@@ -24,7 +24,7 @@
 namespace Oryx
 {
 	ChunkManager::ChunkManager(Vector3 position)
-		:radius(2)
+		:radius(2),mLast(10,10,10)
 	{
 		generate(position);
 	}
@@ -32,20 +32,10 @@ namespace Oryx
 
 	ChunkManager::~ChunkManager()
 	{
-		std::map<int,std::map<int,std::map<int,Chunk*> > >::iterator it = mChunks.begin();
+		std::map<ChunkCoords,Chunk*>::iterator it = mChunks.begin();
 		while(it!=mChunks.end())
 		{
-			std::map<int,std::map<int,Chunk*> >::iterator ite = it->second.begin();
-			while(ite!=it->second.end())
-			{
-				std::map<int,Chunk*>::iterator iter = ite->second.begin();
-				while(iter!=ite->second.end())
-				{
-					delete iter->second;
-					++iter;
-				}
-				++ite;
-			}
+			delete it->second;
 			++it;
 		}
 	}
@@ -54,29 +44,21 @@ namespace Oryx
 	void ChunkManager::update(Real delta)
 	{
 		std::map<Chunk*,bool> updaters;
-		std::map<int,std::map<int,std::map<int,Chunk*> > >::iterator it = mChunks.begin();
+
+		std::map<ChunkCoords,Chunk*>::iterator it = mChunks.begin();
 		while(it!=mChunks.end())
 		{
-			std::map<int,std::map<int,Chunk*> >::iterator ite = it->second.begin();
-			while(ite!=it->second.end())
+			it->second->update(delta);
+
+			if(it->second->needsUpdate())
 			{
-				std::map<int,Chunk*>::iterator iter = ite->second.begin();
-				while(iter!=ite->second.end())
+				updaters[it->second] = true;
+				for(int i=0;i<6;++i)
 				{
-					iter->second->update(delta);
-					if(!iter->second->dirtyBlocks.empty())
-					{
-						updaters[iter->second] = true;
-						for(int i=0;i<6;++i)
-						{
-							if(iter->second->neighbors[i]&&updaters.find(iter->second->neighbors[i])
-								==updaters.end())
-								updaters[iter->second->neighbors[i]] = false;
-						}
-					}
-					++iter;
+					if(it->second->neighbors[i]&&updaters.find(
+						it->second->neighbors[i])==updaters.end())
+						updaters[it->second->neighbors[i]] = false;
 				}
-				++ite;
 			}
 			++it;
 		}
@@ -130,19 +112,21 @@ namespace Oryx
 	
 	void ChunkManager::generate(Vector3 position)
 	{
-		// get position as a grid spot
 		int i = (position.x+8)/16;
-		int j = (position.y+8)/16;
+		//int j = (position.y+8)/16;
 		int k = (position.z+8)/16;
-		
-		int _j = 0;
-		//int _k = k;
-		for(int _i = -radius+i; _i <= radius+i; ++_i)
-			for(int _k = -radius+k; _k <= radius+k; ++_k)
-		{
-			if(!getChunk(_i,_j,_k))
-				createChunk(_i,_j,_k);
+
+		if(mLast.x!=i||mLast.z!=k)
+		{			
+			ChunkCoords c = (i-radius,0,k-radius);
+
+			for(c.x = i-radius; c.x<=i+radius; ++c.x)
+			for(c.z = k-radius; c.z<=k+radius; ++c.z)
+			{
+				createChunk(c);
+			}
 		}
+		mLast = ChunkCoords(i,0,k);
 	}
 	//-----------------------------------------------------------------------
 	
@@ -152,34 +136,28 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	Chunk* ChunkManager::getChunk(int x,int y,int z)
+	Chunk* ChunkManager::getChunk(ChunkCoords c)
 	{
-		if(mChunks.find(x) != mChunks.end() && mChunks[x].find(y) != mChunks[x].end()
-			&& mChunks[x][y].find(z) != mChunks[x][y].end())
-			return mChunks[x][y][z];
+		if(mChunks.find(c)!=mChunks.end())
+			return mChunks[c];
 		return 0;
 	}
 	//-----------------------------------------------------------------------
 	
-	Chunk* ChunkManager::createChunk(int x,int y,int z)
+	Chunk* ChunkManager::createChunk(ChunkCoords c)
 	{
-		if(getChunk(x,y,z))
+		if(getChunk(c))
 			return 0;
 
-		mChunks[x][y][z] = new Chunk(Vector3(x*16-8,y*16-8,z*16-8));
-		
-		// set neighbors
-		mChunks[x][y][z]->neighbors[1] = getChunk(x+1,y,z);
-		mChunks[x][y][z]->neighbors[0] = getChunk(x-1,y,z);
-		mChunks[x][y][z]->neighbors[3] = getChunk(x,y+1,z);
-		mChunks[x][y][z]->neighbors[2] = getChunk(x,y-1,z);
-		mChunks[x][y][z]->neighbors[5] = getChunk(x,y,z+1);
-		mChunks[x][y][z]->neighbors[4] = getChunk(x,y,z-1);
 
-		mChunks[x][y][z]->build();
-		mChunks[x][y][z]->rebuildPhysics();
-		mChunks[x][y][z]->notifyNeighbors();
+		Chunk* ch = new Chunk(Vector3(c.x*16-8,c.y*16-8,c.z*16-8),this);
 
-		return mChunks[x][y][z];
+		for(int i=0;i<6;++i)
+			ch->neighbors[i] = getChunk(c<<i);
+
+		ch->markDirty();
+		ch->notifyNeighbors();
+		mChunks[c] = ch;
+		return ch;
 	}
 }

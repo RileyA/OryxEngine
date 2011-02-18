@@ -49,8 +49,8 @@ material MeinKraft
 
 			texture_unit
 			{
-				filtering anisotropic
-				max_anisotropy 16
+				//filtering anisotropic
+				//max_anisotropy 16
 				texture debugGrid.png
 				tex_address_mode wrap
 			}
