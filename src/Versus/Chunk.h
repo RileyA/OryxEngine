@@ -34,56 +34,78 @@ namespace Oryx
 {
 	class ChunkManager;
 
+	/** A 16x16x16 Chunk of voxels, represented as cubes (a.k.a. Minecraft-style rendering) */
 	class Chunk
 	{
 	public:
 
-		Chunk(Vector3 position,ChunkManager* parent);
+		/** Constructor
+		 *		@remarks There should be no need to manually construct Chunks if
+		 *			you're using a ChunkManager.
+		 *		@param position The position of this chunk
+		 *		@param parent The ChunkManager this Chunk belongs to */
+		Chunk(Vector3 position,ChunkManager* parent = 0);
+
+		/** Destructor, cleans up physics and mesh data */
 		virtual ~Chunk();
 
+		/** Updates this Chunk
+		 *		@param delta The time passed since the last frame (in seconds) */
 		void update(Real delta);
 
+		/** Rebuilds the graphical mesh of this object
+		 *		@param physics Whether or not to update the physics 
+		 *			representation as well*/
 		void build(bool physics = false);
 
-		//void rebuild();
-
-		/** Destroys all blocks in a given radius */
+		/** Destroys all blocks in a given radius (useful for explosions, etc)
+		 *		@param p The origin position 
+		 *		@param radius The radius in which to destroy blocks */
 		void killBlocks(Vector3 p,float radius);
 
-		/** Destroys a block based on raycast data */
+		/** Destroys a block based on raycast data
+		 *		@remarks Since you'll often wind up with a pos/normal pair from
+		 *			a raycast, but no idea which block it is, this simplifies things
+		 *		@param p The position of the raycast hit 
+		 *		@param n The surface normal at the impact point */
 		void killBlock(Vector3 p,Vector3 n);
 
-		/** Adds a block based on raycast data */
+		/** Adds a block based on raycast data 
+		 *		@remarks Since you'll often wind up with a pos/normal pair from
+		 *			a raycast, but no idea which block it is, this simplifies things
+		 *		@param p The position of the raycast hit 
+		 *		@param n The surface normal at the impact point */
 		void addBlock(Vector3 p,Vector3 n,byte tp=1);
 
-		/** Does a full physics rebuild */
+		/** Does a full physics rebuild 
+		 *		@remarks This should get called appropriately by build(), but you
+		 *			can force a manual rebuild if you so please. */
 		void rebuildPhysics();
 
+		/** Gives this Chunk's neighbors a pointer to this Chunk
+		 *		@remarks This should only need to be called by the ChunkManager
+		 *			on creation of chunks, but there may be some need to do so
+		 *			manually (alternate Chunkmanager implementation, etc...) */
 		void notifyNeighbors();
 
+		/** Calculates lighting local to this chunk */
 		void localLighting();
+
+		/** Calculates light that "bleeds over" from neighboring chunks */
 		void secondaryLighting();
+
+		/** memsets all the lighting values to zero (used when recalculating lighting) */
 		void clearLighting();
 
-		byte getBlock(Chunk* c, int x,int y,int z);
-		void setBlock(Chunk* c, int x,int y,int z,byte type);
+		//byte getBlock(Chunk* c, int x,int y,int z);
+		//void setBlock(Chunk* c, int x,int y,int z,byte type);
 
-		void getLighting(ChunkCoords c,int light);
-		
-		static Vector3 getBlockFaceNormal(int bn)
-		{
-			Vector3 out = Vector3::ZERO;
-			out[bn/2] = ((bn & 1) == 0) ? 1 : -1;
-			return out;
-		}
-
-		static ChunkCoords getChunkCoords(const ChunkCoords& c,int bn)
-		{
-			ChunkCoords out = c;
-			out[bn/2] += ((bn & 1) == 0) ? -1 : 1;
-			return out;
-		}
-
+		/** Static helper for checking if a set of coords is in bounds of a chunk.
+		 *		@remarks This may need to be called multiple times to truly 'validate'
+		 *			the coords.
+		 *		@param coords The coordinates to validate 
+		 *		@return An integer index representing the direction the coords
+		 *			were move in, or -1 if the coords are valid */
 		static int validateCoords(ChunkCoords& coords)
 		{
 			for(int i=0;i<3;++i)
@@ -102,6 +124,11 @@ namespace Oryx
 			return -1;
 		}
 
+		/** Takes a pointer to a pointer to a Chunk and a set of coords
+		 *		and corrects the pointer to point at the appropriate chunk
+		 *		based on those coords.
+		 *		@param c A pointer to a pointer to a chunk 
+		 *		@param coords Reference to the coordinates*/
 		static void correctNeighbor(Chunk** c, ChunkCoords& coords)
 		{
 			int n = 0;
@@ -113,6 +140,10 @@ namespace Oryx
 			}
 		}
 		
+		/** Sets a given block to a given state
+		 *		@param c The Chunk to start in
+		 *		@param coords The coordinates to use 
+		 *		@param type The type to make this block (0 is nothing) */
 		static void setBlock(Chunk* c, ChunkCoords coords, byte type)
 		{
 			correctNeighbor(&c,coords);
@@ -123,18 +154,27 @@ namespace Oryx
 			}
 		}
 		
+		/** Gets the state of a block, given a chunk pointer and coordinates */
 		static byte getBlock(Chunk* c, ChunkCoords coords)
 		{
 			correctNeighbor(&c,coords);
 			return c ? c->blocked[coords.x][coords.y][coords.z] : 0;
 		}
 			
+		/** Gets the lighting value of a set block
+		 *		@param Chunk c The Chunk of origin
+		 *		@param coords The coordinates to look at */
 		static byte getLight(Chunk* c, ChunkCoords coords)
 		{
 			correctNeighbor(&c,coords);
 			return c ? c->light[coords.x][coords.y][coords.z] : 15;
 		}	
 		
+		/** Sets the light at a given coordinate
+		 *		@param coords The coordinates (MUST be in chunk bounds, 
+		 *			this will segfault otherwise) 
+		 *		@return Whether or not the lighting value was set (this function 
+		 *			only brightens) */
 		bool setLight(const ChunkCoords& coords,byte lit)
 		{
 			if(light[coords.x][coords.y][coords.z]<lit)
@@ -145,55 +185,79 @@ namespace Oryx
 			return false;
 		}
 
+		/** Returns the state of a block using a ChunkCoords object
+		 *		@param c The coords (must be in bounds) */
 		byte getBlockState(const ChunkCoords& c)
 		{
 			return blocked[c.x][c.y][c.z];
 		}
 
+		/** Returns the lighting state of a block using a ChunkCoords object
+		 *		@param c The coords (must be in bounds) */
 		byte getLightState(const ChunkCoords& c) const
 		{
 			return light[c.x][c.y][c.z];
 		}
 
+		/** Gets whether or not the block at this point is solid
+		 *		@remarks At the moment, this doesn't really do anything,
+		 *			however, when transparent blocks are added, this will matter*/
 		bool isSolid(const ChunkCoords& c)
 		{
 			return getBlockState(c);
 		}
 
+		/** Gets whether or not this Chunk needs to be updated
+		 *		@remarks This should only be true if a block was directly
+		 *			added or removed in this chunk or on its border.
+		 *		@return Whether or not this chunk needs to be updates*/
 		bool needsUpdate()
 		{
 			return mDirty;
 		}
 
+		/** Marks this block as needing an update */
 		void markDirty()
 		{
 			mDirty = true;
 		}
 
-		// The graphics object
-		Mesh* mChunk;
 	
 		// The states of the voxels
 		byte blocked[16][16][16];
 		byte light[16][16][16];
-	
-		// Physics objects
 		
 		// Neightboring blocks
 		Chunk* neighbors[6];
 
 
-		bool lit;
-		bool lightingDirty;
-		static const Vector3 mNormals[6];
-		static const Colour mLightValues[16];
+		//bool lit;
+		//bool lightingDirty;
 
 	private:
 
+		/** Recursive lighting function, traverses the chunk from light sources
+		 *		stepping the light down one notch each move 
+		 *		@param c The coordinates to light from 
+		 *		@param light The light value at this point */
+		void getLighting(ChunkCoords c,int light);
+		
+		// The graphics object
+		Mesh* mChunk;
+
+		// The parent ChunkManager, used to get info about block types etc
 		ChunkManager* mParent;
+
+		// does this Chunk need an update?
 		bool mDirty;
+
+		// Pointer to the graphics Subsystem
 		OgreSubsystem* mOgre;
+
+		// This Chunk's poition in world-space
 		Vector3 mPosition;
+
+		// The physics objects (4x4x4 compounds of up to 4x4x4 Box primitives each)
 		PhysicsBlock* mBlocks[4][4][4];
 	};
 }

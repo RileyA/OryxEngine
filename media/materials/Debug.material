@@ -51,7 +51,7 @@ material MeinKraft
 			{
 				//filtering anisotropic
 				//max_anisotropy 16
-				texture debugGrid.png
+				texture daebugGrid.png
 				tex_address_mode wrap
 			}
 		}
