@@ -227,41 +227,38 @@ namespace Oryx
 				for(int i=0;i<16;++i)for(int j=0;j<16;++j)
 				{
 					byte value;
+					ChunkCoords coords;
 					// just pretend you didn't see this... the nice clean version was buggy
 					// and I haven't had time to figure out why yet...
 					switch(p)
 					{
 					case 0:
 						value = neighbors[p]->light[15][i][j];
-						if(value>0)
-						getLighting(ChunkCoords(0,i,j),value-1);
+						coords = ChunkCoords(0,i,j);
 						break;
 					case 1:
 						value = neighbors[p]->light[0][i][j];
-						if(value>0)
-						getLighting(ChunkCoords(15,i,j),value-1);
+						coords = ChunkCoords(15,i,j);
 						break;
 					case 2:
 						value = neighbors[p]->light[i][15][j];
-						if(value>0)
-						getLighting(ChunkCoords(i,0,j),value-1);
+						coords = ChunkCoords(i,0,j);
 						break;
 					case 3:
 						value = neighbors[p]->light[i][0][j];
-						if(value>0)
-						getLighting(ChunkCoords(i,15,j),value-1);
+						coords = ChunkCoords(i,15,j);
 						break;
 					case 4:
 						value = neighbors[p]->light[i][j][15];
-						if(value>0)
-						getLighting(ChunkCoords(i,j,0),value-1);
+						coords = ChunkCoords(i,j,0);
 						break;
 					case 5:
 						value = neighbors[p]->light[i][j][0];
-						if(value>0)
-						getLighting(ChunkCoords(i,j,15),value-1);
+						coords = ChunkCoords(i,j,15);
 						break;
 					};
+					if(value>1)
+						getLighting(coords,value-1);
 				}
 			}
 		}
@@ -303,7 +300,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	void Chunk::getLighting(ChunkCoords c,int light)
+	void Chunk::getLighting(ChunkCoords& c,int light)
 	{
 		if(light>0 && c.inBounds() && !isSolid(c) &&
 			!(light != MAX_LIGHT&&!setLight(c,light)))

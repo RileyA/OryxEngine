@@ -240,7 +240,7 @@ namespace Oryx
 		 *		stepping the light down one notch each move 
 		 *		@param c The coordinates to light from 
 		 *		@param light The light value at this point */
-		void getLighting(ChunkCoords c,int light);
+		void getLighting(ChunkCoords& c,int light);
 		
 		// The graphics object
 		Mesh* mChunk;

@@ -18,8 +18,9 @@
 //---------------------------------------------------------------------------
 
 #include "Oryx.h"
+#include "OryxStringUtils.h"
 #include "ChunkManager.h"
-#include <set>
+#include <stack>
 
 namespace Oryx
 {
@@ -43,7 +44,10 @@ namespace Oryx
 	
 	void ChunkManager::update(Real delta)
 	{
-		std::map<Chunk*,bool> updaters;
+		std::stack<Chunk*> updated;
+		Real start = TimeManager::getPtr()->getTimeDecimal();
+
+		int chunksRebuilt = 0;
 
 		std::map<ChunkCoords,Chunk*>::iterator it = mChunks.begin();
 		while(it!=mChunks.end())
@@ -52,60 +56,37 @@ namespace Oryx
 
 			if(it->second->needsUpdate())
 			{
-				updaters[it->second] = true;
+				updated.push(it->second);
+				it->second->localLighting();
+
 				for(int i=0;i<6;++i)
 				{
-					if(it->second->neighbors[i]&&updaters.find(
-						it->second->neighbors[i])==updaters.end())
-						updaters[it->second->neighbors[i]] = false;
+					// TODO update diagonals as well. optimize?
+					if(it->second->neighbors[i])
+					{
+						updated.push(it->second->neighbors[i]);
+						it->second->neighbors[i]->localLighting();
+						it->second->neighbors[i]->secondaryLighting();
+					}
 				}
+				it->second->secondaryLighting();
 			}
 			++it;
 		}
 
-		float start;
-		if(updaters.size()>0)
+		chunksRebuilt = updated.size();
+
+		while(!updated.empty())
 		{
-			start = TimeManager::getPtr()->getTimeDecimal();
+			updated.top()->build();
+			updated.pop();
 		}
 
-		std::map<Chunk*,bool>::iterator itera = updaters.begin();
-		while(itera!=updaters.end())
+		if(chunksRebuilt>0)
 		{
-			if(itera->second)
-				itera->first->localLighting();
-			++itera;
-		}
-
-		itera = updaters.begin();
-		while(itera!=updaters.end())
-		{
-			if(!itera->second)
-			{
-				itera->first->localLighting();
-				itera->first->secondaryLighting();
-			}
-			++itera;
-		}
-
-		itera = updaters.begin();
-		while(itera!=updaters.end())
-		{
-			if(itera->second)
-				itera->first->secondaryLighting();
-			++itera;
-		}
-
-		itera = updaters.begin();
-		while(itera!=updaters.end())
-		{
-			itera->first->build();
-			++itera;
-		}	
-
-		if(updaters.size()>0)
-		{
-			std::cout<<"Update Took: "<<TimeManager::getPtr()->getTimeDecimal()-start<<"\n";
+			Logger::getPtr()->logMessage("Update Took: "+StringUtils::toString(
+				TimeManager::getPtr()->getTimeDecimal()-start)+" "
+				+StringUtils::toString(chunksRebuilt)+" Chunk Updates");
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -146,7 +127,6 @@ namespace Oryx
 	{
 		if(getChunk(c))
 			return 0;
-
 
 		Chunk* ch = new Chunk(Vector3(c.x*CHUNK_SIZE_X-CHUNK_SIZE_X/2,c.y*CHUNK_SIZE_Y-
 			CHUNK_SIZE_Y/2,c.z*CHUNK_SIZE_Z-CHUNK_SIZE_Z/2),this);
