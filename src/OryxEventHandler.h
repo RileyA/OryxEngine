@@ -44,7 +44,7 @@ namespace Oryx
 		/** Gets whether or not a named Signal exists
 		 *		@param name The name to look for 
 		 *		@return Whether or not the Signal was found*/
-		bool hasSignal(String name);
+		bool hasSignal(String name) const;
 
 		/** Returns a named signal
 		 *		@param name The name to look for
@@ -68,7 +68,7 @@ namespace Oryx
 		/** Gets whether or not a named Slot exists
 		 *		@param name The name to look for
 		 *		@return Whether or not it was found */
-		bool hasSlot(String name);
+		bool hasSlot(String name) const;
 
 		/** Retrieves a named Slot 
 		 *		@param name The name to look for

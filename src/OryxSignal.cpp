@@ -25,9 +25,9 @@
 
 namespace Oryx
 {
-	void Signal::fire(const Message* message)
+	void Signal::fire(const Message* message) const
 	{
-		std::list<Slot*>::iterator it = mListeners.begin();
+		std::list<Slot*>::const_iterator it = mListeners.begin();
 		for(it;it!=mListeners.end();++it)
 		{
 			(*it)->slot(*message);
@@ -35,9 +35,9 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	void Signal::fire(const Message& message)
+	void Signal::fire(const Message& message) const
 	{
-		std::list<Slot*>::iterator it = mListeners.begin();
+		std::list<Slot*>::const_iterator it = mListeners.begin();
 		for(it;it!=mListeners.end();++it)
 		{
 			(*it)->slot(message);

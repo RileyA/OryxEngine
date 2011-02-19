@@ -47,6 +47,7 @@ namespace Oryx
 			it->second->update(delta);	
 		}
 	}
+	//-----------------------------------------------------------------------
 
 	void Bucket::addObject(Object* obj)
 	{
@@ -74,7 +75,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	bool Bucket::isTemporary()
+	bool Bucket::isTemporary() const
 	{
 		return mTemporary;
 	}

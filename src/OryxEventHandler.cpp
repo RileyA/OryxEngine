@@ -35,7 +35,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	bool EventHandler::hasSignal(String name)
+	bool EventHandler::hasSignal(String name) const
 	{
 		return mSignals.find(name)!=mSignals.end();
 	}
@@ -44,7 +44,7 @@ namespace Oryx
 	Signal* EventHandler::getSignal(String name)
 	{
 		if(hasSignal(name))
-			return &mSignals[name];
+			return &(mSignals.find(name)->second);
 		return 0;
 	}
 	//-----------------------------------------------------------------------
@@ -55,7 +55,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	bool EventHandler::hasSlot(String name)
+	bool EventHandler::hasSlot(String name) const
 	{
 		return mSlots.find(name)!=mSlots.end();
 	}
@@ -64,7 +64,7 @@ namespace Oryx
 	Slot* EventHandler::getSlot(String name)
 	{
 		if(hasSlot(name))
-			return &mSlots[name];
+			return &(mSlots.find(name)->second);
 	}
 	//-----------------------------------------------------------------------
 	

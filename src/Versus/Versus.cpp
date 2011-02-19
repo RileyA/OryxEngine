@@ -17,7 +17,7 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
-// This is a the start of the vs game
+// This is my Tigcompo 'Versus' game
 
 #include "Oryx.h"
 #include "OryxStringUtils.h"

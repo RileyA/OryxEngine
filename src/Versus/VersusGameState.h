@@ -36,6 +36,8 @@
 #include "ENetSubsystem/Client.h"
 #include "BulletSubsystem/BulletSubsystem.h"
 
+// uuuuugly playpen code
+
 namespace Oryx
 {
 	class VersusGameState : public GameState

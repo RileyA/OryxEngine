@@ -58,15 +58,15 @@ namespace Oryx
 		/** Gets whether or not a named Object is in this Bucket
 		 *		@param name The name of the object to look for 
 		 *		@return Whether or not it was found */
-		bool hasObject(String name);
+		bool hasObject(String name) const;
 		/** Gets whether  or not an object is in this Bucket, by ID
 		 *		@param id The objects unique integer ID value
 		 *		@return Whether or not the object was found */
-		bool hasObject(OryxID id);
+		bool hasObject(OryxID id) const;
 
 		/** Gets whether or not this bucket will automagically be
 		 *		deleted at the end of the current GameState */
-		bool isTemporary();
+		bool isTemporary() const;
 
 		/** Sets whether or not this Bucket is temporary
 		 *		@param temp Whether or not the objectshould be deleted

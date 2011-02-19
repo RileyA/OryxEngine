@@ -40,11 +40,11 @@ namespace Oryx
 
 		/** Fires this signal (calls all listeners' delegates) with a given message
 		 *		@param message The message to send */
-		void fire(const Message* message);
+		void fire(const Message* message) const;
 
 		/** Fires this signal (calls all listeners' delegates) with a given message
 		 *		@param message The message to send */
-		void fire(const Message& message);
+		void fire(const Message& message) const;
 
 		/** Adds a listener to this Signal
 		 *		@param Slot Pointer to the Slot */

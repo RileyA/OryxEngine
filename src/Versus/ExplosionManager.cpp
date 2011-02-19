@@ -63,8 +63,6 @@ namespace Oryx
 			mReserve[0]->boom();
 			mReserve[0]->node->setPosition(position);
 			mReserve.erase(mReserve.begin());
-		//	mActive.back()->node->setPosition(position);
-		//	mActive.back()->boom();
 		}
 	}
 }
