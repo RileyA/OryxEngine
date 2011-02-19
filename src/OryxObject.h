@@ -25,13 +25,19 @@
 
 namespace Oryx
 {
+	/** A game Object, just about anything that isn't a subsystem or state
+	 *		(e.g. A tree, a soldier, a score handler, etc..) */
 	class Object : public EventHandler
 	{
 	public:
-
+		
+		/** Constructor
+		 *		@param bucket The bucket to place this object in 
+		 *		@param name The name to use */
 		Object(String bucket="Default",String name="AUTONAMEME");
 		virtual ~Object();
 
+		/** Generates a unique ID value */
 		static OryxID generateID()
 		{
 			#ifdef ORYX_REUSE_OBJECT_IDS
@@ -47,13 +53,17 @@ namespace Oryx
 			return msIDCount-1;
 		}
 
+		/** Pure virtual, should update the object
+		 *		@param delta The time since last frame */
 		virtual void update(Real delta) = 0;
 
+		/** Gets the name of this object */
 		String getName()
 		{
 			return mName;
 		}
 
+		/** Gets the ID of this object */
 		OryxID getID();
 
 	private:

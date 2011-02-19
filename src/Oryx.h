@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2010
+//(C) Copyright Riley Adams 2011
 
 //This file is part of Oryx Engine.
 
@@ -53,8 +53,8 @@
     #define ORYX_EXPORT
 #endif
 
-// If you want to reuse object id numbers may be useful for an app that runs a 
-// long time and creates _many_ objects
+// If you want to reuse object id numbers, may be useful for an app that runs a 
+// long time and creates _many_ objects (probably improbable...)
 //#define ORYX_REUSE_OBJECT_IDS
 
 // Version info
@@ -68,7 +68,9 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <deque>
 #include <queue>
+#include <stack>
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -95,5 +97,9 @@ namespace Oryx
 	typedef unsigned long OryxID;// used to uniquely identify game objects
 }
 
+// Some basic stuff that should be accessible from just about anywhere:
+#include "OryxStringUtils.h"
+#include "OryxTimeManager.h"
+#include "OryxLogger.h"
 
 #endif

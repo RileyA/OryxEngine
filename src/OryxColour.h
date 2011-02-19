@@ -24,6 +24,9 @@
 
 namespace Oryx
 {
+	/** A color value (in British spelling, since I was feeling different...
+	 *		this will be corected eventually). Partially based on Ogre3D's
+	 *		ColourValue (Ogre is under the MIT license) */
 	class ORYX_EXPORT Colour
 	{
 	public:
@@ -36,6 +39,12 @@ namespace Oryx
 		static const Colour Black;
         static const Colour White;
 
+		Real r;
+		Real g;
+		Real b;
+		Real a;
+
+		/** COnstructor */
 	    explicit Colour( float red = 1.0f,float green = 1.0f,float blue = 1.0f,float alpha = 1.0f )
 			: r(red), g(green), b(blue), a(alpha)
         {}
@@ -43,6 +52,7 @@ namespace Oryx
 		bool operator==(const Colour& col) const;
 	    bool operator!=(const Colour& col) const;
 
+		/** Clamps this color to [0,1] range in all channels */
 		void saturate()
 		{
 			if(r>1)
@@ -66,6 +76,8 @@ namespace Oryx
 				a=0.f;
 		}
 
+		/** Returns a saturated copy of this Colour
+		 *		@return A saturated copy*/
 		Colour saturateCopy() const
         {
             Colour copy = *this;
@@ -162,25 +174,23 @@ namespace Oryx
 			return *this;
 		}
 
+		/** Returns 8-bit 0-255 value of the R channel */
 		byte getR8()
 		{
 		    return static_cast<byte>(floor(r*255.f));
 		}
 
+		/** Returns 8-bit 0-255 value of the G channel */
         byte getG8()
 		{
 		    return static_cast<byte>(floor(g*255.f));
 		}
 
+		/** Returns 8-bit 0-255 value of the B channel */
         byte getB8()
 		{
 		    return static_cast<byte>(floor(b*255.f));
 		}
-
-		Real r;
-		Real g;
-		Real b;
-		Real a;
 	};
 }
 

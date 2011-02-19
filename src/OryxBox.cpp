@@ -24,7 +24,7 @@
 
 namespace Oryx
 {
-	bool Box::intersects(Ray r)
+	bool Box::intersects(const Ray& r) const
 	{
 		return Intersect::intersects(r,*this);
 	}

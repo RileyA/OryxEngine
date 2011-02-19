@@ -22,11 +22,12 @@
 
 namespace Oryx
 {
+	// borrowed from Ogre3D, which is under the MIT license
 	bool Intersect::intersects(const Ray& ray,const Box& box)
 	{
 		// Put line in box space	
 		Matrix4 mat;
-		mat.makeTransform(box.mCenter,Vector3(1,1,1),box.mOrientation);
+		mat.makeTransform(box.center,Vector3(1,1,1),box.orientation);
 		Matrix4 imat = mat.inverse();
 		Vector3 p1 = imat*ray.origin;
 		Vector3 p2 = imat*(ray.origin+(ray.direction*ray.length));
@@ -37,15 +38,15 @@ namespace Oryx
 
 		// Use Separating Axis Test
 		// Separation vector from box center to line center is LMid, since the line is in box space
-		if ( fabs( mid.x ) > box.mScale.x + lext.x ) return false;
-		if ( fabs( mid.y ) > box.mScale.y + lext.y ) return false;
-		if ( fabs( mid.z ) > box.mScale.z + lext.z ) return false;
+		if ( fabs( mid.x ) > box.scale.x + lext.x ) return false;
+		if ( fabs( mid.y ) > box.scale.y + lext.y ) return false;
+		if ( fabs( mid.z ) > box.scale.z + lext.z ) return false;
 		// Crossproducts of line and each axis
-		if ( fabs( mid.y * l.z - mid.z * l.y)  >  (box.mScale.y * lext.z + box.mScale.z * lext.y) ) 
+		if ( fabs( mid.y * l.z - mid.z * l.y)  >  (box.scale.y * lext.z + box.scale.z * lext.y) ) 
 			return false;
-		if ( fabs( mid.x * l.z - mid.z * l.x)  >  (box.mScale.x * lext.z + box.mScale.z * lext.x) ) 
+		if ( fabs( mid.x * l.z - mid.z * l.x)  >  (box.scale.x * lext.z + box.scale.z * lext.x) ) 
 			return false;
-		if ( fabs( mid.x * l.y - mid.y * l.x)  >  (box.mScale.x * lext.y + box.mScale.y * lext.x) ) 
+		if ( fabs( mid.x * l.y - mid.y * l.x)  >  (box.scale.x * lext.y + box.scale.y * lext.x) ) 
 			return false;
 		// No separating axis, the line intersects
 		return true;

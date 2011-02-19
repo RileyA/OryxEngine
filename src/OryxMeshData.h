@@ -26,8 +26,15 @@
 
 namespace Oryx
 {
+	/** Simple struct representing a 3d mesh (meant for interchange between subsystems etc..) */
 	struct MeshData
 	{
+		/** Add a vertex to this mesh
+		 *		@remarks Since I'm lazy, indices are just an incrementing list...
+		 *		@param v The vertex position 
+		 *		@param n The normal 
+		 *		@param t The texcoords 
+		 *		@param d The vertex color (optional) */
 		void vertex(Vector3 v,Vector3 n,Vector2 t,Vector3 d=Vector3(-1,-1,-1))
 		{
 			vertices.push_back(v.x);
@@ -47,21 +54,25 @@ namespace Oryx
 			indices.push_back(indices.size());// in order for now...
 		}
 
+		/** Returns the array of vertices */
 		float* getVertices() const
 		{
 			return const_cast<float*>(&vertices[0]);
 		}
 
+		/** Returns the array of normals */
 		float* getNormals() const
 		{
 			return const_cast<float*>(&normals[0]);
 		}
 
+		/** Returns the array of texcoords */
 		float* getTexcoords() const
 		{
 			return const_cast<float*>(&texcoords[0]);
 		}
 
+		/** Returns the array of vertex color */
 		float* getDiffuse() const
 		{
 			if(!diffuse.empty())
@@ -69,6 +80,7 @@ namespace Oryx
 			return 0;
 		}
 
+		/** Returns the array of indices */
 		unsigned short* getIndices() const
 		{
 			return const_cast<unsigned short*>(&indices[0]);

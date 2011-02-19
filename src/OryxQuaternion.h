@@ -24,11 +24,14 @@
 #include "OryxVector3.h"
 #include "Oryx.h"
 
+// note: This class borrows a good deal from Ogre3d's quat implementation
+// Ogre is open source under the MIT license
+
 namespace Oryx
 {
 	class Matrix3;
 
-	/** A quaternion, for representing rotations! */
+	/** A quaternion, for representing rotations!*/
 	class Quaternion
 	{
 	public:

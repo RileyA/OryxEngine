@@ -33,7 +33,8 @@ namespace Oryx
 			(*it)->slot(*message);
 		}
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Signal::fire(const Message& message)
 	{
 		std::list<Slot*>::iterator it = mListeners.begin();
@@ -42,14 +43,16 @@ namespace Oryx
 			(*it)->slot(message);
 		}
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Signal::addListener(Slot* slot,bool notify)
 	{
 		mListeners.push_back(slot);
 		if(notify)
 			slot->listenTo(this,false);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Signal::removeListener(Slot* slot,bool notify)
 	{
 		std::list<Slot*>::iterator it = mListeners.begin();
@@ -64,7 +67,8 @@ namespace Oryx
 			}
 		}
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Signal::removeAllListeners()
 	{
 		std::list<Slot*>::iterator it = mListeners.begin();
@@ -74,14 +78,15 @@ namespace Oryx
 		}
 		mListeners.clear();
 	}
-
 	void Signal::operator +=(Slot* slot)
 	{
 		addListener(slot);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Signal::operator -=(Slot* slot)
 	{
 		removeListener(slot);
 	}
+	//-----------------------------------------------------------------------
 }

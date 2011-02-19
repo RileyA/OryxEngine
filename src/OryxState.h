@@ -25,14 +25,22 @@
 
 namespace Oryx
 {
+	/** An abstract State, inherits EventHandler for Signal/Slot goodness */
     class ORYX_EXPORT State : public EventHandler
     {
     public:
 
+		/** Should start the State up */
         virtual void init()=0;
-        virtual void update(Real delta)=0;
+
+		/** Should update the State 
+		 *		@param delta Teh time since the last frame */
+		virtual void update(Real delta)=0;
+
+		/** Should shut the State down */
         virtual void deinit()=0;
 
+		/** Gets whether or not the state is ready to end */
         bool isDone(){return mDone;}
 
     protected:

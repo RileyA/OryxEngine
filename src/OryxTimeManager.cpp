@@ -68,7 +68,7 @@ namespace Oryx
 
     void TimeManager::update()
     {
-        Real currentTime = getTimeDecimal();//static_cast<Real>(clock())/CLOCKS_PER_SEC;
+        Real currentTime = getTimeDecimal();
         mDeltaTime = currentTime-mLastTime;
         mLastTime = currentTime;
     }
@@ -97,6 +97,7 @@ namespace Oryx
 	{
 		gettimeofday(&mStart,0);
 	}
+	//-----------------------------------------------------------------------
 
     TimeManager* TimeManager::getPtr()
     {

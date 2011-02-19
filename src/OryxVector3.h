@@ -26,6 +26,7 @@ namespace Oryx
 {
 	class Quaternion;
 
+	/** A 3d Vector; borrows heavily from Ogre3d's implementation */
 	class ORYX_EXPORT Vector3
 	{
 	public:

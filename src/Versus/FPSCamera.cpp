@@ -28,7 +28,7 @@ namespace Oryx
 	FPSCamera::FPSCamera()
 		:Object()
 	{
-		createSlot("look",fastdelegate::MakeDelegate(this,&FPSCamera::look));
+		createSlot("look",this,&FPSCamera::look);
 		EventHandler::getDestination("OISSubsystem")->getSignal("mouseMoved")
 			->addListener(getSlot("look"));
 

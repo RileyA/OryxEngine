@@ -28,25 +28,26 @@ namespace Oryx
 {
 	class Ray;
 
+	/** A representation of an oriented 3d box */
 	class Box
 	{
 	public:
+		
+		// Properties:
+		Vector3 center;
+		Vector3 scale;
+		Quaternion orientation;
 
-		Box()
-			:mCenter(0,0,0),mScale(0,0,0),mOrientation(0,0,0,1)
+		/** Construct a box with scale, orientation and position */
+		Box(Vector3 _center=Vector3(0,0,0), Vector3 _scale=Vector3(0,0,0),
+			Quaternion _orientation=Quaternion::IDENTITY)
+			:center(_center),scale(_scale),orientation(_orientation)
 		{}
-		Box(Vector3 center, Vector3 scale, Quaternion orientation)
-			:mCenter(center),mScale(scale),mOrientation(orientation)
-		{}
 
-		bool intersects(Ray r);
-
-	//protected:
-
-		Vector3 mCenter;
-		Vector3 mScale;
-		Quaternion mOrientation;
-
+		/** Gets whether or not the passed ray intersects this box
+		 *		@param Ray The ray to check with
+		 *		@return Whether or not an intersection was found */
+		bool intersects(const Ray& r) const;
 	};
 }
 

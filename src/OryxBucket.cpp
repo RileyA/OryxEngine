@@ -72,14 +72,17 @@ namespace Oryx
 			return mObjects[id];
 		return 0;
 	}
+	//-----------------------------------------------------------------------
 
 	bool Bucket::isTemporary()
 	{
 		return mTemporary;
 	}
+	//-----------------------------------------------------------------------
 
 	void Bucket::setTemporary(bool temp)
 	{
 		mTemporary = temp;
 	}
+	//-----------------------------------------------------------------------
 }

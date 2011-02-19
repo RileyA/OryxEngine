@@ -22,6 +22,8 @@
 
 #include "Oryx.h"
 
+// What is this? Java? pssshhhh exceptions.... I'm lazy....
+
 namespace Oryx
 {
 	/** Simple Exception class, derived from std::runtime_error */

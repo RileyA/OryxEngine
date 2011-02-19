@@ -25,28 +25,44 @@
 
 namespace Oryx
 {
+	/** An abstract representation of an Engine Subsystem 
+	 *		The dependency system is really wonky right now... */
     class ORYX_EXPORT EngineSubsystem : public EventHandler
     {
     public:
 
+		/** Constructor */
         EngineSubsystem(String* deps,size_t count)
         {
             for(size_t i=0;i<count;++i)
                 mDependencies[deps[i]] = 0;
         }
 
+		// should initialize the subsystem
         virtual void _init() = 0;
+
+		// should deinit and clean up
         virtual void _deinit() = 0;
+
+		// callback for when a GameState ends
         virtual void _endState() = 0;
+
+		/** Should update this state
+		 *		@param delta The time since the last frame */
         virtual void _update(Real delta) = 0;
+
+		/** Gets the name of this subsystem */
         virtual String getName() = 0;
 
+		// Helper for casting to a derived type
         template<typename T> T* castType(){return dynamic_cast<T*>(this);}
 
+		// Gets the Subsystems this subsystem depends on
         std::map<String,EngineSubsystem*>& getDependencies(){return mDependencies;}
 
     protected:
 
+		// Pointers to dependencies
         std::map<String,EngineSubsystem*> mDependencies;
 
     };

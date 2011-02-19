@@ -23,10 +23,11 @@
 
 namespace Oryx
 {
+	/** Some simple string utilities */
 	class ORYX_EXPORT StringUtils
 	{
 	public:
-
+		
 		static String toString(long long val);
 		static String toString(int val);
 		static String toString(unsigned int val);

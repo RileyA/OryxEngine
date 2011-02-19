@@ -27,6 +27,7 @@
 
 namespace Oryx
 {
+	
     class ORYX_EXPORT TimeManager
     {
     public:
@@ -34,23 +35,23 @@ namespace Oryx
         static TimeManager* getPtr();
 
         /** Set the speed of time
-            @param speed The desired speed of time (1 is normal, 0 is paused) */
+         *		@param speed The desired speed of time (1 is normal, 0 is paused) */
 		void setTimeSpeed(Real speed);
 
 		/** Get the speed of time
-            @returns The current speed of time */
+         *		@returns The current speed of time */
 		Real getTimeSpeed();
 
 		/** Gets the current time in seconds as a Real number
-            @returns The current time (in seconds) */
+         *		@returns The current time (in seconds) */
 		Real getTimeDecimal();
 
 		/** Gets the current time as a long int
-            @returns The current time as returned by clock() */
+         *		@returns The current time as returned by clock() */
 		long getTime();
 
 		/** The global change in time from the last frame time (more sensitive subsystems
-            might need to implement a delta timer of their own). */
+         *		might need to implement a delta timer of their own). */
 		Real getDeltaTime();
 
 		/** Pretty much just updates the delta time. */
@@ -59,9 +60,10 @@ namespace Oryx
 		/** returns a nicely formatted timestamp string hh::mm::ss */
 		String getTimestamp();
 
+		/** Starts up the clock */
 		void start();
 
-    protected:
+    private:
 
         Real mLastTime;
         Real mDeltaTime;
@@ -69,12 +71,11 @@ namespace Oryx
 
 		struct timeval mStart;
 
-    private:
-
         TimeManager()
             :mLastTime(static_cast<Real>(clock())/CLOCKS_PER_SEC),
             mDeltaTime(0),
             mTimeSpeed(1){}
+
 		TimeManager(TimeManager const&);
 		TimeManager& operator=(TimeManager const&);
 		~TimeManager(){}

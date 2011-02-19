@@ -24,15 +24,14 @@
 
 namespace Oryx
 {
+	/** A nearly abstract Message class, used to package a MessageAny<> */
 	class Message
 	{
 	public:
 
 		Message(String _type="")
 			:type(_type)
-		{
-
-		}
+		{}
 
 		virtual ~Message(){}
 

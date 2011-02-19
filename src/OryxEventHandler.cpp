@@ -33,60 +33,70 @@ namespace Oryx
 	{
 		mSignals[name] = Signal();
 	}
-
+	//-----------------------------------------------------------------------
+	
 	bool EventHandler::hasSignal(String name)
 	{
 		return mSignals.find(name)!=mSignals.end();
 	}
-
+	//-----------------------------------------------------------------------
+	
 	Signal* EventHandler::getSignal(String name)
 	{
 		if(hasSignal(name))
 			return &mSignals[name];
 		return 0;
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void EventHandler::createSlot(String name,Delegate del)
 	{
 		mSlots[name] = Slot(del);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	bool EventHandler::hasSlot(String name)
 	{
 		return mSlots.find(name)!=mSlots.end();
 	}
-
+	//-----------------------------------------------------------------------
+	
 	Slot* EventHandler::getSlot(String name)
 	{
 		if(hasSlot(name))
 			return &mSlots[name];
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void EventHandler::sendMessage(const Message& message,OryxID destination)
 	{
 		if(Engine::getPtr()->getObject(destination))
 			Engine::getPtr()->getObject(destination)->recieveMessage(message,this);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void EventHandler::sendMessage(const Message& message,String destination)
 	{
 		if(mMessageDestinations.find(destination)!=mMessageDestinations.end())
 			mMessageDestinations[destination]->recieveMessage(message,this);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void EventHandler::recieveMessage(const Message& message,EventHandler* sender)
 	{
 		// by default don't do anything...
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void EventHandler::registerDestination(String name,EventHandler* handler)
 	{
 		mMessageDestinations[name] = handler;
 	}
-
+	//-----------------------------------------------------------------------
+	
 	EventHandler* EventHandler::getDestination(String name)
 	{
 		return mMessageDestinations[name];
 	}
-
+	//-----------------------------------------------------------------------
 }

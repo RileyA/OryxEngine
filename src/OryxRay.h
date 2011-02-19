@@ -25,33 +25,32 @@
 
 namespace Oryx
 {
+	/** Representation of a 3D Ray */
 	class Ray
 	{
 	public:	
 
-		Ray(){origin=Vector3(0,0,0),direction=origin;length=0.f;}
-		Ray(Vector3 origin_, Vector3 direction_, float length_=0.f)
+		Vector3 origin;
+		Vector3 direction;
+		Real length;		
+		
+		/** Constructor from a point to a direction
+		 *		@param */
+		Ray(Vector3 origin_=Vector3(0,0,0), Vector3 direction_=Vector3(0,0,0), float length_=0.f)
+			:origin(origin_),direction(direction_),length(length_)
 		{
-			origin = origin_;
-			direction = direction_;
-			length = length_;
 			direction.normalize();
 		}
 
 		/** Makes the ray a finite line from p1 to p2
-			\param p1 the first point
-			\param p2 the second point */
+		 *		@param p1 the first point
+		 *		@param p2 the second point */
 		void line(Vector3 p1,Vector3 p2)
 		{
 			origin = p1;
 			direction = p2-p1;
 			length = direction.normalize();
 		}
-
-		Vector3 origin;
-		Vector3 direction;
-		Real length;
-
 	};
 }
 

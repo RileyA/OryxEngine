@@ -25,6 +25,7 @@
 
 namespace Oryx
 {
+	/** A Message holding some arbitrary data */
 	template<class T> class MessageAny : public Message
 	{
 	public:
@@ -35,8 +36,8 @@ namespace Oryx
 		{}
 	};
 
-	template<class T>
-	const MessageAny<T>* message_cast(const Message& msg)
+	/** Convenience function for casting a message into a given type */
+	template<class T> const MessageAny<T>* message_cast(const Message& msg)
 	{
 		if(const MessageAny<T>* message = dynamic_cast<const MessageAny<T>* >(&msg))
 			return message;

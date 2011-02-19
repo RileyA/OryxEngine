@@ -24,6 +24,7 @@
 
 namespace Oryx
 {
+	/** A 2d Vector; borrows heavily from Ogre3d's implementation */
 	class ORYX_EXPORT Vector2
 	{
 	public:

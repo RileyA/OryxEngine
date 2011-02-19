@@ -122,7 +122,7 @@ namespace Oryx
 
 			mStates.front()->deinit();
 			delete mStates.front();
-			mStates.erase(mStates.begin());
+			mStates.pop_front();
 
 			std::map<String,Bucket*>::iterator it = mBuckets.begin();;
 			for(it;it!=mBuckets.end();)

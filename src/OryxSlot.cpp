@@ -29,7 +29,8 @@ namespace Oryx
 		if(notify)
 			signal->addListener(this,false);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Slot::stopListeningTo(Signal* signal,bool notify)
 	{
 		std::list<Signal*>::iterator it = mSignals.begin();
@@ -44,7 +45,8 @@ namespace Oryx
 			}
 		}
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Slot::stopAllListening()
 	{
 		std::list<Signal*>::iterator it = mSignals.begin();
@@ -54,14 +56,17 @@ namespace Oryx
 		}
 		mSignals.clear();
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Slot::operator += (Signal* signal)
 	{
 		listenTo(signal);
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void Slot::operator -= (Signal* signal)
 	{
 		stopListeningTo(signal);
 	}
+	//-----------------------------------------------------------------------
 }

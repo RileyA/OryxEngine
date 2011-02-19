@@ -24,6 +24,7 @@
 
 namespace Oryx
 {
+	/** Very simple singleton class for logging game events */
     class ORYX_EXPORT Logger
     {
     public:
@@ -31,7 +32,8 @@ namespace Oryx
         /** Gets a pointer to the Logger */
 		static Logger* getPtr();
 
-		/** Writes a message to the console and log file. */
+		/** Writes a message to the console and log file. 
+		 *		@param message The message to write (no need for a newline) */
 		void logMessage(String message);
 
 		/** Tells the Logger to stop outputting all messages */
@@ -49,7 +51,6 @@ namespace Oryx
 
 		std::ofstream mLogFile;
 		bool mActive;
-
     };
 }
 

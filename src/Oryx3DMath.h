@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2010
+//(C) Copyright Riley Adams 2011
 
 //This file is part of Oryx Engine.
 
@@ -17,7 +17,7 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
-// This is just a shortcut to include all the basic 3D math types.
+// This is just a shortcut to include the basic 3D math types.
 
 #include "OryxVector3.h"
 #include "OryxVector2.h"

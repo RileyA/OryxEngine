@@ -32,8 +32,15 @@ namespace Oryx
 	class Intersect
 	{
 	public:
+
 		//static bool intersects(const Sphere& sph1,const Sphere& sph2);
+
+		/** Gets whether or not a Ray and Box intersect
+		 *		@param ray The Ray
+		 *		@param Box The Box 
+		 *		@return Whether or not they intersect */
 		static bool intersects(const Ray& ray,const Box& box);
+
 		//static bool intersects(const Ray& ray,const AxisAlignedBox& aabox);
 	};
 }

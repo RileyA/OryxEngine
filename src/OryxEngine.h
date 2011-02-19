@@ -23,8 +23,6 @@
 #include "Oryx.h"
 #include "OryxGameState.h"
 #include "OryxEngineSubsystem.h"
-#include "OryxLogger.h"
-#include "OryxTimeManager.h"
 #include "OryxEventHandler.h"
 
 namespace Oryx
@@ -37,8 +35,10 @@ namespace Oryx
     class ORYX_EXPORT Engine : public EventHandler
     {
     public:
-
+		
+		/** Constructor */
         Engine();
+		/** Destructor */
         ~Engine();
 
         /** Adds a subsystem to the engine
@@ -123,7 +123,8 @@ namespace Oryx
          *		@param The Subsystem in question */
         bool _resolveDependencies(EngineSubsystem* system);
 
-        std::vector<GameState*> mStates;
+		// The states
+        std::deque<GameState*> mStates;
         std::map<String,EngineSubsystem*> mSubsystems;
 
 		std::map<String,Bucket*> mBuckets;
