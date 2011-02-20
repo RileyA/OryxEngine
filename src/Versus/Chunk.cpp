@@ -160,11 +160,11 @@ namespace Oryx
 		int j = floor(p.y+0.5);
 		int k = floor(p.z+0.5);
 
-		for(int x=i-radius;x<radius+i;++x)
-			for(int y=j-radius;y<radius+j;++y)
-				for(int z=k-radius;z<radius+k;++z)
+		for(int x=i-radius-2;x<radius+i+2;++x)
+			for(int y=j-radius-2;y<radius+j+2;++y)
+				for(int z=k-radius-2;z<radius+k+2;++z)
 		{
-			if(Vector3(x,y,z).distance(Vector3(i,j,k))<radius)
+			if(Vector3(x,y,z).distance(p)<radius)
 				ChunkUtils::setBlock(this,ChunkCoords(x,y,z),0);
 		}
 	}
@@ -301,25 +301,22 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Chunk::getLighting(ChunkCoords& c,int lightVal,bool emitter)
+	void Chunk::getLighting(ChunkCoords& coords, int lightVal, bool emitter)
 	{
-		byte t;
-		// only keep going if 
-		if(lightVal > 0 && c.inBounds() && (t = getTransparency(c)) &&
-			(emitter || setLight(c,lightVal) ))
+		int8 trans;
+		if(lightVal > 0 && coords.inBounds() && (trans = getTransparency(coords)) &&
+			(emitter || setLight(coords,lightVal) ))
 		{
 			for(int i = BD_LEFT; i <= BD_BACK; ++i)
 			{
-				int8 offset = AXIS_OFFSET[i];
-
 				// choose
-				c[AXIS[i]] += offset;
+				coords[AXIS[i]] += AXIS_OFFSET[i];
 
 				// explore
-				getLighting(c,lightVal-t);
+				getLighting(coords, lightVal-trans);
 
 				// unchoose
-				c[AXIS[i]] -= offset;
+				coords[AXIS[i]] -= AXIS_OFFSET[i];
 			}
 		}
 	}
@@ -339,7 +336,7 @@ namespace Oryx
 		for(int i=0;i<6;++i)
 			d.vertex(pos+BLOCK_VERTICES[normal][i],offset+BLOCK_TEXCOORDS[normal][i]*gridSize);
 
-		float steps[6] = {0.8f,0.7f,0.6f,0.99f,0.75f,0.775f};
+		float steps[6] = {0.6f,0.6f,0.5f,0.99f,0.8f,0.7f};
 
 		diffuse*=steps[normal];
 

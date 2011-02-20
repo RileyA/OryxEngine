@@ -63,7 +63,7 @@ namespace Oryx
 		Vector3(0,0,1),
 		Vector3(0,0,-1)};
 	
-	// The light values 0.8^(15-lightLevel), saves some pow()-ing to store these as a const
+	// The light values 0.8^(15-lightLevel), saves some pow()-ing to store these as consts
 	const Colour LIGHTVALUES[16] = {
 		COLORVAL(0.03518f),
 		COLORVAL(0.04398f),
@@ -161,14 +161,14 @@ namespace Oryx
 	#endif
 
 	// map tex atlas positions to faces and block indices
-	const byte MAPPINGS[5][6] = 
+	/*const byte MAPPINGS[5][6] = 
 	{
 		{1,1,1,1,1,1},
 		{1,1,1,1,1,1},
 		{2,2,2,2,2,2},
 		{3,3,3,3,3,3},
 		{4,4,4,4,4,4}
-	};
+	};*/
 
 	// hard-coded since it shouldn't ever change, and is faster than calculating it out each time
 	const Vector3 BLOCK_VERTICES[6][6] =
@@ -210,12 +210,12 @@ namespace Oryx
 	};
 
 	// Test w/ Minecraft terrain.png
-	/*const byte MAPPINGS[5][6] = {
+	const byte MAPPINGS[5][6] = {
 		{1,1,1,1,1,1},
 		{37,37,37,37,37,37},
 		{2,2,2,2,2,2},
 		{3,3,3,3,3,3},
 		{4,4,3,1,4,4}
-	};*/
+	};
 }
 #endif

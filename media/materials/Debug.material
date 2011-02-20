@@ -12,7 +12,7 @@ material DebugGrid
 				tex_address_mode wrap
 			}
 			texture_unit
-			{
+			{z
 				texture CubeMap_AO.png
 				tex_coord_set 1
 				colour_op modulate
@@ -45,16 +45,17 @@ material Debug1
 		{
 			//scene_blend alpha_blend
 			//depth_write off
-			alpha_rejection greater 100
+			//alpha_rejection greater 100
 			lighting off
 			//emissive 0.0 0.0 0.0
-			emissive vertexcolour
+			//emissive vertexcolour
 
 			texture_unit
 			{
-				filtering none
+				filtering anisotropic
+				max anisotropy 16
 				texture daebugGrid.png
-				tex_address_mode clamp
+				tex_address_mode wrap
 			}
 		}
 	}

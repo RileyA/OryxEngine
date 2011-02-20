@@ -35,7 +35,7 @@ namespace Oryx
 {
 	class ChunkManager;
 
-	/** A 16x16x16 Chunk of voxels, represented as cubes (a.k.a. Minecraft-style rendering) */
+	/** A "Chunk" of voxels, represented as cubes (a.k.a. Minecraft-style rendering) */
 	class Chunk
 	{
 	public:
@@ -45,7 +45,7 @@ namespace Oryx
 		 *			you're using a ChunkManager.
 		 *		@param position The position of this chunk
 		 *		@param parent The ChunkManager this Chunk belongs to */
-		Chunk(Vector3 position,ChunkManager* parent = 0);
+		Chunk(Vector3 position, ChunkManager* parent = 0);
 
 		/** Destructor, cleans up physics and mesh data */
 		virtual ~Chunk();
@@ -127,8 +127,7 @@ namespace Oryx
 			return light[c.x][c.y][c.z];
 		}
 
-		/** Gets whether or not the block at this point is solid
-		 *		@remarks At the moment, this doesn't really do anything... */
+		/** Gets whether or not the block at this point is solid */
 		bool isSolid(const ChunkCoords& c)
 		{
 			return blockSolid(getBlockState(c));
@@ -173,24 +172,30 @@ namespace Oryx
 		 *		@param If this is an emitter */
 		void getLighting(ChunkCoords& c,int lightVal,bool emitter=false);
 		
+		// TODO: Get rid of one of these, the original need for separate notions
+		// of 'solid' and 'transparent' is gone...
+
+		/** Helper that gets whether a type of block is solid */
 		bool blockSolid(byte chunkValue)
 		{
 			#ifdef ALLOW_BLOCK_TRANSPARENCY
-			return !TRANSPARENT[chunkValue];
+				return !TRANSPARENT[chunkValue];
 			#else
-			return chunkValue;
+				return chunkValue;
 			#endif
 		}
 
+		/** Helper that gets whether a type of block is transparent*/
 		byte blockTransparent(byte chunkValue)
 		{
 			#ifdef ALLOW_BLOCK_TRANSPARENCY
-			return TRANSPARENT[chunkValue];
+				return TRANSPARENT[chunkValue];
 			#else
-			return !chunkValue;
+				return !chunkValue;
 			#endif
 		}
 
+		/** Adds a 1 meter quad (actually 2 tris) to a given MeshData object */
 		void makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,size_t atlas);
 
 		// The graphics object
