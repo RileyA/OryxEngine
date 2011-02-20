@@ -37,12 +37,13 @@ namespace Oryx
 	
 	void VersusGameState::init()
 	{
+		currentMat = 0;
 		OgreSubsystem* ogre = mEngine->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 		BulletSubsystem* bts = mEngine->getSubsystem("BulletSubsystem")->castType<BulletSubsystem>();
 		OISSubsystem* ois = mEngine->getSubsystem("OISSubsystem")->castType<OISSubsystem>();
 		ois->initInput(ogre->getWindowHandle());
-		ogre->setBackgroundColor(Colour(0.f,0.f,0.f));
-		ogre->setLinearFog(30.f,45.f,Colour(0.f,0.f,0.f));
+		ogre->setBackgroundColor(Colour(0.3f,0.6f,0.9f));
+		ogre->setLinearFog(30.f,45.f,Colour(0.3f,0.6f,0.9f));
 		mgr = new ExplosionManager();
 
 		ENetSubsystem* enet = mEngine->getSubsystem("ENetSubsystem")->castType<ENetSubsystem>();
@@ -104,18 +105,33 @@ namespace Oryx
 		if(ois->isButtonDown("MB_Right")&&!toggle)
 		{
 			toggle = true;
-			RaycastReport r = bts->raycast(mCam->getPosition(),mCam->getDirection());
-
-			if(r.hit&&r.userData)
+			if(ois->isKeyDown("KC_V"))
 			{
-				Chunk* xc = (Chunk*)r.userData;
-				if(ois->isKeyDown("KC_G"))
+				++currentMat;
+				if(currentMat>2)
+					currentMat = 0;
+				if(currentMat==0)
+					cmgr->setMaterial("Debug1",2);
+				else if(currentMat==1)
+					cmgr->setMaterial("Debug2",2);
+				else if(currentMat==2)
+					cmgr->setMaterial("MeinKraft",16);
+			}
+			else
+			{
+				RaycastReport r = bts->raycast(mCam->getPosition(),mCam->getDirection());
+
+				if(r.hit&&r.userData)
 				{
-					xc->killBlocks(r.position,2);
-					mgr->createExplosion(r.position);
+					Chunk* xc = (Chunk*)r.userData;
+					if(ois->isKeyDown("KC_G"))
+					{
+						xc->killBlocks(r.position,2);
+						mgr->createExplosion(r.position);
+					}
+					else
+						xc->killBlock(r.position,r.normal);
 				}
-				else
-					xc->killBlock(r.position,r.normal);
 			}
 		}
 		else if(!ois->isButtonDown("MB_Right")&&toggle)

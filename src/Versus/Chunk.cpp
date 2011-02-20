@@ -19,6 +19,7 @@
 
 #include "Oryx.h"
 #include "Chunk.h"
+#include "ChunkUtils.h"
 #include "ChunkManager.h"
 #include "OryxMessageAny.h"
 #include "OryxEventHandler.h"
@@ -29,13 +30,15 @@
 
 namespace Oryx
 {
-	void quad(Vector3 pos,Vector3 normal,MeshData& d,short type,Colour diffuse);
+	void quad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,size_t atlas);
 
 	//-----------------------------------------------------------------------
 
 	Chunk::Chunk(Vector3 position,ChunkManager* parent)
 		:mPosition(position),mParent(parent)
 	{	
+		mAtlasDimensions = 2;
+		mMaterial = "Debug1";
 		mChunk = 0;
 		mPosition = position;
 		mOgre = Engine::getPtr()->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
@@ -45,8 +48,14 @@ namespace Oryx
 	
 		// Throw in some blocks
 		for(int i=0;i<CHUNK_SIZE_X;++i)for(int j=0;j<CHUNK_SIZE_Y;++j)for(int k=0;k<CHUNK_SIZE_Z;++k)
-			if(j<8)
+		{
+			if(j==8)
 				blocked[i][j][k] = 4;
+			else if(j<5)
+				blocked[i][j][k] = 2;
+			else if(j<8)
+				blocked[i][j][k] = 3;
+		}
 		
 		BulletSubsystem* b = Engine::getPtr()->getSubsystem("BulletSubsystem")->
 			castType<BulletSubsystem>();
@@ -69,9 +78,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Chunk::update(Real delta)
-	{
-	}
+	void Chunk::update(Real delta){}
 	//-----------------------------------------------------------------------
 	
 	void Chunk::build(bool physics)
@@ -85,22 +92,21 @@ namespace Oryx
 
 			if(type)
 			{ 	
-				bool adjacents[6];
-
-				// very ugly, but hard coding this all seems ~50% more efficient 
+				// very ugly, but hard coding this all seems a good deal more efficient 
 				// than my attempt at a cleaner version...
-				adjacents[0] = (i>0&&!blocked[i-1][j][k]) || (i==0&&!neighbors[0]) ||
-					(i==0&&neighbors[0]&&!neighbors[0]->blocked[CHUNK_SIZE_X-1][j][k]);
-				adjacents[1] = (i<CHUNK_SIZE_X-1&&!blocked[i+1][j][k]) || (i==CHUNK_SIZE_X-1&&!neighbors[1]) 
-					|| (i==CHUNK_SIZE_X-1&&neighbors[1]&&!neighbors[1]->blocked[0][j][k]);
-				adjacents[2] = (j>0&&!blocked[i][j-1][k]) || (j==0&&!neighbors[2]) ||
-					(j==0&&neighbors[2]&&!neighbors[2]->blocked[i][CHUNK_SIZE_Y-1][k]);	
-				adjacents[3] = (j<CHUNK_SIZE_Y-1&&!blocked[i][j+1][k]) || (j==CHUNK_SIZE_Y-1&&!neighbors[3]) ||
-					(j==CHUNK_SIZE_Y-1&&neighbors[3]&&!neighbors[3]->blocked[i][0][k]);
-				adjacents[4] = (k>0&&!blocked[i][j][k-1]) || (k==0&&!neighbors[4]) ||
-					(k==0&&neighbors[4]&&!neighbors[4]->blocked[i][j][CHUNK_SIZE_Z-1]);
-				adjacents[5] = (k<CHUNK_SIZE_Z-1&&!blocked[i][j][k+1]) || (k==CHUNK_SIZE_Z-1&&!neighbors[5]) ||
-					(k==CHUNK_SIZE_Z-1&&neighbors[5]&&!neighbors[5]->blocked[i][j][0]);
+				bool adjacents[6] = {
+					(i>0&&!blockSolid(blocked[i-1][j][k])) || (i==0&&!neighbors[0]) ||(i==0&&neighbors[0]
+						&&!blockSolid(neighbors[0]->blocked[CHUNK_SIZE_X-1][j][k])),
+					(i<CHUNK_SIZE_X-1&&!blockSolid(blocked[i+1][j][k])) || (i==CHUNK_SIZE_X-1 &&!neighbors[1])||
+						(i==CHUNK_SIZE_X-1&&neighbors[1] && !blockSolid(neighbors[1]->blocked[0][j][k])),
+					(j>0&&!blockSolid(blocked[i][j-1][k])) || (j==0&&!neighbors[2]) ||
+						(j==0&&neighbors[2]&&!blockSolid(neighbors[2]->blocked[i][CHUNK_SIZE_Y-1][k])),
+					(j<CHUNK_SIZE_Y-1&&!blockSolid(blocked[i][j+1][k])) || (j==CHUNK_SIZE_Y-1&&!neighbors[3])||
+						(j==CHUNK_SIZE_Y-1&&neighbors[3]&&!blockSolid(neighbors[3]->blocked[i][0][k])),
+					(k>0&&!blockSolid(blocked[i][j][k-1])) || (k==0&&!neighbors[4]) ||
+						(k==0&&neighbors[4]&&!blockSolid(neighbors[4]->blocked[i][j][CHUNK_SIZE_Z-1])),
+					(k<CHUNK_SIZE_Z-1&&!blockSolid(blocked[i][j][k+1])) || (k==CHUNK_SIZE_Z-1&&!neighbors[5])||
+						(k==CHUNK_SIZE_Z-1&&neighbors[5]&&!blockSolid(neighbors[5]->blocked[i][j][0]))};
 
 				if(!adjacents[0]&&!adjacents[1]&&!adjacents[2]&&!adjacents[3]&&!adjacents[4]&&!adjacents[5])
 					continue;
@@ -109,7 +115,9 @@ namespace Oryx
 				
 				for(int p=0;p<6;++p)
 					if(adjacents[p])
-						quad(Vector3(i,j,k),QUADNORMALS[p],d,type,LIGHTVALUES[getLight(this,bc<<p)]);
+					{
+						makeQuad(Vector3(i,j,k),p,d,MAPPINGS[type][p],LIGHTVALUES[ChunkUtils::getLight(this,bc<<p)],mAtlasDimensions);
+					}
 			}
 		}
 
@@ -117,6 +125,7 @@ namespace Oryx
 			mOgre->destroySceneNode(mChunk);
 
 		mChunk = mOgre->createMesh(d);
+		mChunk->setMaterialName(mMaterial);
 		mOgre->getRootSceneNode()->addChild(mChunk);
 		mChunk->setPosition(mPosition);
 
@@ -130,7 +139,7 @@ namespace Oryx
 	void Chunk::killBlock(Vector3 p,Vector3 n)
 	{
 		p += OFFSET;
-		p-=mPosition;
+		p -= mPosition;
 
 		Vector3 pn = p-n*0.5f;
 
@@ -138,7 +147,7 @@ namespace Oryx
 		int j = floor(pn.y+0.5);
 		int k = floor(pn.z+0.5);
 
-		setBlock(this,ChunkCoords(i,j,k),0);
+		ChunkUtils::setBlock(this,ChunkCoords(i,j,k),0);
 	}
 	//-----------------------------------------------------------------------
 	
@@ -156,7 +165,7 @@ namespace Oryx
 				for(int z=k-radius;z<radius+k;++z)
 		{
 			if(Vector3(x,y,z).distance(Vector3(i,j,k))<radius)
-				setBlock(this,ChunkCoords(x,y,z),0);
+				ChunkUtils::setBlock(this,ChunkCoords(x,y,z),0);
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -186,7 +195,7 @@ namespace Oryx
 		int j = floor(pn.y+0.5);
 		int k = floor(pn.z+0.5);
 
-		setBlock(this,ChunkCoords(i,j,k),type);
+		ChunkUtils::setBlock(this,ChunkCoords(i,j,k),type);
 	}
 	//-----------------------------------------------------------------------
 
@@ -205,7 +214,7 @@ namespace Oryx
 		{
 			if(neighbors[i])
 			{
-				neighbors[i]->neighbors[(i&1)==0?i+1:i-1] = this;
+				neighbors[i]->neighbors[i-AXIS_OFFSET[i]] = this;
 				neighbors[i]->markDirty();
 			}
 		}
@@ -224,41 +233,26 @@ namespace Oryx
 		{
 			if(neighbors[p])
 			{
-				for(int i=0;i<16;++i)for(int j=0;j<16;++j)
+				byte normal = AXIS[p];
+				byte aX = p > 1 ? 0 : 1;
+				byte aY = p < 4 ? 2 : 1;
+
+				byte d1 = (p&1)==0 ? CHUNKSIZE[normal]-1 : 0;
+				byte d2 = (p&1)==0 ? 0 : CHUNKSIZE[normal]-1;
+				
+				ChunkCoords coords = ChunkCoords(0,0,0);
+				coords[normal] = d1;
+				
+				for(coords[aX]=0;coords[aX]<CHUNKSIZE[aX];++coords[aX])
+					for(coords[aY]=0;coords[aY]<CHUNKSIZE[aY];++coords[aY])
 				{
-					byte value;
-					ChunkCoords coords;
-					// just pretend you didn't see this... the nice clean version was buggy
-					// and I haven't had time to figure out why yet...
-					switch(p)
-					{
-					case 0:
-						value = neighbors[p]->light[15][i][j];
-						coords = ChunkCoords(0,i,j);
-						break;
-					case 1:
-						value = neighbors[p]->light[0][i][j];
-						coords = ChunkCoords(15,i,j);
-						break;
-					case 2:
-						value = neighbors[p]->light[i][15][j];
-						coords = ChunkCoords(i,0,j);
-						break;
-					case 3:
-						value = neighbors[p]->light[i][0][j];
-						coords = ChunkCoords(i,15,j);
-						break;
-					case 4:
-						value = neighbors[p]->light[i][j][15];
-						coords = ChunkCoords(i,j,0);
-						break;
-					case 5:
-						value = neighbors[p]->light[i][j][0];
-						coords = ChunkCoords(i,j,15);
-						break;
-					};
+					byte value = neighbors[p]->getLightState(coords);
 					if(value>1)
+					{
+						coords[normal] = d2;
 						getLighting(coords,value-1);
+						coords[normal] = d1;
+					}
 				}
 			}
 		}
@@ -272,92 +266,89 @@ namespace Oryx
 		for(int i=0;i<CHUNK_SIZE_X;++i)for(int k=0;k<CHUNK_SIZE_Z;++k)
 		{
 			int highest = 0;
-			
-			for(int y=0;y<CHUNK_SIZE_Y;++y)
-				if(blocked[i][y][k])	
-					highest = y;
 
-			for(int p=highest+1;p<CHUNK_SIZE_Y;++p)
-				light[i][p][k] = MAX_LIGHT;
+			int lit = MAX_LIGHT;
+
+			for(int y=CHUNK_SIZE_Y-1;y>=0;--y)
+			{
+				byte val = blockTransparent(blocked[i][y][k]);
+				if(val==0||lit==0)
+					break;
+				else
+					lit-=val-1;
+				light[i][y][k] = lit;
+			}
 		}
 
-		ChunkCoords c = ChunkCoords();
+		ChunkCoords c = ChunkCoords(0,0,0);
 
-		// this seems sliiightly more efficient... I should probably dig 
-		// through the disassembly and figure out for sure, but I'm lazy...
-		signed char *i,*j,*k;
-		i = &c.x;
-		j = &c.y;
-		k = &c.z;
-
-		for((*i)=0;(*i)<CHUNK_SIZE_X;++(*i))
-			for((*j)=0;(*j)<CHUNK_SIZE_Y;++(*j))
-				for((*k)=0;(*k)<CHUNK_SIZE_Z;++(*k))
+		for(c.x=0;c.x<CHUNK_SIZE_X;++c.x)
+			for(c.y=0;c.y<CHUNK_SIZE_Y;++c.y)
+				for(c.z=0;c.z<CHUNK_SIZE_Z;++c.z)
 		{
-			if(getLightState(c)==MAX_LIGHT)
-				getLighting(c,MAX_LIGHT);
+			byte ls =getLightState(c); 
+			if(ls>1)
+				getLighting(c,ls,true);
 		}
 	}
 	//-----------------------------------------------------------------------
 	
-	void Chunk::getLighting(ChunkCoords& c,int light)
+	void Chunk::setMaterial(String material,size_t atlas)
 	{
-		if(light>0 && c.inBounds() && !isSolid(c) &&
-			!(light != MAX_LIGHT&&!setLight(c,light)))
+		mMaterial = material;
+		mAtlasDimensions = atlas;
+		mChunk->setMaterialName(material);
+	}
+	//-----------------------------------------------------------------------
+
+	void Chunk::getLighting(ChunkCoords& c,int lightVal,bool emitter)
+	{
+		byte t;
+		// only keep going if 
+		if(lightVal > 0 && c.inBounds() && (t = getTransparency(c)) &&
+			(emitter || setLight(c,lightVal) ))
 		{
-			// explore in each direction 
-			for(int i=0;i<6;++i)
+			for(int i = BD_LEFT; i <= BD_BACK; ++i)
 			{
-				byte val = (i&1)==0 ? 1 : -1;
+				int8 offset = AXIS_OFFSET[i];
 
 				// choose
-				c[i/2] += val;
+				c[AXIS[i]] += offset;
 
 				// explore
-				getLighting(c,light-1);
+				getLighting(c,lightVal-t);
 
 				// unchoose
-				c[i/2] -= val;
+				c[AXIS[i]] -= offset;
 			}
 		}
 	}
 	//-----------------------------------------------------------------------
 
-	void quad(Vector3 pos,Vector3 normal,MeshData& d,short type,Colour diffuse)
+
+	void Chunk::makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,size_t atlas)
 	{
 		Vector2 offset;
-		int dims = 2;
+		int dims = atlas;
 		int tp = type-1;
 		float gridSize = 1.f/dims;
 
 		offset = Vector2(tp%dims*gridSize,tp/dims*gridSize);
-
-		Quaternion rot;
-
-		float factor = 1.f;
-		
-		if(normal.y<=-0.8)
-			rot = Quaternion::IDENTITY;
-		else if(normal.y>=0.8)
-			rot = Quaternion(0,0,1,0);
-		else 
-			rot = normal.getRotationTo(Vector3(0,1,0));
-
 		pos -= OFFSET;
 
-		d.vertex(pos+rot * Vector3(-1,1,-1)*0.5,normal,offset+Vector2(0,0)*gridSize);
-		d.vertex(pos+rot * Vector3(-1,1,1)*0.5,normal,offset+Vector2(0,1)*gridSize);
-		d.vertex(pos+rot * Vector3(1,1,-1)*0.5,normal,offset+Vector2(1,0)*gridSize);
-		
-		d.vertex(pos+rot * Vector3(-1,1,1)*0.5,normal,offset+Vector2(0,1)*gridSize);
-		d.vertex(pos+rot * Vector3(1,1,1)*0.5,normal,offset+Vector2(1,1)*gridSize);
-		d.vertex(pos+rot * Vector3(1,1,-1)*0.5,normal,offset+Vector2(1,0)*gridSize);
-		
+		for(int i=0;i<6;++i)
+			d.vertex(pos+BLOCK_VERTICES[normal][i],offset+BLOCK_TEXCOORDS[normal][i]*gridSize);
+
+		float steps[6] = {0.8f,0.7f,0.6f,0.99f,0.75f,0.775f};
+
+		diffuse*=steps[normal];
+
 		for(int i=0;i<6;++i)
 		{
 			d.diffuse.push_back(diffuse.r);
 			d.diffuse.push_back(diffuse.g);
 			d.diffuse.push_back(diffuse.b);
+			d.diffuse.push_back(1.f);
 		}
 	}
 	//-----------------------------------------------------------------------

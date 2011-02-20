@@ -53,6 +53,16 @@ namespace Oryx
 			}
 			indices.push_back(indices.size());// in order for now...
 		}
+		
+		void vertex(Vector3 v,Vector2 t)
+		{
+			vertices.push_back(v.x);
+			vertices.push_back(v.y);
+			vertices.push_back(v.z);
+			texcoords.push_back(t.x);
+			texcoords.push_back(t.y);
+			indices.push_back(indices.size());// in order for now...
+		}
 
 		/** Returns the array of vertices */
 		float* getVertices() const
@@ -63,7 +73,9 @@ namespace Oryx
 		/** Returns the array of normals */
 		float* getNormals() const
 		{
-			return const_cast<float*>(&normals[0]);
+			if(!normals.empty())
+				return const_cast<float*>(&normals[0]);
+			return 0;
 		}
 
 		/** Returns the array of texcoords */

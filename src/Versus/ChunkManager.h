@@ -22,8 +22,8 @@
 
 #include "Oryx.h"
 #include "OryxEngine.h"
-#include "Chunk.h"
 #include "OryxObject.h"
+#include "Chunk.h"
 #include "OgreSubsystem/OgreSubsystem.h"
 #include "OISSubsystem/OISSubsystem.h"
 #include "BulletSubsystem/BulletSubsystem.h"
@@ -45,11 +45,14 @@ namespace Oryx
 		Chunk* getChunk(ChunkCoords c);
 		Chunk* createChunk(ChunkCoords c);
 
+		void setMaterial(String material,size_t atlasDimensions);
+	
 	private:
 
 		std::map<ChunkCoords,Chunk*> mChunks;
 		int radius;
 		ChunkCoords mLast;
+
 
 	};
 }

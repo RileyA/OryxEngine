@@ -74,7 +74,17 @@ namespace Oryx
 			++it;
 		}
 
+
+
 		chunksRebuilt = updated.size();
+
+		if(chunksRebuilt>0)
+		{
+			Logger::getPtr()->logMessage("Lighting Took: "+StringUtils::toString(
+				TimeManager::getPtr()->getTimeDecimal()-start));
+		}
+		
+		Real start2 = TimeManager::getPtr()->getTimeDecimal();
 
 		while(!updated.empty())
 		{
@@ -84,8 +94,9 @@ namespace Oryx
 
 		if(chunksRebuilt>0)
 		{
-			Logger::getPtr()->logMessage("Update Took: "+StringUtils::toString(
-				TimeManager::getPtr()->getTimeDecimal()-start)+" "
+;
+			Logger::getPtr()->logMessage("Builds Took: "+StringUtils::toString(
+				TimeManager::getPtr()->getTimeDecimal()-start2)+" "
 				+StringUtils::toString(chunksRebuilt)+" Chunk Updates");
 		}
 	}
@@ -128,8 +139,7 @@ namespace Oryx
 		if(getChunk(c))
 			return 0;
 
-		Chunk* ch = new Chunk(Vector3(c.x*CHUNK_SIZE_X-CHUNK_SIZE_X/2,c.y*CHUNK_SIZE_Y-
-			CHUNK_SIZE_Y/2,c.z*CHUNK_SIZE_Z-CHUNK_SIZE_Z/2),this);
+		Chunk* ch = new Chunk(Vector3(c.x*CHUNK_SIZE_X-CHUNK_SIZE_X/2,c.y*CHUNK_SIZE_Y-CHUNK_SIZE_Y/2,c.z*CHUNK_SIZE_Z-CHUNK_SIZE_Z/2),this);
 
 		for(int i=0;i<6;++i)
 			ch->neighbors[i] = getChunk(c<<i);
@@ -139,4 +149,17 @@ namespace Oryx
 		mChunks[c] = ch;
 		return ch;
 	}
+	//-----------------------------------------------------------------------
+	
+	void ChunkManager::setMaterial(String material,size_t atlasDimensions)
+	{
+		std::map<ChunkCoords,Chunk*>::iterator it = mChunks.begin();
+
+		while(it!=mChunks.end())
+		{
+			it->second->setMaterial(material,atlasDimensions);
+			++it;
+		}
+	}
+	//-----------------------------------------------------------------------
 }

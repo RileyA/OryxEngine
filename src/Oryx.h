@@ -93,6 +93,8 @@ namespace Oryx
 	typedef float Real;
 	typedef unsigned int uint;
 	typedef unsigned char byte;
+	typedef unsigned char uint8;
+	typedef signed char int8;
 	typedef unsigned long long uint64;
 	typedef unsigned long OryxID;// used to uniquely identify game objects
 }

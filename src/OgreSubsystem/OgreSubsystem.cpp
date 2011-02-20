@@ -262,6 +262,7 @@ namespace Oryx
 		using namespace Ogre;
 
 		bool hasVertexColor = data.getDiffuse();
+		bool hasNormals = data.getNormals();
 		
 		int numFaces = data.indices.size()/3;
 		int numVertices = data.vertices.size()/3;
@@ -284,17 +285,24 @@ namespace Oryx
 		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
 		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
 
-		vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
-		vdecl->addElement(1, 0, VET_FLOAT3, VES_NORMAL);
-		vdecl->addElement(2, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES);
+		size_t bufferCount = 0;
+
+		vdecl->addElement(bufferCount, 0, VET_FLOAT3, VES_POSITION);
+
+		if(hasNormals)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
+
+		vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES);
 
 		if(hasVertexColor)
-			vdecl->addElement(3, 0, VET_FLOAT3, VES_DIFFUSE);
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_DIFFUSE);
+		
+		bufferCount = 0;
 
 		// Positions
 		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
 			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
-		vbind->setBinding(0, posVertexBuffer);
+		vbind->setBinding(bufferCount, posVertexBuffer);
 
 		float* vertices = data.getVertices(); 
 		float* normals = data.getNormals();
@@ -302,27 +310,31 @@ namespace Oryx
 		float* diffuse = data.getDiffuse();
 		unsigned short* indices = data.getIndices();
 
+
 		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
 
 		// Normals
-		normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-			3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
-		vbind->setBinding(1, normVertexBuffer);
+		if(hasNormals)
+		{
+			normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+				3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+			vbind->setBinding(++bufferCount, normVertexBuffer);
 
-		normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
+			normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
+		}
 
 		// Texcoords
 		texcoordsVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
 			2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-		vbind->setBinding(2, texcoordsVertexBuffer);
+		vbind->setBinding(++bufferCount, texcoordsVertexBuffer);
 
 		texcoordsVertexBuffer->writeData(0,texcoordsVertexBuffer->getSizeInBytes(),texcoords, true);
 
 		if(hasVertexColor)
 		{
 			diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-				3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
-			vbind->setBinding(3, diffuseVertexBuffer);
+				4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+			vbind->setBinding(++bufferCount, diffuseVertexBuffer);
 
 			diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
 		}
@@ -344,8 +356,8 @@ namespace Oryx
 		m->load();
 		m->touch();
 
-		m->_setBounds(AxisAlignedBox(-8,-8,-8,8,8,8));
-		m->_setBoundingSphereRadius(Ogre::Math::Sqrt(11.313f));
+		m->_setBounds(AxisAlignedBox(-32,-32,-32,32,32,32));
+		m->_setBoundingSphereRadius(64.f);
 
 		sm->setMaterialName("MeinKraft");
 

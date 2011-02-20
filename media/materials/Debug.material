@@ -37,8 +37,30 @@ material Arrow
 	}
 }
 
-// heh...
-material MeinKraft
+material Debug1
+{
+	technique
+	{
+		pass
+		{
+			//scene_blend alpha_blend
+			//depth_write off
+			alpha_rejection greater 100
+			lighting off
+			//emissive 0.0 0.0 0.0
+			emissive vertexcolour
+
+			texture_unit
+			{
+				filtering none
+				texture daebugGrid.png
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material Debug2
 {
 	technique
 	{
@@ -49,9 +71,30 @@ material MeinKraft
 
 			texture_unit
 			{
-				//filtering anisotropic
-				//max_anisotropy 16
-				texture daebugGrid.png
+				filtering anisotropic
+				max_anisotropy 16
+				texture debugGrid2.png
+				tex_address_mode wrap
+			}
+		}
+	}
+}
+
+// heh...
+material MeinKraft
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			diffuse vertexcolor
+			alpha_rejection greater 100
+
+			texture_unit
+			{
+				filtering none
+				texture terrain.png
 				tex_address_mode wrap
 			}
 		}

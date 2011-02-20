@@ -25,6 +25,7 @@
 #include "OryxColour.h"
 
 #define COLORVAL(x) Colour(x,x,x)
+//#define ALLOW_BLOCK_TRANSPARENCY
 
 namespace Oryx
 {
@@ -64,7 +65,6 @@ namespace Oryx
 	
 	// The light values 0.8^(15-lightLevel), saves some pow()-ing to store these as a const
 	const Colour LIGHTVALUES[16] = {
-		COLORVAL(0.021475f),
 		COLORVAL(0.03518f),
 		COLORVAL(0.04398f),
 		COLORVAL(0.0549755f),
@@ -79,11 +79,25 @@ namespace Oryx
 		COLORVAL(0.4096f),
 		COLORVAL(0.512f),
 		COLORVAL(0.64f),
+		COLORVAL(0.8f),
 		COLORVAL(1.f)
 	};
 
+	const byte AXIS[6] = {0,0,1,1,2,2};
+	const int8 AXIS_OFFSET[6] = {-1,1,-1,1,-1,1};
+
 	typedef signed char ChunkCoordValue;// save a few bytes...
-	//typedef short ChunkCoordValue; required if coords are gonna be >127 in any dimension
+	//typedef short ChunkCoordValue; //required if coords are gonna be >127 in any dimension
+	
+	enum BlockDirection
+	{
+		BD_LEFT,  // -x
+		BD_RIGHT, // +x
+		BD_DOWN,  // -y
+		BD_UP,    // +y
+		BD_FRONT, // -z
+		BD_BACK   // +z
+	};
 
 	/** A representation of a position in/around a Chunk object */
 	class ChunkCoords
@@ -91,19 +105,6 @@ namespace Oryx
 	public:
 
 		const static ChunkCoords ChunkOffsets[6];
-
-		// This isn't actually used much, but there is often an index used 
-		// for "direction" when looping through adjacent blocks/tiles, so 
-		// this is reference for which index maps to what direction
-		enum BlockDirection
-		{
-			BD_LEFT,  // -x
-			BD_RIGHT, // +x
-			BD_DOWN,  // -y
-			BD_UP,    // +y
-			BD_FRONT, // -z
-			BD_BACK   // +z
-		};
 
 		ChunkCoordValue x;
 		ChunkCoordValue y;
@@ -125,7 +126,7 @@ namespace Oryx
 
 		bool onEdge() const
 		{
-			return x==15||x==0||y==15||y==0||z==15||z==0;
+			return x==CHUNK_SIZE_X-1||x==0||y==CHUNK_SIZE_Y-1||y==0||z==CHUNK_SIZE_Z-1||z==0;
 		}
 
 		ChunkCoordValue& operator [] ( const size_t i )
@@ -154,5 +155,67 @@ namespace Oryx
 			return std::lexicographical_compare(&x,&z+1,&c.x,&c.z+1);
 		}
 	};
+
+	#ifdef ALLOW_BLOCK_TRANSPARENCY
+	const byte TRANSPARENT[6] = {1,0,0,0,0,0};
+	#endif
+
+	// map tex atlas positions to faces and block indices
+	const byte MAPPINGS[5][6] = 
+	{
+		{1,1,1,1,1,1},
+		{1,1,1,1,1,1},
+		{2,2,2,2,2,2},
+		{3,3,3,3,3,3},
+		{4,4,4,4,4,4}
+	};
+
+	// hard-coded since it shouldn't ever change, and is faster than calculating it out each time
+	const Vector3 BLOCK_VERTICES[6][6] =
+	{
+		{Vector3(-0.5f,0.5f,0.5f),Vector3(-0.5f,0.5f,-0.5f),Vector3(-0.5f,-0.5f,-0.5f),
+			Vector3(-0.5f,0.5f,0.5f),Vector3(-0.5f,-0.5f,-0.5f),Vector3(-0.5f,-0.5f,0.5f)},
+		{Vector3(0.5f,0.5f,-0.5f),Vector3(0.5f,0.5f,0.5f),Vector3(0.5f,-0.5f,0.5f),
+			Vector3(0.5f,0.5f,-0.5f),Vector3(0.5f,-0.5f,0.5f),Vector3(0.5f,-0.5f,-0.5f)},
+		{Vector3(0.5f,-0.5f,-0.5f),Vector3(0.5f,-0.5f,0.5f),Vector3(-0.5f,-0.5f,0.5f),
+			Vector3(0.5f,-0.5f,-0.5f),Vector3(-0.5f,-0.5f,0.5f),Vector3(-0.5f,-0.5f,-0.5f)},
+		{Vector3(0.5f,0.5f,0.5f),Vector3(0.5f,0.5f,-0.5f),Vector3(-0.5f,0.5f,-0.5f),
+			Vector3(0.5f,0.5f,0.5f),Vector3(-0.5f,0.5f,-0.5f),Vector3(-0.5f,0.5f,0.5f)},
+		{Vector3(0.5f,0.5f,-0.5f),Vector3(0.5f,-0.5f,-0.5f),Vector3(-0.5f,-0.5f,-0.5f),
+			Vector3(0.5f,0.5f,-0.5f),Vector3(-0.5f,-0.5f,-0.5f),Vector3(-0.5f,0.5f,-0.5f)},
+		{Vector3(0.5f,-0.5f,0.5f),Vector3(0.5f,0.5f,0.5f),Vector3(-0.5f,0.5f,0.5f),
+			Vector3(0.5f,-0.5f,0.5f),Vector3(-0.5f,0.5f,0.5f),Vector3(-0.5f,-0.5f,0.5f)}
+	};
+
+	// DEPRECATED
+	/*const Vector3 BLOCK_NORMALS[6] =
+	{
+		Vector3(-1,0,0),
+		Vector3(1,0,0),
+		Vector3(0,-1,0),
+		Vector3(0,1,0),
+		Vector3(0,0,-1),
+		Vector3(0,0,1)	
+	};*/
+
+	// TODO: fix vertex windings and such above, so this isn't necessary
+	const Vector2 BLOCK_TEXCOORDS[6][6] =
+	{
+		{Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)},
+		{Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)},
+		{Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)},
+		{Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)},
+		{Vector2(1,0),Vector2(1,1),Vector2(0,1),Vector2(1,0),Vector2(0,1),Vector2(0,0)},
+		{Vector2(1,1),Vector2(1,0),Vector2(0,0),Vector2(1,1),Vector2(0,0),Vector2(0,1)}
+	};
+
+	// Test w/ Minecraft terrain.png
+	/*const byte MAPPINGS[5][6] = {
+		{1,1,1,1,1,1},
+		{37,37,37,37,37,37},
+		{2,2,2,2,2,2},
+		{3,3,3,3,3,3},
+		{4,4,3,1,4,4}
+	};*/
 }
 #endif

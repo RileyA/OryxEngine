@@ -28,6 +28,7 @@
 #include "BulletSubsystem/BulletSubsystem.h"
 
 #include "ChunkCoords.h"
+//#include "ChunkManager.h"
 #include "PhysicsBlock.h"
 
 namespace Oryx
@@ -96,79 +97,6 @@ namespace Oryx
 
 		/** memsets all the lighting values to zero (used when recalculating lighting) */
 		void clearLighting();
-
-		//byte getBlock(Chunk* c, int x,int y,int z);
-		//void setBlock(Chunk* c, int x,int y,int z,byte type);
-
-		/** Static helper for checking if a set of coords is in bounds of a chunk.
-		 *		@remarks This may need to be called multiple times to truly 'validate'
-		 *			the coords.
-		 *		@param coords The coordinates to validate 
-		 *		@return An integer index representing the direction the coords
-		 *			were move in, or -1 if the coords are valid */
-		static int validateCoords(ChunkCoords& coords)
-		{
-			for(int i=0;i<3;++i)
-			{
-				if(coords[i]<0)
-				{
-					coords[i]+=16;
-					return i*2;	
-				}
-				else if(coords[i]>15)
-				{
-					coords[i]-=16;
-					return i*2+1;
-				}
-			}
-			return -1;
-		}
-
-		/** Takes a pointer to a pointer to a Chunk and a set of coords
-		 *		and corrects the pointer to point at the appropriate chunk
-		 *		based on those coords.
-		 *		@param c A pointer to a pointer to a chunk 
-		 *		@param coords Reference to the coordinates*/
-		static void correctNeighbor(Chunk** c, ChunkCoords& coords)
-		{
-			int n = 0;
-			while(n!=-1&&(*c))
-			{
-				n = validateCoords(coords);
-				if(n!=-1)
-					(*c) = (*c)->neighbors[n];
-			}
-		}
-		
-		/** Sets a given block to a given state
-		 *		@param c The Chunk to start in
-		 *		@param coords The coordinates to use 
-		 *		@param type The type to make this block (0 is nothing) */
-		static void setBlock(Chunk* c, ChunkCoords coords, byte type)
-		{
-			correctNeighbor(&c,coords);
-			if(c && c->blocked[coords.x][coords.y][coords.z]!=type)
-			{
-				c->blocked[coords.x][coords.y][coords.z] = type;
-				c->markDirty();
-			}
-		}
-		
-		/** Gets the state of a block, given a chunk pointer and coordinates */
-		static byte getBlock(Chunk* c, ChunkCoords coords)
-		{
-			correctNeighbor(&c,coords);
-			return c ? c->blocked[coords.x][coords.y][coords.z] : 0;
-		}
-			
-		/** Gets the lighting value of a set block
-		 *		@param Chunk c The Chunk of origin
-		 *		@param coords The coordinates to look at */
-		static byte getLight(Chunk* c, ChunkCoords coords)
-		{
-			correctNeighbor(&c,coords);
-			return c ? c->light[coords.x][coords.y][coords.z] : 15;
-		}	
 		
 		/** Sets the light at a given coordinate
 		 *		@param coords The coordinates (MUST be in chunk bounds, 
@@ -200,11 +128,16 @@ namespace Oryx
 		}
 
 		/** Gets whether or not the block at this point is solid
-		 *		@remarks At the moment, this doesn't really do anything,
-		 *			however, when transparent blocks are added, this will matter*/
+		 *		@remarks At the moment, this doesn't really do anything... */
 		bool isSolid(const ChunkCoords& c)
 		{
-			return getBlockState(c);
+			return blockSolid(getBlockState(c));
+		}
+		
+		/** Gets whether the block at the coords is transparent (allows light through) */
+		byte getTransparency(const ChunkCoords& c)
+		{
+			return blockTransparent(getBlockState(c));
 		}
 
 		/** Gets whether or not this Chunk needs to be updated
@@ -222,26 +155,44 @@ namespace Oryx
 			mDirty = true;
 		}
 
+		void setMaterial(String mat,size_t atlas);
 	
 		// The states of the voxels
-		byte blocked[16][16][16];
-		byte light[16][16][16];
+		byte blocked[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
+		byte light[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
 		
 		// Neightboring blocks
 		Chunk* neighbors[6];
-
-
-		//bool lit;
-		//bool lightingDirty;
 
 	private:
 
 		/** Recursive lighting function, traverses the chunk from light sources
 		 *		stepping the light down one notch each move 
 		 *		@param c The coordinates to light from 
-		 *		@param light The light value at this point */
-		void getLighting(ChunkCoords& c,int light);
+		 *		@param light The light value at this point 
+		 *		@param If this is an emitter */
+		void getLighting(ChunkCoords& c,int lightVal,bool emitter=false);
 		
+		bool blockSolid(byte chunkValue)
+		{
+			#ifdef ALLOW_BLOCK_TRANSPARENCY
+			return !TRANSPARENT[chunkValue];
+			#else
+			return chunkValue;
+			#endif
+		}
+
+		byte blockTransparent(byte chunkValue)
+		{
+			#ifdef ALLOW_BLOCK_TRANSPARENCY
+			return TRANSPARENT[chunkValue];
+			#else
+			return !chunkValue;
+			#endif
+		}
+
+		void makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,size_t atlas);
+
 		// The graphics object
 		Mesh* mChunk;
 
@@ -258,7 +209,13 @@ namespace Oryx
 		Vector3 mPosition;
 
 		// The physics objects (4x4x4 compounds of up to 4x4x4 Box primitives each)
-		PhysicsBlock* mBlocks[4][4][4];
+		PhysicsBlock* mBlocks[CHUNK_STEPS_X][CHUNK_STEPS_Y][CHUNK_STEPS_Z];
+
+		// The current material
+		String mMaterial;
+
+		// dimensions of the texture atlas
+		size_t mAtlasDimensions;
 	};
 }
 

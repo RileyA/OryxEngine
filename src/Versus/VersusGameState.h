@@ -66,6 +66,7 @@ namespace Oryx
 		PhysicsObject* box;
 		ExplosionManager* mgr;
 		ChunkManager* cmgr;
+		int currentMat;
 	};
 }
 
