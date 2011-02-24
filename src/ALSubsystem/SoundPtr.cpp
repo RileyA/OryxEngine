@@ -25,11 +25,11 @@
 namespace Oryx
 {
 	SoundPtr::SoundPtr(unsigned int index,time_t start,ALSubsystem* amgr)
-	{
-		mStart = start;
-		mSoundIndex = index;
-		mAudioMgr = amgr;
-	}
+		:mStart(start),
+		mSoundIndex(index),
+		mAudioMgr(amgr)
+	{}
+	//-----------------------------------------------------------------------
 
 	SoundPtr::SoundPtr()
 	{
@@ -37,22 +37,17 @@ namespace Oryx
 		mAudioMgr = 0;
 		mSoundIndex = 5000;
 	}
-
-	SoundPtr::~SoundPtr()
-	{
-
-	}
-
+	//-----------------------------------------------------------------------
+	
 	SoundData& SoundPtr::getData()
 	{
 		return mAudioMgr->getActiveSound(mSoundIndex)->getData();
 	}
-
+	//-----------------------------------------------------------------------
+	
 	bool SoundPtr::isValid()
 	{
-		if(mAudioMgr->getActiveSound(mSoundIndex)->getStartTime()==mStart)
-			return true;
-		else
-			return false;
+		return mAudioMgr->getActiveSound(mSoundIndex)->getStartTime() == mStart;
 	}
+	//-----------------------------------------------------------------------
 }

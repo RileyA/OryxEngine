@@ -45,7 +45,7 @@ namespace Oryx
 		 *			you're using a ChunkManager.
 		 *		@param position The position of this chunk
 		 *		@param parent The ChunkManager this Chunk belongs to */
-		Chunk(Vector3 position, ChunkManager* parent = 0);
+		Chunk(Vector3 position, ChunkManager* parent,byte* data);
 
 		/** Destructor, cleans up physics and mesh data */
 		virtual ~Chunk();
@@ -196,7 +196,7 @@ namespace Oryx
 		}
 
 		/** Adds a 1 meter quad (actually 2 tris) to a given MeshData object */
-		void makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,size_t atlas);
+		void makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,bool* adjs);
 
 		// The graphics object
 		Mesh* mChunk;
@@ -221,6 +221,8 @@ namespace Oryx
 
 		// dimensions of the texture atlas
 		size_t mAtlasDimensions;
+
+		int mNumBlocks;
 	};
 }
 

@@ -76,6 +76,15 @@ namespace Oryx
 		{
 			c = correctChunkCoords(c,coords);
 			return c ? c->light[coords.x][coords.y][coords.z] : MAX_LIGHT;
+		}
+
+		/** Gets the type value of a set block
+		 *		@param Chunk c The Chunk of origin
+		 *		@param coords The coordinates to look at */
+		static byte getBlock(Chunk* c, ChunkCoords coords)
+		{
+			c = correctChunkCoords(c,coords);
+			return c ? c->blocked[coords.x][coords.y][coords.z] : 0;
 		}	
 	};
 }

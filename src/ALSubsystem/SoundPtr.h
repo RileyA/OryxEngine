@@ -29,13 +29,16 @@ namespace Oryx
 {
 	class ALSubsystem;
 
+	/** An object representing a sound, (since the system uses/reuses sound buffers
+	 *		this is sort of a wrapper representing an individual sound. 
+	 *		@remarks Always check isValid() before messing with it, since sounds may immediately
+	 *			be reused... */
 	class ORYX_AL_EXPORT SoundPtr
 	{
 	public:
 
 		SoundPtr(unsigned int index,time_t start,ALSubsystem* amgr);
 		SoundPtr();
-		~SoundPtr();
 
 		bool isValid();
 

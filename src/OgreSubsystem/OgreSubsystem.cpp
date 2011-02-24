@@ -53,6 +53,7 @@ namespace Oryx
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
 			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
+			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");
 			mRoot->setRenderSystem(rs);
@@ -80,8 +81,8 @@ namespace Oryx
 			defaultCamNode->attachObject(mDefaultCamera->getCamera());
 			mDefaultCamera->setPosition(Vector3(0,0,0));
 			mDefaultCamera->getCamera()->setDirection(0,0,-1);
-			mDefaultCamera->setFarClip(300);
-			mDefaultCamera->setNearClip(0.01f);
+			mDefaultCamera->setFarClip(50);
+			mDefaultCamera->setNearClip(0.1f);
 			mDefaultCamera->setFOV(60.f);
 
 			mViewport = mWindow->addViewport(mDefaultCamera->getCamera());
@@ -111,6 +112,8 @@ namespace Oryx
             Logger::getPtr()->logMessage("Ogre Subsystem started up.");
             mInitialized = true;
 
+			Ogre::CompositorInstance *instance = Ogre::CompositorManager::getSingleton().addCompositor(mViewport, "TestMRT");
+			Ogre::CompositorManager::getSingleton().setCompositorEnabled(mViewport, "TestMRT", false);
 		}
     }
     //-----------------------------------------------------------------------
@@ -140,6 +143,8 @@ namespace Oryx
     void OgreSubsystem::_update(Real delta)
     {
 		renderFrame();
+		if(TimeManager::getPtr()->getTimeDecimal()>7.5f)
+			Ogre::CompositorManager::getSingleton().setCompositorEnabled(mViewport, "TestMRT", true);
     }
     //-----------------------------------------------------------------------
 
@@ -269,7 +274,7 @@ namespace Oryx
 		
 		HardwareVertexBufferSharedPtr posVertexBuffer;
 		HardwareVertexBufferSharedPtr normVertexBuffer;
-		HardwareVertexBufferSharedPtr texcoordsVertexBuffer;
+		std::vector<HardwareVertexBufferSharedPtr> texcoordsVertexBuffer;
 		HardwareVertexBufferSharedPtr diffuseVertexBuffer;
 		HardwareIndexBufferSharedPtr indexBuffer;
 
@@ -291,25 +296,25 @@ namespace Oryx
 
 		if(hasNormals)
 			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
-
-		vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES);
-
+		
 		if(hasVertexColor)
-			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_DIFFUSE);
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT4, VES_DIFFUSE);
+		
+		for(int i=0;i<data.texcoords.size();++i)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES,i);
 		
 		bufferCount = 0;
 
 		// Positions
 		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
 			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+
 		vbind->setBinding(bufferCount, posVertexBuffer);
 
 		float* vertices = data.getVertices(); 
 		float* normals = data.getNormals();
-		float* texcoords = data.getTexcoords();
 		float* diffuse = data.getDiffuse();
 		unsigned short* indices = data.getIndices();
-
 
 		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
 
@@ -318,25 +323,31 @@ namespace Oryx
 		{
 			normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
 				3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+
 			vbind->setBinding(++bufferCount, normVertexBuffer);
 
 			normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
 		}
-
-		// Texcoords
-		texcoordsVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-			2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-		vbind->setBinding(++bufferCount, texcoordsVertexBuffer);
-
-		texcoordsVertexBuffer->writeData(0,texcoordsVertexBuffer->getSizeInBytes(),texcoords, true);
-
+		
 		if(hasVertexColor)
 		{
 			diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
 				4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+
 			vbind->setBinding(++bufferCount, diffuseVertexBuffer);
 
 			diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
+		}
+
+		// Texcoords
+		for(int i=0;i<data.texcoords.size();++i)
+		{
+			texcoordsVertexBuffer.push_back(HardwareBufferManager::getSingleton().createVertexBuffer(
+				2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY));
+
+			vbind->setBinding(++bufferCount, texcoordsVertexBuffer[i]);
+			
+			texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
 		}
 
 		// Prepare buffer for indices
@@ -353,11 +364,13 @@ namespace Oryx
 
 		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
 
+		vdecl->sort();
+
 		m->load();
 		m->touch();
 
-		m->_setBounds(AxisAlignedBox(-32,-32,-32,32,32,32));
-		m->_setBoundingSphereRadius(64.f);
+		m->_setBounds(AxisAlignedBox(-8,-8,-8,8,8,8));
+		m->_setBoundingSphereRadius(11.313f);
 
 		sm->setMaterialName("MeinKraft");
 

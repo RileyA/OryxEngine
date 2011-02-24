@@ -22,8 +22,25 @@
 
 namespace Oryx
 {
+	/** A simple struct representing the results fo a raycast test */
 	struct RaycastReport
 	{
+		/** Whether or not this raycast hit anything, if not everything else 
+		 *		will be uninitialized	 */
+		bool hit;
+
+		/** The normal of the impact point */
+		Vector3 normal;
+
+		/** The impact point */
+		Vector3 position;
+
+		/** The collision group of the hit object */
+		short group;
+
+		/** The userdata pointer of the hit object */
+		void* userData;
+		
 		RaycastReport()
 		{
 			hit = false;
@@ -37,11 +54,5 @@ namespace Oryx
 			group = hitGroup;
 			userData = _userData;
 		}
-
-		bool hit;
-		Vector3 normal;
-		Vector3 position;
-		short group;
-		void* userData;
 	};
 }

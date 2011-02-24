@@ -12,7 +12,7 @@ material DebugGrid
 				tex_address_mode wrap
 			}
 			texture_unit
-			{z
+			{
 				texture CubeMap_AO.png
 				tex_coord_set 1
 				colour_op modulate
@@ -43,20 +43,24 @@ material Debug1
 	{
 		pass
 		{
-			//scene_blend alpha_blend
-			//depth_write off
-			//alpha_rejection greater 100
 			lighting off
-			//emissive 0.0 0.0 0.0
-			//emissive vertexcolour
 
 			texture_unit
 			{
 				filtering anisotropic
-				max anisotropy 16
+				max_anisotropy 16
 				texture daebugGrid.png
 				tex_address_mode wrap
+				tex_coord_set 0
 			}
+			/*texture_unit
+			{
+				filtering none
+				texture ao.png
+				tex_address_mode wrap
+				tex_coord_set 1
+				colour_op modulate
+			}*/
 		}
 	}
 }
@@ -68,7 +72,6 @@ material Debug2
 		pass
 		{
 			lighting off
-			diffuse vertexcolor
 
 			texture_unit
 			{
@@ -77,10 +80,17 @@ material Debug2
 				texture debugGrid2.png
 				tex_address_mode wrap
 			}
+			/*texture_unit
+			{
+				filtering none
+				texture ao.png
+				tex_address_mode border
+				tex_coord_set 1
+				colour_op modulate
+			}*/
 		}
 	}
 }
-
 // heh...
 material MeinKraft
 {
@@ -89,7 +99,6 @@ material MeinKraft
 		pass
 		{
 			lighting off
-			diffuse vertexcolor
 			alpha_rejection greater 100
 
 			texture_unit
@@ -98,6 +107,14 @@ material MeinKraft
 				texture terrain.png
 				tex_address_mode wrap
 			}
+			/*texture_unit
+			{
+				filtering none
+				texture ao.png
+				tex_address_mode border
+				tex_coord_set 1
+				colour_op modulate
+			}*/
 		}
 	}
 }

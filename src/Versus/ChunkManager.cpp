@@ -25,7 +25,7 @@
 namespace Oryx
 {
 	ChunkManager::ChunkManager(Vector3 position)
-		:radius(2),mLast(10,10,10)
+		:radius(1),mLast(10,10,10)
 	{
 		generate(position);
 	}
@@ -108,12 +108,13 @@ namespace Oryx
 		//int j = (position.y+CHUNK_SIZE_Y/2)/CHUNK_SIZE_Y;
 		int k = (position.z+CHUNK_SIZE_Z/2)/CHUNK_SIZE_Z;
 
-		if(mLast.x!=i||mLast.z!=k)
+		if(mLast.x!=i||mLast.z!=k)//||mLast.y!=j)
 		{			
 			ChunkCoords c = (i-radius,0,k-radius);
 
 			for(c.x = i-radius; c.x<=i+radius; ++c.x)
-				for(c.z = k-radius; c.z<=k+radius; ++c.z)
+				//for(c.y = j-radius; c.y<=j+radius; ++c.y)
+					for(c.z = k-radius; c.z<=k+radius; ++c.z)
 					createChunk(c);
 		}
 		mLast = ChunkCoords(i,0,k);
@@ -139,7 +140,23 @@ namespace Oryx
 		if(getChunk(c))
 			return 0;
 
-		Chunk* ch = new Chunk(Vector3(c.x*CHUNK_SIZE_X-CHUNK_SIZE_X/2,c.y*CHUNK_SIZE_Y-CHUNK_SIZE_Y/2,c.z*CHUNK_SIZE_Z-CHUNK_SIZE_Z/2),this);
+		byte data[16][16][16];
+
+		for(int i=0;i<16;++i)
+			for(int j=0;j<16;++j)
+				for(int k=0;k<16;++k)
+		{
+				data[i][j][k] = 0;
+				if(j<5)
+					data[i][j][k] = 2;
+				else if(j<8)
+					data[i][j][k] = 3;
+				else if(j<9)
+					data[i][j][k] = 4;
+		}
+
+		Chunk* ch = new Chunk(Vector3(c.x*CHUNK_SIZE_X-CHUNK_SIZE_X/2,c.y*CHUNK_SIZE_Y-CHUNK_SIZE_Y/2,
+			c.z*CHUNK_SIZE_Z-CHUNK_SIZE_Z/2),this,&data[0][0][0]);
 
 		for(int i=0;i<6;++i)
 			ch->neighbors[i] = getChunk(c<<i);

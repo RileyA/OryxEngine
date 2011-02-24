@@ -26,6 +26,8 @@
 
 #define COLORVAL(x) Colour(x,x,x)
 //#define ALLOW_BLOCK_TRANSPARENCY
+//#define BLOCK_AO
+//#define BLOCK_NORMALS
 
 namespace Oryx
 {
@@ -188,7 +190,7 @@ namespace Oryx
 	};
 
 	// DEPRECATED
-	/*const Vector3 BLOCK_NORMALS[6] =
+	const Vector3 BLOCK_NORMALS[6] =
 	{
 		Vector3(-1,0,0),
 		Vector3(1,0,0),
@@ -196,7 +198,7 @@ namespace Oryx
 		Vector3(0,1,0),
 		Vector3(0,0,-1),
 		Vector3(0,0,1)	
-	};*/
+	};
 
 	// TODO: fix vertex windings and such above, so this isn't necessary
 	const Vector2 BLOCK_TEXCOORDS[6][6] =

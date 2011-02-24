@@ -48,6 +48,7 @@ namespace Oryx
 	void Mesh::getMeshData(MeshData& out, bool texcoords, bool normals,
 		bool indices, bool vertices)
 	{
+		out.addTexcoordSet();
 		size_t vertex_count = 0;
 		size_t numTris = 0;
 		size_t index_count = 0;
@@ -147,8 +148,8 @@ namespace Oryx
 					if(texcoords)
 					{
 						tElem->baseVertexPointerToElement(tex, &tReal);
-						out.texcoords.push_back(*tReal++);
-						out.texcoords.push_back(*tReal++);
+						out.texcoords[0].push_back(*tReal++);
+						out.texcoords[0].push_back(*tReal++);
 						tex+=tbuf->getVertexSize();
 					}
 				}

@@ -43,8 +43,8 @@ namespace Oryx
 			normals.push_back(n.x);
 			normals.push_back(n.y);
 			normals.push_back(n.z);
-			texcoords.push_back(t.x);
-			texcoords.push_back(t.y);
+			texcoords[0].push_back(t.x);
+			texcoords[0].push_back(t.y);
 			if(d.x>-0.5f)// sorta ugly way of doing this, but ahh well...
 			{
 				diffuse.push_back(d.x);
@@ -59,8 +59,8 @@ namespace Oryx
 			vertices.push_back(v.x);
 			vertices.push_back(v.y);
 			vertices.push_back(v.z);
-			texcoords.push_back(t.x);
-			texcoords.push_back(t.y);
+			texcoords[0].push_back(t.x);
+			texcoords[0].push_back(t.y);
 			indices.push_back(indices.size());// in order for now...
 		}
 
@@ -79,9 +79,9 @@ namespace Oryx
 		}
 
 		/** Returns the array of texcoords */
-		float* getTexcoords() const
+		float* getTexcoords(int set=0) const
 		{
-			return const_cast<float*>(&texcoords[0]);
+			return const_cast<float*>(&texcoords[set][0]);
 		}
 
 		/** Returns the array of vertex color */
@@ -98,9 +98,14 @@ namespace Oryx
 			return const_cast<unsigned short*>(&indices[0]);
 		}
 
+		void addTexcoordSet()
+		{
+			texcoords.push_back(std::vector<float>());
+		}
+
 		std::vector<float> vertices;
 		std::vector<float> normals;
-		std::vector<float> texcoords;
+		std::vector<std::vector<float> > texcoords;
 		std::vector<float> diffuse;
 		std::vector<unsigned short> indices;
 	};
