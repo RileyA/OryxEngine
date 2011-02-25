@@ -270,7 +270,7 @@ namespace Oryx
 				box = new PhysicsBoxShape(extents);
 				mShapes[name] = box;
 			}
-			else if(shape)
+			else
 			{
 				if(shape->getType() != PST_BOX)
 					throw NonUniqueNameException(name);
@@ -292,13 +292,17 @@ namespace Oryx
 		if(name!="NULL")
 		{
 			PhysicsShape* shape = getShape(name);
-			if(!shape || !(sphere = dynamic_cast<PhysicsSphereShape*>(getShape(name))))
+			if(!shape)
 			{
 				sphere = new PhysicsSphereShape(radius);
 				mShapes[name] = sphere;
 			}
-			else if(shape)
-				throw NonUniqueNameException(name);
+			else
+			{
+				if(shape->getType() != PST_SPHERE)
+					throw NonUniqueNameException(name);
+				sphere = static_cast<PhysicsSphereShape*>(shape);
+			}
 		}
 		else
 			sphere = new PhysicsSphereShape(radius);
@@ -314,13 +318,17 @@ namespace Oryx
 		if(name!="NULL")
 		{
 			PhysicsShape* shape = getShape(name);
-			if(!shape || !(con = dynamic_cast<PhysicsConvexShape*>(getShape(name))))
+			if(!shape)
 			{
 				con = new PhysicsConvexShape(points,name);
 				mShapes[name] = con;
 			}
-			else if(shape)
-				throw NonUniqueNameException(name);
+			else
+			{
+				if(shape->getType() != PST_CONVEX)
+					throw NonUniqueNameException(name);
+				con = static_cast<PhysicsConvexShape*>(shape);
+			}
 		}
 		else
 			con = new PhysicsConvexShape(points,name);
@@ -336,13 +344,17 @@ namespace Oryx
 		if(name!="NULL")
 		{
 			PhysicsShape* shape = getShape(name);
-			if(!shape || !(tri = dynamic_cast<PhysicsTrimeshShape*>(getShape(name))))
+			if(!shape)
 			{
 				tri = new PhysicsTrimeshShape(triangles,name);
 				mShapes[name] = tri;
 			}
-			else if(shape)
-				throw NonUniqueNameException(name);
+			else
+			{
+				if(shape->getType() != PST_TRIMESH)
+					throw NonUniqueNameException(name);
+				tri = static_cast<PhysicsTrimeshShape*>(shape);
+			}
 		}
 		else
 			tri = new PhysicsTrimeshShape(triangles,name);
