@@ -50,7 +50,7 @@ namespace Oryx
 
 		for(int i=0;i<CHUNK_STEPS_X;++i)for(int j=0;j<CHUNK_STEPS_Y;++j)for(int k=0;k<CHUNK_STEPS_Z;++k)
 			mBlocks[i][j][k] = new PhysicsBlock(i,j,k,
-				b->createCompound(OFFSET*-1.f+Vector3(i,j,k)*CHUNK_STEP+mPosition),this);
+				static_cast<CollisionObject*>(b->createCompound(OFFSET*-1.f+Vector3(i,j,k)*CHUNK_STEP+mPosition)),this);
 
 		for(int p=0;p<6;++p)
 			neighbors[p] = 0;

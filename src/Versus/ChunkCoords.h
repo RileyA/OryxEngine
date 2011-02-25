@@ -26,7 +26,7 @@
 
 #define COLORVAL(x) Colour(x,x,x)
 //#define ALLOW_BLOCK_TRANSPARENCY
-//#define BLOCK_AO
+#define BLOCK_AO
 //#define BLOCK_NORMALS
 
 namespace Oryx

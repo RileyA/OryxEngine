@@ -103,5 +103,6 @@ namespace Oryx
 #include "OryxStringUtils.h"
 #include "OryxTimeManager.h"
 #include "OryxLogger.h"
+#include "OryxException.h"
 
 #endif

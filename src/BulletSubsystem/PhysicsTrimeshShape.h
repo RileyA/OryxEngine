@@ -17,27 +17,23 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "PhysicsObject.h"
-#include "btBulletDynamicsCommon.h"
+#ifndef PHYSICS_TRIMESH_SHAPE_H
+#define PHYSICS_TRIMESH_SHAPE_H
+
+#include "PhysicsShape.h"
 
 namespace Oryx
 {
-	PhysicsObject::PhysicsObject(btDynamicsWorld* world)
-		:mDynamicsWorld(world),mReadyForDelete(0)
+	class PhysicsTrimeshShape : public PhysicsShape
 	{
-		
-	}
-	//-----------------------------------------------------------------------
-	
-	bool PhysicsObject::readyForDelete()
-	{
-		return mReadyForDelete;
-	}
-	//-----------------------------------------------------------------------
-	
-	void PhysicsObject::_kill()
-	{
-		mReadyForDelete = true;
-	}
-	//-----------------------------------------------------------------------
+	public:
+
+		PhysicsTrimeshShape(MeshData& data, String name = "NULL");
+
+		PhysicsShapeType getType(){return PST_TRIMESH;}
+
+	};
 }
+
+#endif
+

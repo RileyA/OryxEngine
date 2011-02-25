@@ -17,27 +17,26 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "PhysicsObject.h"
 #include "btBulletDynamicsCommon.h"
+#include "PhysicsTrimeshShape.h"
 
 namespace Oryx
 {
-	PhysicsObject::PhysicsObject(btDynamicsWorld* world)
-		:mDynamicsWorld(world),mReadyForDelete(0)
+	PhysicsTrimeshShape::PhysicsTrimeshShape(MeshData& d, String name)
+		:PhysicsShape(name == "NULL",name)
 	{
-		
+		// TODO: delete this somewhere? maybe bullet does w/ the shape?
+		btTriangleMesh *triMesh = new btTriangleMesh();
+		for(int i=0;i+3<d.indices.size();i+=3)
+		{
+			btVector3 points[3];
+			for(int j=0;j<3;++j)
+				points[j] = btVector3(
+					d.vertices[d.indices[i+j]*3],
+					d.vertices[d.indices[i+j]*3+1],
+					d.vertices[d.indices[i+j]*3+2]);
+			triMesh->addTriangle(points[0],points[1],points[2]);
+		}
+		mShape = new btBvhTriangleMeshShape(triMesh,true);
 	}
-	//-----------------------------------------------------------------------
-	
-	bool PhysicsObject::readyForDelete()
-	{
-		return mReadyForDelete;
-	}
-	//-----------------------------------------------------------------------
-	
-	void PhysicsObject::_kill()
-	{
-		mReadyForDelete = true;
-	}
-	//-----------------------------------------------------------------------
 }

@@ -27,6 +27,14 @@
 #include "Oryx3DMath.h"
 #include "PhysicsObject.h"
 #include "RaycastReport.h"
+#include "PhysicsShape.h"
+#include "PhysicsBoxShape.h"
+#include "PhysicsSphereShape.h"
+#include "PhysicsConvexShape.h"
+#include "PhysicsCompoundShape.h"
+#include "PhysicsTrimeshShape.h"
+#include "CollisionObject.h"
+#include "RigidBody.h"
 
 // bullet forward declarations
 class btDynamicsWorld;
@@ -125,44 +133,46 @@ namespace Oryx
 		/** Gets a cached shape
 		 *		@param name The name of the shape to loop for
 		 *		@return The shape, or 0 if not found */
-		btCollisionShape* getShape(String name);
+		PhysicsShape* getShape(String name);
 		/** Creates a primitive box shape
 		 *		@param extents The extents of the box to create
 		 *		@return The created object */
-		btCollisionShape* createBoxShape(Vector3 extents);
+		PhysicsBoxShape* createBoxShape(Vector3 extents);
 		/** Creates a primitive sphere shape
 		 *		@param radius The desired radius
 		 *		@return The created object */
-		btCollisionShape* createSphereShape(Real radius);
+		PhysicsSphereShape* createSphereShape(Real radius);
 		/** Creates a convex hull primitive from a point cloud 
 		 *		@param points The points, stored in a MeshData object 
 		 *		@param name The name of the mesh (so if it already exists, we can reuse)
 		 *		@return The created shape */
-		btCollisionShape* createConvexShape(MeshData& points, String name="NULL");
+		PhysicsConvexShape* createConvexShape(MeshData& points, String name="NULL");
 		/** Creates a triange mesh shape based on a MeshData object 
-		 *		@param triangels The MeshData to use 
+		 *		@param triangles The MeshData to use 
 		 *		@param name The name, for caching purposes */
-		btCollisionShape* createTrimeshShape(MeshData& triangles,String name="NULL");
+		PhysicsTrimeshShape* createTrimeshShape(MeshData& triangles,String name="NULL");
 		/** Creates a compound object based on vectors of primitives and positions
 		 *		@param shapes The shapes to use 
 		 *		@param positions The positions to place the shapes within this compound */
-		btCollisionShape* createCompoundShape(const std::vector<btCollisionShape*>& shapes,
+		PhysicsCompoundShape* createCompoundShape(const std::vector<PhysicsShape*>& shapes,
 			const std::vector<Vector3>& positions);
 
 		/** Creates a single-shape physics object
 		 *		@param shape The physics shape to be used
 		 *		@param position Where to spawn the physics object 
 		 *		@param mass The desired mass (0 if a static object) */
-		PhysicsObject* createObject(btCollisionShape* shape, Vector3 position, float mass);
+		PhysicsObject* createObject(PhysicsShape* shape, Vector3 position, float mass);
+		PhysicsObject* createObject(PhysicsShape* shape, Vector3 position);
+
 		/** Creates a dynamic rigid body object
 		 *		@param shape The desired shape 
 		 *		@param position Where to spawn the object 
 		 *		@param mass The desired mass to use */
-		PhysicsObject* createRigidBody(btCollisionShape* shape, Vector3 position, float mass);
+		RigidBody* createRigidBody(PhysicsShape* shape, Vector3 position, float mass);
 		/** Creates a static physics object
 		 *		@param shape The shape to be used
 		 *		@param position Where to place the object */
-		PhysicsObject* createStatic(btCollisionShape* shape, Vector3 position);
+		CollisionObject* createStatic(PhysicsShape* shape, Vector3 position);
 
         static const size_t mDependencyCount;
         static const String mDependencies[];
@@ -182,7 +192,7 @@ namespace Oryx
 		
 		bool mStarted;
 		std::vector<PhysicsObject*> mObjects;
-		std::map<std::string,btCollisionShape*> mShapes;
+		std::map<std::string,PhysicsShape*> mShapes;
 
 		Vector3 mGravity;
     };

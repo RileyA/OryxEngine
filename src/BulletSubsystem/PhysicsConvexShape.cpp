@@ -17,27 +17,15 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "PhysicsObject.h"
+#include "PhysicsConvexShape.h"
 #include "btBulletDynamicsCommon.h"
 
 namespace Oryx
 {
-	PhysicsObject::PhysicsObject(btDynamicsWorld* world)
-		:mDynamicsWorld(world),mReadyForDelete(0)
+	PhysicsConvexShape::PhysicsConvexShape(MeshData& data, String name)
+		:PhysicsShape(name == "NULL",name)
 	{
-		
+		mShape = new btConvexHullShape(static_cast<btScalar*>(data.getVertices()),
+			data.vertices.size()/3,3+sizeof(btScalar));
 	}
-	//-----------------------------------------------------------------------
-	
-	bool PhysicsObject::readyForDelete()
-	{
-		return mReadyForDelete;
-	}
-	//-----------------------------------------------------------------------
-	
-	void PhysicsObject::_kill()
-	{
-		mReadyForDelete = true;
-	}
-	//-----------------------------------------------------------------------
 }

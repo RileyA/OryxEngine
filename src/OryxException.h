@@ -33,6 +33,14 @@ namespace Oryx
 		Exception() : std::runtime_error("Undocumented Exception.") {}
 		Exception(String except) : std::runtime_error(except){}
 	};
+
+	/** Thrown when a given name or ID should be unique, but isn't */
+	class ORYX_EXPORT NonUniqueNameException : public std::runtime_error
+	{
+	public:
+		NonUniqueNameException() : std::runtime_error("Non-Unique Name Exeption!") {}
+		NonUniqueNameException(String except) : std::runtime_error("Non-Unique Name Exception: "+except){}
+	};
 }
 
 #endif

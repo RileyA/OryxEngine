@@ -17,27 +17,14 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "PhysicsObject.h"
+#include "PhysicsSphereShape.h"
 #include "btBulletDynamicsCommon.h"
 
 namespace Oryx
 {
-	PhysicsObject::PhysicsObject(btDynamicsWorld* world)
-		:mDynamicsWorld(world),mReadyForDelete(0)
+	PhysicsSphereShape::PhysicsSphereShape(Real radius)
+		:PhysicsShape(false,"SPHERE_"+StringUtils::toString(radius))
 	{
-		
+		mShape = new btSphereShape(radius);
 	}
-	//-----------------------------------------------------------------------
-	
-	bool PhysicsObject::readyForDelete()
-	{
-		return mReadyForDelete;
-	}
-	//-----------------------------------------------------------------------
-	
-	void PhysicsObject::_kill()
-	{
-		mReadyForDelete = true;
-	}
-	//-----------------------------------------------------------------------
 }

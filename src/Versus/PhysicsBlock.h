@@ -34,14 +34,14 @@ namespace Oryx
 	{
 	public:
 
-		PhysicsObject* block;
+		CollisionObject* block;
 		Chunk* parent;
 
 		int x;
 		int y;
 		int z;
 
-		PhysicsBlock(int i, int j, int k,PhysicsObject* bl,Chunk* par)
+		PhysicsBlock(int i, int j, int k,CollisionObject* bl,Chunk* par)
 		{
 			block = bl;
 			x = i*CHUNK_STEP;

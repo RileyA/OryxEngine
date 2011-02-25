@@ -155,14 +155,15 @@ namespace Oryx
 				delete obj;
 			}
 
-			std::map<String,btCollisionShape*>::iterator iter = mShapes.begin();
-			while(iter!=mShapes.end())
+			std::map<String,PhysicsShape*>::iterator iter = mShapes.begin();
+			while(iter != mShapes.end())
 			{
 				btTriangleMesh* tr = 0;
 
-				if(iter->second->getShapeType()==21)
+				// TODO put this in trimesh's dtor...
+				if(iter->second->getType() == PST_TRIMESH)
 					tr = dynamic_cast<btTriangleMesh*>(dynamic_cast<btBvhTriangleMeshShape*>(
-						iter->second)->getMeshInterface());
+						iter->second->getBtShape())->getMeshInterface());
 
 				if(tr)
 					delete tr;// clear triangle data!
@@ -215,7 +216,6 @@ namespace Oryx
 	PhysicsObject* BulletSubsystem::createStaticTrimesh(MeshData& d,Vector3 pos,String name)
 	{
 		PhysicsObject* p = createStatic(createTrimeshShape(d,name),pos);
-		p->setUniqueCollisionShape(name=="NULL");
 		return p;
 	}
 	//-----------------------------------------------------------------------
@@ -223,7 +223,6 @@ namespace Oryx
 	PhysicsObject* BulletSubsystem::createConvexHull(MeshData& d,Vector3 pos,float mass,String name)
 	{
 		PhysicsObject* p = createObject(createConvexShape(d,name),pos,mass);
-		p->setUniqueCollisionShape(name=="NULL");
 		return p;
 	}
 	//-----------------------------------------------------------------------
@@ -242,106 +241,128 @@ namespace Oryx
 	
 	PhysicsObject* BulletSubsystem::createCompound(Vector3 pos)
 	{
-		std::vector<btCollisionShape*> s;
+		std::vector<PhysicsShape*> s;
 		std::vector<Vector3> v;
 		PhysicsObject* obj = createStatic(createCompoundShape(s,v),pos);
-		obj->setCompound(true);
 		return obj;
 	}
 	//-----------------------------------------------------------------------
 	
-	btCollisionShape* BulletSubsystem::getShape(String name)
+	PhysicsShape* BulletSubsystem::getShape(String name)
 	{
-		if(mShapes.find(name)!=mShapes.end())
+		if(mShapes.find(name) != mShapes.end())
 			return mShapes[name];
 		return 0;
 	}
 	//-----------------------------------------------------------------------
 	
-	btCollisionShape* BulletSubsystem::createBoxShape(Vector3 extents)
+	PhysicsBoxShape* BulletSubsystem::createBoxShape(Vector3 extents)
 	{
+		PhysicsBoxShape* box = 0;
 		String name = "BOX_"+StringUtils::toString(extents.x)+"_"+
-			StringUtils::toString(extents.y)+"_"+
-			StringUtils::toString(extents.z);
-		btCollisionShape* s = getShape(name);
-		if(!s)
-		{
-			s =  new btBoxShape(btVector3(extents.x,extents.y,extents.z));
-			mShapes[name] = s;
-		}
-		return s;
-	}
-	//-----------------------------------------------------------------------
-	
-	btCollisionShape* BulletSubsystem::createSphereShape(Real radius)
-	{
-		String name = "SPHERE_"+StringUtils::toString(radius);
-		btCollisionShape* s = getShape(name);
-		if(!s)
-		{
-			s =  new btSphereShape(radius);
-			mShapes[name] = s;
-		}
-		return s;
-	}
-	//-----------------------------------------------------------------------
-	
-	btCollisionShape* BulletSubsystem::createConvexShape(MeshData& points, String name)
-	{
-		btCollisionShape* s = 0;
+			StringUtils::toString(extents.y)+"_"+StringUtils::toString(extents.z);
+		
 		if(name!="NULL")
-			s = getShape(name);
-		if(!s)
 		{
-			s = new btConvexHullShape(static_cast<btScalar*>(points.getVertices()),
-				points.vertices.size()/3,3*sizeof(btScalar));
-
-			if(name!="NULL")
-				mShapes[name] = s;
-		}
-		return s;
-	}
-	//-----------------------------------------------------------------------
-	
-	btCollisionShape* BulletSubsystem::createTrimeshShape(MeshData& d,String name)
-	{
-		btCollisionShape* s = 0;
-		if(name!="NULL")
-			s = getShape(name);
-		if(!s)
-		{
-			btTriangleMesh *triMesh = new btTriangleMesh();
-			for(int i=0;i+3<d.indices.size();i+=3)
+			PhysicsShape* shape = getShape(name);
+			if(!shape)
 			{
-				btVector3 points[3];
-				for(int j=0;j<3;++j)
-					points[j] = btVector3(
-						d.vertices[d.indices[i+j]*3],
-						d.vertices[d.indices[i+j]*3+1],
-						d.vertices[d.indices[i+j]*3+2]);
-				triMesh->addTriangle(points[0],points[1],points[2]);
+				box = new PhysicsBoxShape(extents);
+				mShapes[name] = box;
 			}
-			s = new btBvhTriangleMeshShape(triMesh,true);
-			if(name!="NULL")
-				mShapes[name] = s;
+			else if(shape)
+			{
+				if(shape->getType() != PST_BOX)
+					throw NonUniqueNameException(name);
+				box = static_cast<PhysicsBoxShape*>(shape);
+			}
 		}
-		return s;
+		else
+			box = new PhysicsBoxShape(extents);
+
+		return box;
+	}
+	//-----------------------------------------------------------------------
+	
+	PhysicsSphereShape* BulletSubsystem::createSphereShape(Real radius)
+	{
+		PhysicsSphereShape* sphere;
+		String name = "SPHERE_"+StringUtils::toString(radius);
+		
+		if(name!="NULL")
+		{
+			PhysicsShape* shape = getShape(name);
+			if(!shape || !(sphere = dynamic_cast<PhysicsSphereShape*>(getShape(name))))
+			{
+				sphere = new PhysicsSphereShape(radius);
+				mShapes[name] = sphere;
+			}
+			else if(shape)
+				throw NonUniqueNameException(name);
+		}
+		else
+			sphere = new PhysicsSphereShape(radius);
+
+		return sphere;
+	}
+	//-----------------------------------------------------------------------
+	
+	PhysicsConvexShape* BulletSubsystem::createConvexShape(MeshData& points, String name)
+	{
+		PhysicsConvexShape* con;
+		
+		if(name!="NULL")
+		{
+			PhysicsShape* shape = getShape(name);
+			if(!shape || !(con = dynamic_cast<PhysicsConvexShape*>(getShape(name))))
+			{
+				con = new PhysicsConvexShape(points,name);
+				mShapes[name] = con;
+			}
+			else if(shape)
+				throw NonUniqueNameException(name);
+		}
+		else
+			con = new PhysicsConvexShape(points,name);
+
+		return con;
+	}
+	//-----------------------------------------------------------------------
+	
+	PhysicsTrimeshShape* BulletSubsystem::createTrimeshShape(MeshData& triangles,String name)
+	{
+		PhysicsTrimeshShape* tri;
+		
+		if(name!="NULL")
+		{
+			PhysicsShape* shape = getShape(name);
+			if(!shape || !(tri = dynamic_cast<PhysicsTrimeshShape*>(getShape(name))))
+			{
+				tri = new PhysicsTrimeshShape(triangles,name);
+				mShapes[name] = tri;
+			}
+			else if(shape)
+				throw NonUniqueNameException(name);
+		}
+		else
+			tri = new PhysicsTrimeshShape(triangles,name);
+
+		return tri;
 	}
 	//-----------------------------------------------------------------------
 	// TODO add orientation options
-	btCollisionShape* BulletSubsystem::createCompoundShape(
-		const std::vector<btCollisionShape*>& shapes,
+	PhysicsCompoundShape* BulletSubsystem::createCompoundShape(
+		const std::vector<PhysicsShape*>& shapes,
 		const std::vector<Vector3>& positions)
 	{
-		btCompoundShape* comp = new btCompoundShape();
+		PhysicsCompoundShape* comp = new PhysicsCompoundShape();
 		for(int i=0;i<shapes.size();++i)
-			comp->addChildShape(btTransform(btQuaternion::getIdentity(),
-				convertBullet(positions[i])),shapes[i]);
+			comp->addShape(shapes[i],positions[i]);
 		return comp;
 	}
 	//-----------------------------------------------------------------------
 	
-	PhysicsObject* BulletSubsystem::createObject(btCollisionShape* shape,
+	PhysicsObject* BulletSubsystem::createObject(PhysicsShape* shape,
 		Vector3 position, Real mass)
 	{
 		if(mass<=0.f)
@@ -350,13 +371,19 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	PhysicsObject* BulletSubsystem::createRigidBody(btCollisionShape* shape, 
+	PhysicsObject* BulletSubsystem::createObject(PhysicsShape* shape, Vector3 position)
+	{
+		return createStatic(shape,position);
+	}
+	//-----------------------------------------------------------------------
+
+	RigidBody* BulletSubsystem::createRigidBody(PhysicsShape* shape, 
 		Vector3 position, float mass)
 	{
 		btVector3 localInertia(0,0,0);
-		shape->calculateLocalInertia(mass,localInertia);
+		shape->getBtShape()->calculateLocalInertia(mass,localInertia);
 
-		btRigidBody* actor = new btRigidBody(mass,0,shape,localInertia);	
+		btRigidBody* actor = new btRigidBody(mass,0,shape->getBtShape(),localInertia);	
 		actor->setRestitution(0.3f);
 		actor->setFriction(0.8f);
 		actor->setAnisotropicFriction(btVector3(0.9f,0.9f,0.9f));
@@ -365,42 +392,25 @@ namespace Oryx
 
 		dynamic_cast<btDiscreteDynamicsWorld*>(mDynamicsWorld)->addRigidBody(actor,
 			COLLISION_GROUP_1,COLLISION_GROUP_1);
-
-		mObjects.push_back(new PhysicsObject(actor,mDynamicsWorld));
-		return mObjects.back();
+		
+		RigidBody* body = new RigidBody(mDynamicsWorld,actor,shape);
+		mObjects.push_back(body);
+		return body;
 	}
 	//-----------------------------------------------------------------------
 	
-	PhysicsObject* BulletSubsystem::createStatic(btCollisionShape* shape, Vector3 position)
+	CollisionObject* BulletSubsystem::createStatic(PhysicsShape* shape, Vector3 position)
 	{
 		btCollisionObject* actor = new btCollisionObject();
-		actor->setCollisionShape(shape);
-		actor->setWorldTransform(btTransform(btQuaternion::getIdentity(),
-			btVector3(position.x,position.y,position.z)));
+		actor->setCollisionShape(shape->getBtShape());
+		actor->setWorldTransform(btTransform(btQuaternion::getIdentity(),convertBullet(position)));
 		actor->setRestitution(0.3f);
 		actor->setFriction(0.8f);
 
 		mDynamicsWorld->addCollisionObject(actor,COLLISION_GROUP_1);
-		mObjects.push_back(new PhysicsObject(actor,mDynamicsWorld));
-		return mObjects.back();
+		CollisionObject* obj = new CollisionObject(mDynamicsWorld,actor,shape);
+		mObjects.push_back(obj);
+		return obj;
 	}
 	//-----------------------------------------------------------------------
 }
-
-
-				/*btVector3 point1 = btVector3(
-					d.vertices[d.indices[i+j]*3+0],
-					d.vertices[d.indices[i+j]*3+1],
-					d.vertices[d.indices[i+j]*3+2]
-					);++j;
-				btVector3 point2 = btVector3(
-					d.vertices[d.indices[i+j]*3+0],
-					d.vertices[d.indices[i+j]*3+1],
-					d.vertices[d.indices[i+j]*3+2]
-					);++j;		
-				btVector3 point3 = btVector3(
-					d.vertices[d.indices[i+j]*3+0],
-					d.vertices[d.indices[i+j]*3+1],
-					d.vertices[d.indices[i+j]*3+2]
-					);
-				mTriMesh->addTriangle(point1,point2,point3);*/

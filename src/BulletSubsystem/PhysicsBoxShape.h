@@ -17,27 +17,25 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "PhysicsObject.h"
-#include "btBulletDynamicsCommon.h"
+#ifndef PHYSICS_BOX_SHAPE_H
+#define PHYSICS_BOX_SHAPE_H
+
+#include "PhysicsShape.h"
 
 namespace Oryx
 {
-	PhysicsObject::PhysicsObject(btDynamicsWorld* world)
-		:mDynamicsWorld(world),mReadyForDelete(0)
+	class PhysicsBoxShape : public PhysicsShape
 	{
-		
-	}
-	//-----------------------------------------------------------------------
-	
-	bool PhysicsObject::readyForDelete()
-	{
-		return mReadyForDelete;
-	}
-	//-----------------------------------------------------------------------
-	
-	void PhysicsObject::_kill()
-	{
-		mReadyForDelete = true;
-	}
-	//-----------------------------------------------------------------------
+	public:
+
+		/** Creates a box shape with the given extents
+		 *		@param extents The extents of the box */
+		PhysicsBoxShape(Vector3 extents);
+
+		virtual PhysicsShapeType getType(){return PST_BOX;}
+	};
 }
+
+#endif
+
+

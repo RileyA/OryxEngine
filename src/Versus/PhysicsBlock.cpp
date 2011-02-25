@@ -26,7 +26,7 @@ namespace Oryx
 		BulletSubsystem* b = Engine::getPtr()->getSubsystem("BulletSubsystem")->
 		castType<BulletSubsystem>();
 
-		block->removeAllShapes();
+		static_cast<PhysicsCompoundShape*>(block->getShape())->removeAllShapes();
 		for(int i=0;i<4;++i)for(int j=0;j<4;++j)for(int k=0;k<4;++k)
 		{
 			if(parent->blocked[i+x][j+y][k+z])
@@ -40,7 +40,7 @@ namespace Oryx
 					!(z+k==0||!parent->blocked[x+i][y+j][z+k-1]))
 					continue;
 
-				block->addShape(b->createBoxShape(Vector3(0.5,0.5,0.5)),
+				static_cast<PhysicsCompoundShape*>(block->getShape())->addShape(b->createBoxShape(Vector3(0.5,0.5,0.5)),
 					Vector3(i,j,k));
 			}
 		}

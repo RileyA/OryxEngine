@@ -1,2 +1,2 @@
 env = Environment(CPPDEFINES=['BUILD_BULLET_DLL','LINUX'])
-env.SharedLibrary('BulletSubsystem',['Bulletdllmain.cpp','BulletSubsystem.cpp','PhysicsObject.cpp','BulletConversions.cpp'],CPPPATH=['../src','/usr/include/bullet'],LIBPATH='../bin',LIBS=['OryxEngine','BulletCollision','BulletDynamics','LinearMath'])
+env.SharedLibrary('BulletSubsystem',['Bulletdllmain.cpp','BulletSubsystem.cpp','PhysicsObject.cpp','BulletConversions.cpp','CollisionObject.cpp','PhysicsBoxShape.cpp','PhysicsSphereShape.cpp','PhysicsConvexShape.cpp','PhysicsTrimeshShape.cpp','PhysicsCompoundShape.cpp','PhysicsShape.cpp','RigidBody.cpp'],CPPPATH=['../src','/usr/include/bullet'],LIBPATH='../bin',LIBS=['OryxEngine','BulletCollision','BulletDynamics','LinearMath'])
