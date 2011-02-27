@@ -196,7 +196,7 @@ namespace Oryx
 		}
 
 		/** Adds a 1 meter quad (actually 2 tris) to a given MeshData object */
-		void makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,bool* adjs);
+		void makeQuad(ChunkCoords& cpos,Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,bool* adjs,byte* lights);
 
 		// The graphics object
 		Mesh* mChunk;

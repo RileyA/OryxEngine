@@ -26,7 +26,7 @@
 
 #define COLORVAL(x) Colour(x,x,x)
 //#define ALLOW_BLOCK_TRANSPARENCY
-#define BLOCK_AO
+//#define BLOCK_AO
 //#define BLOCK_NORMALS
 
 namespace Oryx
@@ -87,6 +87,14 @@ namespace Oryx
 
 	const byte AXIS[6] = {0,0,1,1,2,2};
 	const int8 AXIS_OFFSET[6] = {-1,1,-1,1,-1,1};
+	const int8 LIGHTING_COORDS[6][4][2] = {
+		{{5,2},{5,3},{4,3},{4,2}},
+		{{4,2},{4,3},{5,3},{5,2}},
+		{{0,4},{4,1},{5,1},{5,0}},
+		{{0,5},{5,1},{4,1},{4,0}},
+		{{0,3},{1,3},{1,2},{0,2}},
+		{{0,2},{1,2},{1,3},{0,3}}
+	};
 
 	typedef signed char ChunkCoordValue;// save a few bytes...
 	//typedef short ChunkCoordValue; //required if coords are gonna be >127 in any dimension
@@ -168,9 +176,22 @@ namespace Oryx
 		{1,1,1,1,1,1},
 		{1,1,1,1,1,1},
 		{2,2,2,2,2,2},
-		{3,3,3,3,3,3},
+		{3,3,3,3,3,3},`
 		{4,4,4,4,4,4}
 	};*/
+
+	const byte FILTERVERTEX[6] = 
+	{
+		//2,3,2,3,2,2
+		
+		 0,3,1,3,2,1
+		//   1,0,2,0,3,2
+	//	3,2,0,2,1,0
+
+		//0,0,0,0,3,0
+		//0,1,3,3,1,2
+		//0,1,2,0,2,3
+	};
 
 	// hard-coded since it shouldn't ever change, and is faster than calculating it out each time
 	const Vector3 BLOCK_VERTICES[6][6] =

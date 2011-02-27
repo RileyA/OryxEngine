@@ -53,14 +53,14 @@ material Debug1
 				tex_address_mode wrap
 				tex_coord_set 0
 			}
-			texture_unit
+			/*texture_unit
 			{
 				filtering none
 				texture ao.png
 				tex_address_mode wrap
 				tex_coord_set 1
 				colour_op modulate
-			}
+			}*/
 		}
 	}
 }
@@ -107,14 +107,14 @@ material MeinKraft
 				texture terrain.png
 				tex_address_mode wrap
 			}
-			texture_unit
+			/*texture_unit
 			{
 				filtering none
 				texture ao.png
 				tex_address_mode border
 				tex_coord_set 1
 				colour_op modulate
-			}
+			}*/
 		}
 	}
 }

@@ -139,10 +139,18 @@ namespace Oryx
 				ChunkCoords bc(i,j,k);
 
 				byte lit = getLightState(bc);
+				byte adj[6];
+
+				byte lt[6] = {0,0,0,0,0,0};
+				for(int p=0;p<6;++p)
+					//if(!adjacents[p])
+						lt[p] = ChunkUtils::getLight(this,bc<<p);
 				
 				for(int p=0;p<6;++p)
 					if(!adjacents[p])
-						makeQuad(Vector3(i,j,k),p,d,MAPPINGS[ChunkUtils::getBlock(this,bc<<p)][5-p],LIGHTVALUES[lit],adjacents);
+					{
+						makeQuad(bc,Vector3(i,j,k),p,d,MAPPINGS[ChunkUtils::getBlock(this,bc<<p)][5-p],LIGHTVALUES[lit],adjacents,lt);
+					}
 			}
 
 		}
@@ -350,7 +358,7 @@ namespace Oryx
 	//-----------------------------------------------------------------------
 
 
-	void Chunk::makeQuad(Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,bool* adj)
+	void Chunk::makeQuad(ChunkCoords& cpos,Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,bool* adj,byte* lights)
 	{
 		Vector2 offset;
 		int dims = mAtlasDimensions;
@@ -367,7 +375,9 @@ namespace Oryx
 
 		diffuse*=steps[5-normal];
 		int randy;// = rand()%12+1;
-
+		
+		//for(int p=0;p<6;++6)
+		//	getLight(this,bc<<p);
 
 		#ifdef BLOCK_AO
 		byte trans[6][4] = {
@@ -436,10 +446,36 @@ namespace Oryx
 			d.normals.push_back(BLOCK_NORMALS[normal].y);
 			d.normals.push_back(BLOCK_NORMALS[normal].z);
 			#endif
+			//int r = rand()%2;
+			// diagonal...
+			//
+			ChunkCoords cc;
+			//if(r==0)
+			//{
+			//	cc = cpos<<5-LIGHTING_COORDS[normal][FILTERVERTEX[i]][0];
+			//	cc = cc<<5-LIGHTING_COORDS[normal][FILTERVERTEX[i]][1];
+			//}
+			//else
+			//{
+				cc = cpos<<LIGHTING_COORDS[normal][FILTERVERTEX[i]][0];
+				cc = cc<<LIGHTING_COORDS[normal][FILTERVERTEX[i]][1];
+			//}
 
-			d.diffuse.push_back(diffuse.r);
-			d.diffuse.push_back(diffuse.g);
-			d.diffuse.push_back(diffuse.b);
+			float ltt = LIGHTVALUES[ChunkUtils::getLight(this,cc)].r;
+				//ltt/=2;
+
+
+			//float lig = LIGHTVALUES[FILTERVERTEX[i]*3].r;
+			float lig = LIGHTVALUES[lights[LIGHTING_COORDS[normal][FILTERVERTEX[i]][0]]].r
+				+ LIGHTVALUES[lights[LIGHTING_COORDS[normal][FILTERVERTEX[i]][1]]].r + diffuse.r+ltt;
+
+			lig/=4.f;
+
+			d.diffuse.push_back(lig);
+			d.diffuse.push_back(lig);
+			d.diffuse.push_back(lig);
+			//d.diffuse.push_back(diffuse.g);
+			//d.diffuse.push_back(diffuse.b);
 			d.diffuse.push_back(1.f);
 
 			#ifdef BLOCK_AO

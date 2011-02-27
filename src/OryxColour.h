@@ -44,7 +44,7 @@ namespace Oryx
 		Real b;
 		Real a;
 
-		/** COnstructor */
+		/** Constructor */
 	    explicit Colour( float red = 1.0f,float green = 1.0f,float blue = 1.0f,float alpha = 1.0f )
 			: r(red), g(green), b(blue), a(alpha)
         {}
@@ -190,6 +190,12 @@ namespace Oryx
         byte getB8()
 		{
 		    return static_cast<byte>(floor(b*255.f));
+		}
+
+		/** Returns 8-bit 0-255 value of the A channel */
+        byte getA8()
+		{
+		    return static_cast<byte>(floor(a*255.f));
 		}
 	};
 }
