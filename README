@@ -1,3 +1,22 @@
+Oryx Engine is a free/open source game engine. It is primarily being developed
+to power my personal game projects, but maybe it'll prove useful for others.
+
+At the moment it is being developed in Linux, though it should be portable to
+the major 3 OS's with a little work (fixes and build scripts for Windows should
+be up in the near future, and perhaps the same for OSX).
+
+The engine provides a core with basic state management, an event system (heavily
+inspired by Qt's signals/slots) and some other stuff (timer, logger, math/string 
+utils, etc).
+
+Functionality is added by extending the EngineSubsystem class. This way you
+can use the same core with any number of different kinds of games and middleware.
+At the moment I'm making a 3D game, so I'm actively developing an Ogre3D subsystem,
+one for bullet physics, OpenAL, and Chaiscript. More will come later as I work
+on different projects.
+
+-------------------------------------------------------------------------------
+-----------------------------|   Legal   |-------------------------------------
 -------------------------------------------------------------------------------
  (C) Copyright Riley Adams 2011
 

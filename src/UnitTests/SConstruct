@@ -1,0 +1,3 @@
+env = Environment();
+env['ENV']['LD_RUN_PATH']='../../bin';
+env.Program('Tests',['OryxTests.cpp','OryxColourTest.cpp'],CPPPATH=['../'],LIBS=['boost_unit_test_framework','OryxEngine'],LIBPATH=['../../bin']);

@@ -28,7 +28,6 @@
 #include "BulletSubsystem/BulletSubsystem.h"
 
 #include "ChunkCoords.h"
-//#include "ChunkManager.h"
 #include "PhysicsBlock.h"
 
 namespace Oryx
@@ -196,7 +195,7 @@ namespace Oryx
 		}
 
 		/** Adds a 1 meter quad (actually 2 tris) to a given MeshData object */
-		void makeQuad(ChunkCoords& cpos,Vector3 pos,int normal,MeshData& d,short type,Colour diffuse,bool* adjs,byte* lights);
+		void makeQuad(ChunkCoords& cpos,Vector3 pos,int normal,MeshData& d,short type,Real diffuse,bool* adjs,byte* lights);
 
 		// The graphics object
 		Mesh* mChunk;

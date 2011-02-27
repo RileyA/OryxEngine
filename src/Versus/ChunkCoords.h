@@ -26,8 +26,8 @@
 
 #define COLORVAL(x) Colour(x,x,x)
 //#define ALLOW_BLOCK_TRANSPARENCY
-//#define BLOCK_AO
 //#define BLOCK_NORMALS
+#define SMOOTH_LIGHTING
 
 namespace Oryx
 {
@@ -56,6 +56,9 @@ namespace Oryx
 	static const Vector3 OFFSET = Vector3((CHUNKSIZE[0]-1)/2.f,
 			(CHUNKSIZE[1]-1)/2.f,(CHUNKSIZE[2]-1)/2.f);
 
+	// Add a little shading depending on the direction of each face
+	const Real LIGHT_STEPS[6] = {0.6f,0.6f,0.5f,0.99f,0.8f,0.7f};
+
 	// Normals for the quads (more effiecient to store them here, than to calculate each time...
 	const Vector3 QUADNORMALS[6] = {
 		Vector3(1,0,0),
@@ -66,23 +69,23 @@ namespace Oryx
 		Vector3(0,0,-1)};
 	
 	// The light values 0.8^(15-lightLevel), saves some pow()-ing to store these as consts
-	const Colour LIGHTVALUES[16] = {
-		COLORVAL(0.03518f),
-		COLORVAL(0.04398f),
-		COLORVAL(0.0549755f),
-		COLORVAL(0.06871948f),
-		COLORVAL(0.08589f),
-		COLORVAL(0.10737f),
-		COLORVAL(0.1342f),
-		COLORVAL(0.16777f),
-		COLORVAL(0.2097f),
-		COLORVAL(0.262144f),
-		COLORVAL(0.32768f),
-		COLORVAL(0.4096f),
-		COLORVAL(0.512f),
-		COLORVAL(0.64f),
-		COLORVAL(0.8f),
-		COLORVAL(1.f)
+	const Real LIGHTVALUES[16] = {
+		0.03518f,
+		0.04398f,
+		0.0549755f,
+		0.06871948f,
+		0.08589f,
+		0.10737f,
+		0.1342f,
+		0.16777f,
+		0.2097f,
+		0.262144f,
+		0.32768f,
+		0.4096f,
+		0.512f,
+		0.64f,
+		0.8f,
+		1.f
 	};
 
 	const byte AXIS[6] = {0,0,1,1,2,2};
@@ -171,27 +174,22 @@ namespace Oryx
 	#endif
 
 	// map tex atlas positions to faces and block indices
-	/*const byte MAPPINGS[5][6] = 
+	const byte MAPPINGS[5][6] = 
 	{
 		{1,1,1,1,1,1},
 		{1,1,1,1,1,1},
 		{2,2,2,2,2,2},
-		{3,3,3,3,3,3},`
+		{3,3,3,3,3,3},
 		{4,4,4,4,4,4}
-	};*/
-
-	const byte FILTERVERTEX[6] = 
-	{
-		//2,3,2,3,2,2
-		
-		 0,3,1,3,2,1
-		//   1,0,2,0,3,2
-	//	3,2,0,2,1,0
-
-		//0,0,0,0,3,0
-		//0,1,3,3,1,2
-		//0,1,2,0,2,3
+		// Minecraft "terrain.png" test:
+		/*{1,1,1,1,1,1},
+		{37,37,37,37,37,37},
+		{2,2,2,2,2,2},
+		{3,3,3,3,3,3},
+		{4,4,3,1,4,4}*/
 	};
+
+	const byte FILTERVERTEX[6] = {0,3,1,3,2,1}; // convert 0-5 to 0-3 with vertices (since I'm too lazy to use shared verts...)
 
 	// hard-coded since it shouldn't ever change, and is faster than calculating it out each time
 	const Vector3 BLOCK_VERTICES[6][6] =
@@ -210,7 +208,6 @@ namespace Oryx
 			Vector3(0.5f,-0.5f,0.5f),Vector3(-0.5f,0.5f,0.5f),Vector3(-0.5f,-0.5f,0.5f)}
 	};
 
-	// DEPRECATED
 	const Vector3 BLOCK_NORMALS[6] =
 	{
 		Vector3(-1,0,0),
@@ -230,15 +227,6 @@ namespace Oryx
 		{Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)},
 		{Vector2(1,0),Vector2(1,1),Vector2(0,1),Vector2(1,0),Vector2(0,1),Vector2(0,0)},
 		{Vector2(1,1),Vector2(1,0),Vector2(0,0),Vector2(1,1),Vector2(0,0),Vector2(0,1)}
-	};
-
-	// Test w/ Minecraft terrain.png
-	const byte MAPPINGS[5][6] = {
-		{1,1,1,1,1,1},
-		{37,37,37,37,37,37},
-		{2,2,2,2,2,2},
-		{3,3,3,3,3,3},
-		{4,4,3,1,4,4}
 	};
 }
 #endif
