@@ -99,6 +99,9 @@ namespace Oryx
 		RaycastReport raycast(Vector3 origin,Vector3 direction,
 			float length=10000.f,short group=0,short mask=0);
 
+		SweepReport sweep(PhysicsShape* shape, Vector3 origin,Vector3 direction,
+			float length=10000.f,short group=0,short mask=0);
+
 		/** Creates a static trimesh based on a standard MeshData object
 		 *		@param d The mesh to base the physics object off of
 		 *		@param pos The position to place the created object 

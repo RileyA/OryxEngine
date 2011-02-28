@@ -225,6 +225,41 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	SweepReport BulletSubsystem::sweep(PhysicsShape* shape, Vector3 origin,Vector3 direction,
+		float length,short group,short mask)
+	{
+		direction.normalize();
+		direction *= length;
+
+		btCollisionWorld::ClosestConvexResultCallback cb(convertBullet(origin), 
+			convertBullet(origin+direction));
+		
+		cb.m_collisionFilterGroup = 65535^group;
+		cb.m_collisionFilterMask = 65535^mask;
+
+		btTransform from = btTransform(convertBullet(Quaternion::IDENTITY),
+			convertBullet(origin));
+		btTransform to   = btTransform(convertBullet(Quaternion::IDENTITY),
+			convertBullet(origin+direction));
+
+		mDynamicsWorld->convexSweepTest(dynamic_cast<btConvexShape*>(shape->getBtShape()),from,to,cb);
+		
+		if(cb.hasHit())
+		{
+			return SweepReport(convertBullet(cb.m_hitNormalWorld),
+				convertBullet(cb.m_hitPointWorld),
+				cb.m_closestHitFraction,
+				cb.m_hitCollisionObject->getBroadphaseHandle()->m_collisionFilterGroup,
+				cb.m_hitCollisionObject->getUserPointer());
+		}
+		else
+		{
+			return SweepReport();
+		}	
+	
+	}
+	//-----------------------------------------------------------------------
+
 	PhysicsObject* BulletSubsystem::createStaticTrimesh(MeshData& d,Vector3 pos,String name)
 	{
 		PhysicsObject* p = createStatic(createTrimeshShape(d,name),pos);

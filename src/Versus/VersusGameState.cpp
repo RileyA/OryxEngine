@@ -29,6 +29,7 @@
 namespace Oryx
 {
 
+
 	VersusGameState::VersusGameState()
 		:GameState()
 	{
@@ -105,6 +106,8 @@ namespace Oryx
 		//obj->setCollisionGroup(COLLISION_GROUP_1|COLLISION_GROUP_3);
 		//qcc = bts->createQuantaCCT(Vector3(0,300,0));
 		bts->setGravity(Vector3(0,-5,0));
+
+		ct = new CharacterThingy(bts,ogre);
 	}
 
 	void VersusGameState::update(Real delta)
@@ -116,22 +119,38 @@ namespace Oryx
 	
 		Plane pl = Plane(Vector3(0,1,0),0);
 		Vector3 move = 
-			mCam->getDirection()*((ois->isKeyDown("KC_S")*-1+ois->isKeyDown("KC_W"))*1);
+			mCam->getDirection()*((ois->isKeyDown("KC_S")*-1+ois->isKeyDown("KC_W"))*1) +
+			mCam->mCamera->getAbsoluteRight()*(ois->isKeyDown("KC_D")-ois->isKeyDown("KC_A"));
 
-		//move = pl.projectVector(move);
+		//move+=Vector3(0,-1,0);
+		move = pl.projectVector(move);
+
+		//ct->move(Vector3(0,-1,0),5);//,5);
 		
 		//if(move.length()>0)
+		//{
+		//	move.normalize();
+		//	ct->move(move);
+		//}
+		//
+		ct->update(delta,move);
+
+		//std::cout<<"delta: "<<TimeManager::getPtr()->getDeltaTime();
 		//	move.normalize();
 
 		//qcc->setMoveVector3(move);
 
 		if(ois->isKeyDown("KC_ESCAPE"))
 			sendMessage(MessageAny<String>("kill"),"Engine");
-
+			if(!ois->isKeyDown("KC_V"))
+			{
+				currentMat = 0;
+			}
 		if(ois->isButtonDown("MB_Right")&&!toggle)
 		{
 			toggle = true;
-			if(ois->isKeyDown("KC_V"))
+
+			if(ois->isKeyDown("KC_V")&&currentMat==0)
 			{
 				++currentMat;
 				if(currentMat>2)
@@ -142,6 +161,22 @@ namespace Oryx
 					cmgr->setMaterial("Debug2",2);
 				else if(currentMat==2)
 					cmgr->setMaterial("MeinKraft",16);
+				/*Vector3 printmeh = mCam->getPosition();
+				std::cout<<"P: "<<printmeh.x<<" "<<printmeh.y<<" "<<printmeh.z<<"\n";
+				printmeh = mCam->getDirection();
+				std::cout<<"D: "<<printmeh.x<<" "<<printmeh.y<<" "<<printmeh.z<<"\n";
+				SweepReport repo = bts->sweep(bts->createSphereShape(1.f),mCam->getPosition(),
+					mCam->getDirection(),15.f,COLLISION_GROUP_3,COLLISION_GROUP_3);
+				if(repo.hit)
+				{
+					std::cout<<"hit!\n";
+					mCam->mPosNode->setPosition(mCam->getPosition() + 
+						mCam->getDirection()*15.f*repo.hitFraction);	
+				}
+				else
+				{
+					std::cout<<"no hit!\n";
+				}*/
 				//bts->setGravity(Vector3(-5,0,0));
 				//bts->setGravity(Vector3(0,-10,0));
 			}
@@ -227,6 +262,7 @@ namespace Oryx
 		cmgr->generate(mCam->getPosition());
 
 		//mCam->mPosNode->setPosition(qcc->getPosition());
+		mCam->mPosNode->setPosition(ct->getPos()+Vector3(0,1.2f,0));
 		//mCam->mPosNode->setOrientation(qcc->getOrientation());
 		//std::cout<<"P: "<<qcc->getPosition().y<<"\n";
 

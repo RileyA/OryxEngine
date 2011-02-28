@@ -55,4 +55,42 @@ namespace Oryx
 			userData = _userData;
 		}
 	};
+
+	/** Gives info on the result of a convex sweep test */
+	struct SweepReport
+	{
+		/** Whether or not this sweep hit anything, if not everything else 
+		 *		will be uninitialized	 */
+		bool hit;
+
+		/** The normal of the impact point */
+		Vector3 normal;
+
+		/** The impact point */
+		Vector3 position;
+
+		/** The collision group of the hit object */
+		short group;
+
+		/** The userdata pointer of the hit object */
+		void* userData;
+
+		/** The fraction of the desired move reached */
+		float hitFraction;
+
+		SweepReport()
+		{
+			hit = false;
+		}
+
+		SweepReport(Vector3 n, Vector3 p, float moveFraction, short hitGroup=0, void* _userData=0)
+		{
+			hit = true;
+			normal = n;
+			position = p;
+			group = hitGroup;
+			hitFraction = moveFraction;
+			userData = _userData;
+		}	
+	};
 }
