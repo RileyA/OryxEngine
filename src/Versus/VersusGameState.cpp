@@ -43,15 +43,15 @@ namespace Oryx
 		OISSubsystem* ois = mEngine->getSubsystem("OISSubsystem")->castType<OISSubsystem>();
 		ois->initInput(ogre->getWindowHandle());
 		ogre->setBackgroundColor(Colour(0.3f,0.6f,0.9f));
-		ogre->setLinearFog(30.f,45.f,Colour(0.3f,0.6f,0.9f));
+		//ogre->setLinearFog(30.f,45.f,Colour(0.3f,0.6f,0.9f));
 		mgr = new ExplosionManager();
 
-		ENetSubsystem* enet = mEngine->getSubsystem("ENetSubsystem")->castType<ENetSubsystem>();
+		/*ENetSubsystem* enet = mEngine->getSubsystem("ENetSubsystem")->castType<ENetSubsystem>();
 		mClient = enet->createClient();
 		mClient->connect("127.0.0.1",1244);
 		mClient->addCallback(fastdelegate::MakeDelegate(this,&VersusGameState::processPackets));
 		mClient->addConnectCallback(fastdelegate::MakeDelegate(this,&VersusGameState::addPeer));
-		mClient->addDisconnectCallback(fastdelegate::MakeDelegate(this,&VersusGameState::removePeer));
+		mClient->addDisconnectCallback(fastdelegate::MakeDelegate(this,&VersusGameState::removePeer));*/
 		createSlot("clk",fastdelegate::MakeDelegate(this,&VersusGameState::mouse));
 
 		/*GUIScreen* scrn = ogre->getGUI()->createScreen(ogre->getMainViewport(),"TechDemo","Test");
@@ -73,7 +73,16 @@ namespace Oryx
 		//GUIButton* bt = new GUIButton(scrn->getRootElement(0),0,"cursor");
 		//bt->setScale(Vector2(16.f/1024,23.f/768));
 		//bt->setPosition(Vector2(50,50));
-
+		//
+		//Mesh* m = ogre->createMesh("Test.mesh");
+		//ogre->getRootSceneNode()->addChild(m);
+		//MeshData d;
+		//m->getMeshData(d,false,false,true,true);
+		//
+		//
+		//Mesh* m2 = ogre->createMesh(d);
+		//ogre->getRootSceneNode()->addChild(m2);
+		//m2->setPosition(Vector3(0,-30,0));
 		mCam = new FPSCamera();
 		mTimer = 0.f;
 
@@ -90,6 +99,12 @@ namespace Oryx
 		
 		bts->startSimulation();
 		cmgr = new ChunkManager(Vector3(0,-10,0));	
+
+		//CollisionObject* obj = static_cast<CollisionObject*>(bts->createStaticTrimesh(d,Vector3(0,0,0),"NULL"));
+		//obj->setCollisionGroup(COLLISION_GROUP_2);
+		//obj->setCollisionGroup(COLLISION_GROUP_1|COLLISION_GROUP_3);
+		//qcc = bts->createQuantaCCT(Vector3(0,300,0));
+		bts->setGravity(Vector3(0,-5,0));
 	}
 
 	void VersusGameState::update(Real delta)
@@ -98,7 +113,18 @@ namespace Oryx
 		OISSubsystem* ois = mEngine->getSubsystem("OISSubsystem")->castType<OISSubsystem>();
 		OgreSubsystem* ogre = mEngine->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 		BulletSubsystem* bts = mEngine->getSubsystem("BulletSubsystem")->castType<BulletSubsystem>();
+	
+		Plane pl = Plane(Vector3(0,1,0),0);
+		Vector3 move = 
+			mCam->getDirection()*((ois->isKeyDown("KC_S")*-1+ois->isKeyDown("KC_W"))*1);
+
+		//move = pl.projectVector(move);
 		
+		//if(move.length()>0)
+		//	move.normalize();
+
+		//qcc->setMoveVector3(move);
+
 		if(ois->isKeyDown("KC_ESCAPE"))
 			sendMessage(MessageAny<String>("kill"),"Engine");
 
@@ -116,10 +142,12 @@ namespace Oryx
 					cmgr->setMaterial("Debug2",2);
 				else if(currentMat==2)
 					cmgr->setMaterial("MeinKraft",16);
+				//bts->setGravity(Vector3(-5,0,0));
+				//bts->setGravity(Vector3(0,-10,0));
 			}
 			else
 			{
-				RaycastReport r = bts->raycast(mCam->getPosition(),mCam->getDirection());
+				RaycastReport r = bts->raycast(mCam->getPosition(),mCam->getDirection(),10000.f,COLLISION_GROUP_3,COLLISION_GROUP_3);
 
 				if(r.hit&&r.userData)
 				{
@@ -142,7 +170,7 @@ namespace Oryx
 		if(ois->isButtonDown("MB_Left")&&!toggle2)
 		{				
 		
-			RaycastReport r = bts->raycast(mCam->getPosition(),mCam->getDirection());
+			RaycastReport r = bts->raycast(mCam->getPosition(),mCam->getDirection(),10000.f,COLLISION_GROUP_3,COLLISION_GROUP_3);
 			toggle2 = true;
 
 			if(r.hit&&r.userData)
@@ -198,7 +226,9 @@ namespace Oryx
 
 		cmgr->generate(mCam->getPosition());
 
-	//	mCam->mPosNode->setPosition(box->getPosition());
+		//mCam->mPosNode->setPosition(qcc->getPosition());
+		//mCam->mPosNode->setOrientation(qcc->getOrientation());
+		//std::cout<<"P: "<<qcc->getPosition().y<<"\n";
 
 	}
 

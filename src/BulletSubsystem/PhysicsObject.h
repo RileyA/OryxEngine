@@ -35,6 +35,8 @@ namespace Oryx
 		/** Constructor */
 		PhysicsObject(btDynamicsWorld* world);
 
+		virtual ~PhysicsObject(){};
+
 		/** Updates this object
 		 *		@param frame Whether or not this is a new frame 
 		 *		@param interpolation The interpolation value 

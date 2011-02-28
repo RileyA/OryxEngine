@@ -113,6 +113,18 @@ namespace Oryx
         return String("BulletSubsystem");
     }
     //-----------------------------------------------------------------------
+
+	Vector3 BulletSubsystem::getGravity()
+	{
+		return mGravity;
+	}
+	//-----------------------------------------------------------------------
+
+	void BulletSubsystem::setGravity(Vector3 g)
+	{
+		mGravity = g;
+	}
+	//-----------------------------------------------------------------------
 	
 	void BulletSubsystem::startSimulation()
 	{
@@ -423,6 +435,13 @@ namespace Oryx
 		CollisionObject* obj = new CollisionObject(mDynamicsWorld,actor,shape);
 		mObjects.push_back(obj);
 		return obj;
+	}
+	//-----------------------------------------------------------------------
+
+	QuantaController* BulletSubsystem::createQuantaCCT(Vector3 pos)
+	{
+		mObjects.push_back(new QuantaController(this,pos));
+		return static_cast<QuantaController*>(mObjects.back());
 	}
 	//-----------------------------------------------------------------------
 }

@@ -50,6 +50,8 @@ namespace Oryx
 		void update(Real delta);
 		void deinit();
 
+		QuantaController* qcc;
+
 		void processPackets(byte* data,size_t length,size_t id);
 		void addPeer(byte id,String name);
 		void removePeer(byte id);

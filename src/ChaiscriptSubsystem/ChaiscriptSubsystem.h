@@ -35,10 +35,20 @@ namespace Oryx
         ChaiscriptSubsystem();
         ~ChaiscriptSubsystem();
 
+		/** Starts the scripting system up */
         virtual void _init();
+
+		/** Shuts the scripting system down */
         virtual void _deinit();
+
+		/** Updates the scripting system
+		 *		@param delte The time since the last frame */
         virtual void _update(Real delta);
+
+		/** Called when the current state ends  */
         virtual void _endState();
+
+		/** Returns the name of this susbsystem */
         virtual String getName();
 
         /** Runs a .chai script
@@ -49,6 +59,7 @@ namespace Oryx
             @param script The scripting code */
 		void runString(String script);
 
+		/** Gets a pointer to the ChaiWrapper */
 		ChaiWrapper* getWrapper();
 
         static const size_t mDependencyCount;

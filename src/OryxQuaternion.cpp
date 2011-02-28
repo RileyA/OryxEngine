@@ -48,7 +48,52 @@ namespace Oryx
 		uuv *= 2.0f;
 		return v + uv + uuv;
     }
+    //-----------------------------------------------------------------------
+	Quaternion Quaternion::operator+ (const Quaternion& rkQ) const
+    {
+        return Quaternion(w+rkQ.w,x+rkQ.x,y+rkQ.y,z+rkQ.z);
+    }
+    //----------------------------------------------------------------------
+    Quaternion Quaternion::operator- (const Quaternion& rkQ) const
+    {
+        return Quaternion(w-rkQ.w,x-rkQ.x,y-rkQ.y,z-rkQ.z);
+    }
+    //-----------------------------------------------------------------------
+	
+    Quaternion Quaternion::operator* (const Quaternion& rkQ) const
+    {
+        // NOTE:  Multiplication is not generally commutative, so in most
+        // cases p*q != q*p.
 
+        return Quaternion
+        (
+            w * rkQ.w - x * rkQ.x - y * rkQ.y - z * rkQ.z,
+            w * rkQ.x + x * rkQ.w + y * rkQ.z - z * rkQ.y,
+            w * rkQ.y + y * rkQ.w + z * rkQ.x - x * rkQ.z,
+            w * rkQ.z + z * rkQ.w + x * rkQ.y - y * rkQ.x
+        );
+    }
+    //-----------------------------------------------------------------------
+	
+    Quaternion Quaternion::operator* (Real fScalar) const
+    {
+        return Quaternion(fScalar*w,fScalar*x,fScalar*y,fScalar*z);
+    }
+	//-----------------------------------------------------------------------
+
+    Quaternion Quaternion::operator- () const
+    {
+        return Quaternion(-w,-x,-y,-z);
+    }
+	//-----------------------------------------------------------------------
+
+    Quaternion operator* (Real fScalar, const Quaternion& rkQ)
+    {
+        return Quaternion(fScalar*rkQ.w,fScalar*rkQ.x,fScalar*rkQ.y,
+            fScalar*rkQ.z);
+    }
+	//-----------------------------------------------------------------------
+	
 	void Quaternion::FromRotationMatrix (const Matrix3& kRot)
     {
         // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
@@ -116,6 +161,21 @@ namespace Oryx
     }
 
     //-----------------------------------------------------------------------
+    Real Quaternion::normalize(void)
+    {
+        Real len = w*w+x*x+y*y+z*z;
+        Real factor = 1.0f / sqrt(len);
+        *this = *this * factor;
+        return len;
+    }
+	//-----------------------------------------------------------------------
+	
+    Real Quaternion::Dot (const Quaternion& rkQ) const
+    {
+        return w*rkQ.w+x*rkQ.x+y*rkQ.y+z*rkQ.z;
+    }
+	//-----------------------------------------------------------------------
+	
     Quaternion Quaternion::Inverse () const
     {
         Real fNorm = w*w+x*x+y*y+z*z;
@@ -129,5 +189,48 @@ namespace Oryx
             // return an invalid result to flag the error
             return Quaternion(0,0,0,0);
         }
-    }	
+    }
+	//-----------------------------------------------------------------------
+	
+    Quaternion Quaternion::Slerp (Real fT, const Quaternion& rkP,
+        const Quaternion& rkQ, bool shortestPath)
+    {
+        Real fCos = rkP.Dot(rkQ);
+        Quaternion rkT;
+
+        // Do we need to invert rotation?
+        if (fCos < 0.0f && shortestPath)
+        {
+            fCos = -fCos;
+            rkT = -rkQ;
+        }
+        else
+        {
+            rkT = rkQ;
+        }
+
+        if (abs(fCos) < 1 - 1e-03)
+        {
+            // Standard case (slerp)
+            Real fSin = sqrt(1 - fCos*fCos);
+            Real fAngle = atan2(fSin, fCos);
+            Real fInvSin = 1.0f / fSin;
+            Real fCoeff0 = sin((1.0f - fT) * fAngle) * fInvSin;
+            Real fCoeff1 = sin(fT * fAngle) * fInvSin;
+            return fCoeff0 * rkP + fCoeff1 * rkT;
+        }
+        else
+        {
+            // There are two situations:
+            // 1. "rkP" and "rkQ" are very close (fCos ~= +1), so we can do a linear
+            //    interpolation safely.
+            // 2. "rkP" and "rkQ" are almost inverse of each other (fCos ~= -1), there
+            //    are an infinite number of possibilities interpolation. but we haven't
+            //    have method to fix this case, so just use linear interpolation here.
+            Quaternion t = (1.0f - fT) * rkP + fT * rkT;
+            // taking the complement requires renormalisation
+            t.normalize();
+            return t;
+        }
+    }
 }

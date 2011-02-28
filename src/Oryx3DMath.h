@@ -19,7 +19,13 @@
 
 // This is just a shortcut to include the basic 3D math types.
 
+#ifndef ORYX_3D_MATH
+#define ORYX_3D_MATH
+
 #include "OryxVector3.h"
 #include "OryxVector2.h"
 #include "OryxQuaternion.h"
 #include "OryxMeshData.h"
+#include "OryxPlane.h"
+
+#endif

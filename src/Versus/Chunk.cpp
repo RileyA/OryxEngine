@@ -48,9 +48,7 @@ namespace Oryx
 		BulletSubsystem* b = Engine::getPtr()->getSubsystem("BulletSubsystem")->
 			castType<BulletSubsystem>();
 
-		for(int i=0;i<CHUNK_STEPS_X;++i)for(int j=0;j<CHUNK_STEPS_Y;++j)for(int k=0;k<CHUNK_STEPS_Z;++k)
-			mBlocks[i][j][k] = new PhysicsBlock(i,j,k,
-				static_cast<CollisionObject*>(b->createCompound(OFFSET*-1.f+Vector3(i,j,k)*CHUNK_STEP+mPosition)),this);
+		mBlock = new PhysicsBlock(0,0,0,position,0,this);
 
 		for(int p=0;p<6;++p)
 			neighbors[p] = 0;
@@ -59,10 +57,7 @@ namespace Oryx
 	
 	Chunk::~Chunk()
 	{
-		for(int i=0;i<CHUNK_STEPS_X;++i)
-			for(int j=0;j<CHUNK_STEPS_Y;++j)
-				for(int k=0;k<CHUNK_STEPS_Z;++k)
-					delete mBlocks[i][j][k];
+		delete mBlock;
 	}
 	//-----------------------------------------------------------------------
 
@@ -125,7 +120,7 @@ namespace Oryx
 		mChunk->setPosition(mPosition);
 
 		if(physics)
-			rebuildPhysics();
+			rebuildPhysics(d);
 
 		mDirty = false;
 	}
@@ -194,12 +189,9 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Chunk::rebuildPhysics()
+	void Chunk::rebuildPhysics(MeshData& d)
 	{
-		for(int i=0;i<CHUNK_STEPS_X;++i)
-			for(int j=0;j<CHUNK_STEPS_Y;++j)
-				for(int k=0;k<CHUNK_STEPS_Z;++k)
-					mBlocks[i][j][k]->rebuild();
+		mBlock->rebuild(d);
 	}
 	//-----------------------------------------------------------------------
 

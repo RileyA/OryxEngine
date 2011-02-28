@@ -26,23 +26,43 @@
 
 namespace Oryx
 {
+	/** This class basically hides away the Chaiscript header, so that client apps 
+	 *	don't need to include it and the horrendous compiled times that go with it */
 	class ORYX_CHAI_EXPORT ChaiWrapper
 	{
 	public:
-		ChaiWrapper():mChai(){}
+
+		ChaiWrapper()
+			:mChai(){}
+
 		~ChaiWrapper(){}
-		chaiscript::ChaiScript* getChai(){return &mChai;}
+
+		/** Returns the Chaiscript subsystem */
+		chaiscript::ChaiScript* getChai()
+		{
+			return &mChai;
+		}
+
+		/** Registers a named function with the Chaiscript subsystem 
+		 *		@param t A pointer to the function 
+		 *		@param name The name to use for it in scripts */
 		template<typename T> void registerFunction(T t,String name)
 		{
 		    mChai.add(chaiscript::fun(t),name);
 		}
+
+		/** Registers a type with Chaiscript
+		 *		@tparam T The type to register
+		 *		@param name The name to use in teh scripting system */
 		template<typename T> void registerType(String name)
 		{
 			mChai.add(chaiscript::user_type<T>(), name);
 		}
 
 	protected:
+
 		chaiscript::ChaiScript mChai;
+
 	};
 }
 

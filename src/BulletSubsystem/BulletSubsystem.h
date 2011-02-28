@@ -35,6 +35,7 @@
 #include "PhysicsTrimeshShape.h"
 #include "CollisionObject.h"
 #include "RigidBody.h"
+#include "QuantaController.h"
 
 // bullet forward declarations
 class btDynamicsWorld;
@@ -89,6 +90,7 @@ namespace Oryx
 
 		/** Get the current direction and magnitude of gravity */
 		Vector3 getGravity();
+		void setGravity(Vector3 g);
 
 		/** Performs a simple raycast and returns the results
 		 *		@param origin Where to fire the ray from
@@ -173,6 +175,10 @@ namespace Oryx
 		 *		@param shape The shape to be used
 		 *		@param position Where to place the object */
 		CollisionObject* createStatic(PhysicsShape* shape, Vector3 position);
+
+		QuantaController* createQuantaCCT(Vector3 pos);
+
+		btDynamicsWorld* getWorld(){return mDynamicsWorld;}
 
         static const size_t mDependencyCount;
         static const String mDependencies[];

@@ -80,7 +80,7 @@ namespace Oryx
 		/** Does a full physics rebuild 
 		 *		@remarks This should get called appropriately by build(), but you
 		 *			can force a manual rebuild if you so please. */
-		void rebuildPhysics();
+		void rebuildPhysics(MeshData& d);
 
 		/** Gives this Chunk's neighbors a pointer to this Chunk
 		 *		@remarks This should only need to be called by the ChunkManager
@@ -213,7 +213,7 @@ namespace Oryx
 		Vector3 mPosition;
 
 		// The physics objects (4x4x4 compounds of up to 4x4x4 Box primitives each)
-		PhysicsBlock* mBlocks[CHUNK_STEPS_X][CHUNK_STEPS_Y][CHUNK_STEPS_Z];
+		PhysicsBlock* mBlock;//s[CHUNK_STEPS_X][CHUNK_STEPS_Y][CHUNK_STEPS_Z];
 
 		// The current material
 		String mMaterial;

@@ -21,12 +21,20 @@
 
 namespace Oryx
 {
-	void PhysicsBlock::rebuild()
+	void PhysicsBlock::rebuild(MeshData& d)
 	{
 		BulletSubsystem* b = Engine::getPtr()->getSubsystem("BulletSubsystem")->
 		castType<BulletSubsystem>();
 
-		static_cast<PhysicsCompoundShape*>(block->getShape())->removeAllShapes();
+		if(block)
+			block->_kill();
+
+		block = static_cast<CollisionObject*>(b->createStaticTrimesh(d,pos));
+
+		block->setUserData(parent);
+		block->setCollisionGroup(COLLISION_GROUP_2);
+		block->setCollisionMask(COLLISION_GROUP_15|COLLISION_GROUP_1|COLLISION_GROUP_3);
+		/*static_cast<PhysicsCompoundShape*>(block->getShape())->removeAllShapes();
 		for(int i=0;i<4;++i)for(int j=0;j<4;++j)for(int k=0;k<4;++k)
 		{
 			if(parent->blocked[i+x][j+y][k+z])
@@ -43,6 +51,6 @@ namespace Oryx
 				static_cast<PhysicsCompoundShape*>(block->getShape())->addShape(b->createBoxShape(Vector3(0.5,0.5,0.5)),
 					Vector3(i,j,k));
 			}
-		}
+		}*/
 	}
 }

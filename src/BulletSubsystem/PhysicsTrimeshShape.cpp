@@ -25,7 +25,6 @@ namespace Oryx
 	PhysicsTrimeshShape::PhysicsTrimeshShape(MeshData& d, String name)
 		:PhysicsShape(name == "NULL",name)
 	{
-		// TODO: delete this somewhere? maybe bullet does w/ the shape?
 		btTriangleMesh *triMesh = new btTriangleMesh();
 		for(int i=0;i+3<d.indices.size();i+=3)
 		{

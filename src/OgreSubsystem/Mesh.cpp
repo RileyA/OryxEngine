@@ -133,6 +133,8 @@ namespace Oryx
 						out.vertices.push_back(*pReal++);
 						out.vertices.push_back(*pReal++);
 						out.vertices.push_back(*pReal++);
+						//std::cout<<"v: "<<out.vertices[out.vertices.size()-1]<<" "<<
+						//	out.vertices[out.vertices.size()-2]<<" "<<out.vertices[out.vertices.size()-3]<<"\n";
 						vertex += vbuf->getVertexSize();
 					}
 
@@ -198,5 +200,7 @@ namespace Oryx
 			}
 			current_offset = next_offset;
 		}
+
+		std::cout<<"Mesh Data output: v: "<<out.vertices.size()<<" i: "<<out.indices.size()<<"\n";
 	}
 }

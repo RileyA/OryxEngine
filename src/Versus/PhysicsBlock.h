@@ -40,24 +40,31 @@ namespace Oryx
 		int x;
 		int y;
 		int z;
+		Vector3 pos;
 
-		PhysicsBlock(int i, int j, int k,CollisionObject* bl,Chunk* par)
+		PhysicsBlock(int i, int j, int k,Vector3 p,CollisionObject* bl,Chunk* par)
 		{
+			pos = p;
 			block = bl;
 			x = i*CHUNK_STEP;
 			y = j*CHUNK_STEP;
 			z = k*CHUNK_STEP;
 			parent = par;
-			block->setUserData(parent);
-			block->setCollisionMask(COLLISION_GROUP_15);
+			if(block)
+			{
+				block->setUserData(parent);
+				//block->setCollisionGroup(COLLISION_GROUP_1);
+				//block->setCollisionMask(COLLISION_GROUP_15|COLLISION_GROUP_1|COLLISION_GROUP_3);
+			}
 		}
 
 		~PhysicsBlock()
 		{
-			block->_kill();
+			if(block)
+				block->_kill();
 		}
 
-		void rebuild();
+		void rebuild(MeshData& d);
 	};
 }
 

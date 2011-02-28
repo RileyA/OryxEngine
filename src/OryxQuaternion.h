@@ -57,21 +57,21 @@ namespace Oryx
 		}
 
 		Vector3 operator*(Vector3 vect);
+		Quaternion operator- (const Quaternion& rkQ) const;
+		Quaternion operator+ (const Quaternion& rkQ) const;
+		Quaternion operator* (const Quaternion& rkQ) const;
+		Quaternion operator* (Real fScalar) const;
+		Quaternion operator- () const;
 
+		friend Quaternion operator* (Real fScalar,
+            const Quaternion& rkQ);
 
-		Real normalize()
-        {
-			Real len = w*w+x*x+y*y+z*z;
-			Real factor = 1.0f / sqrt(len);
-			x*=factor;
-			y*=factor;
-			z*=factor;
-			w*=factor;
-			//*this = *this * factor;
-			return len;
-        }
+		// performs spherical linear interpolation between two Quaternions
+		static Quaternion Slerp (Real fT, const Quaternion& rkP,
+			const Quaternion& rkQ, bool shortestPath = true);
 
-		
+        Real Dot (const Quaternion& rkQ) const;  // dot product
+        Real normalize(void); 
 
 		//Real normalize(); 
 		//Real Quaternion::Norm ();

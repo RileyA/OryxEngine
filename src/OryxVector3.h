@@ -159,6 +159,14 @@ namespace Oryx
             return *(&x+i);
         }
 
+		inline bool directionEquals(const Vector3& rhs,
+				const Real& tolerance)
+		{
+				Real dot = dotProduct(rhs);
+				Real angle = acos(dot);
+				return abs(angle) <= (3.14159f/180.f) * tolerance;
+		}
+
 		/** Normalize the vector, (make it unit length). Returns the previous length. */
 		float normalize()
 		{
