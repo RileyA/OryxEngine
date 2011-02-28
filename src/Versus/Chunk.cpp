@@ -119,7 +119,7 @@ namespace Oryx
 		mOgre->getRootSceneNode()->addChild(mChunk);
 		mChunk->setPosition(mPosition);
 
-		if(physics)
+		//if(physics)
 			rebuildPhysics(d);
 
 		mDirty = false;

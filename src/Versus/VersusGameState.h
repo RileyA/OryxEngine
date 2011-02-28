@@ -52,6 +52,7 @@ namespace Oryx
 		
 		CharacterThingy(BulletSubsystem* bs,OgreSubsystem* ogre)
 		{
+			mJump = 0.f;
 			mBullet = bs;
 			mOgre = ogre;
 			mSphere = mBullet->createSphereShape(0.375f);
@@ -81,12 +82,15 @@ namespace Oryx
 			acc+=delta;
 			while(acc>TIMESTEP)
 			{
-				move(Vector3(0,-1,0),10.f,11);
+				move(Vector3(0,-1,0),10.f - mJump,11);
 
 				if(motion.length()>0.001f)
 					move(motion);
 
 				acc-=TIMESTEP;
+				mJump -= TIMESTEP*20.f;
+				if(mJump<0.f)
+					mJump = 0.f;
 			}
 		}
 
@@ -95,7 +99,7 @@ namespace Oryx
 			if(speed==0.f)
 				speed = mSpeed;
 			
-			direction.normalize();
+			//direction.normalize();
 			float step;
 
 			step = (!gg||gg==11) ? TIMESTEP*speed : offset;
@@ -113,7 +117,7 @@ namespace Oryx
 				step = std::max(step - (castLen - hitDist),0.f);
 				mPosition += direction*step;
 
-				if(gg<10)
+				if(gg<4)
 				{
 					
 					Vector3 slide = direction + swept.normal * direction.dotProduct(swept.normal*-1);
@@ -121,7 +125,7 @@ namespace Oryx
 					slide = pl.projectVector(slide);
 					if(slide.squaredLength()>0)
 					{
-						slide.normalize();
+						//slide.normalize();
 						move(slide,0.f,gg+1,originalStep-step);
 					}
 				}
@@ -136,6 +140,12 @@ namespace Oryx
 					for(int i=0;i<pastFrames.size();++i)
 						pastFrames[i]->setPosition(poses[i]);
 			}*/
+		}
+
+		void jump()
+		{
+			if(mJump<1.f)
+				mJump = 17.4f;
 		}
 
 		Vector3 getPos()
@@ -154,6 +164,7 @@ namespace Oryx
 		std::vector<Mesh*> pastFrames;
 		std::vector<Vector3> poses;
 		int frm;
+		Real mJump;
 
 	};
 

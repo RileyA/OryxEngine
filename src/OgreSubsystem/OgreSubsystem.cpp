@@ -62,7 +62,7 @@ namespace Oryx
 
 			Ogre::NameValuePairList miscP;
 
-			miscP["vsync"] = "false";
+			miscP["vsync"] = "true";
 			miscP["FSAA"] = "0";
 			miscP["gamma"] = "false";
 			miscP["border"] = "fixed";

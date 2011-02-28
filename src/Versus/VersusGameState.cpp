@@ -55,11 +55,11 @@ namespace Oryx
 		mClient->addDisconnectCallback(fastdelegate::MakeDelegate(this,&VersusGameState::removePeer));*/
 		createSlot("clk",fastdelegate::MakeDelegate(this,&VersusGameState::mouse));
 
-		/*GUIScreen* scrn = ogre->getGUI()->createScreen(ogre->getMainViewport(),"TechDemo","Test");
+		GUIScreen* scrn = ogre->getGUI()->createScreen(ogre->getMainViewport(),"TechDemo","Test");
 
 		txt = new StaticText(scrn->getRootElement(0),
 			"Text01",0,20,Vector2(10,10),Vector2(0.5,1.f/12.f),"Test!");
-		txt->setColour(Colour(0.6,0.75,0.9));*/
+		txt->setColour(Colour(0.6,0.75,0.9));
 		//txt->setAlign(GA_CENTER);
 		//txt->getSignal("clicked")->addListener(getSlot("clk"));
 
@@ -112,7 +112,7 @@ namespace Oryx
 
 	void VersusGameState::update(Real delta)
 	{
-		//txt->setCaption("FPS: "+StringUtils::toString(1.f/delta));
+		txt->setCaption("FPS: "+StringUtils::toString(1.f/delta));
 		OISSubsystem* ois = mEngine->getSubsystem("OISSubsystem")->castType<OISSubsystem>();
 		OgreSubsystem* ogre = mEngine->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 		BulletSubsystem* bts = mEngine->getSubsystem("BulletSubsystem")->castType<BulletSubsystem>();
@@ -124,6 +124,8 @@ namespace Oryx
 
 		//move+=Vector3(0,-1,0);
 		move = pl.projectVector(move);
+		if(move.squaredLength()>0)
+			move.normalize();
 
 		//ct->move(Vector3(0,-1,0),5);//,5);
 		
@@ -140,17 +142,22 @@ namespace Oryx
 
 		//qcc->setMoveVector3(move);
 
+		if(ois->isKeyDown("KC_SPACE"))
+		{
+			ct->jump();
+		}
+
 		if(ois->isKeyDown("KC_ESCAPE"))
 			sendMessage(MessageAny<String>("kill"),"Engine");
-			if(!ois->isKeyDown("KC_V"))
-			{
-				currentMat = 0;
-			}
+			//if(!ois->isKeyDown("KC_V"))
+			//{
+			//	currentMat = 0;
+			//}
 		if(ois->isButtonDown("MB_Right")&&!toggle)
 		{
 			toggle = true;
 
-			if(ois->isKeyDown("KC_V")&&currentMat==0)
+			if(ois->isKeyDown("KC_V"))
 			{
 				++currentMat;
 				if(currentMat>2)
