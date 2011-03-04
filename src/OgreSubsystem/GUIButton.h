@@ -24,7 +24,7 @@
 namespace Oryx
 {
 	// A simple button, based on the gui rectangle
-	class GUIButton : public GUIRectangle
+	class ORYX_OGRE_EXPORT GUIButton : public GUIRectangle
 	{
 	public:
 

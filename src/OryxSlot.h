@@ -32,7 +32,7 @@ namespace Oryx
 	typedef fastdelegate::FastDelegate1<const Message&> Delegate;
 
 	/** A Qt-inspired Slot, recieves messages sent from Signals */
-	class Slot
+	class ORYX_EXPORT Slot
 	{
 	public:
 

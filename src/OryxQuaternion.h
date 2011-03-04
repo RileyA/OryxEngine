@@ -32,7 +32,7 @@ namespace Oryx
 	class Matrix3;
 
 	/** A quaternion, for representing rotations!*/
-	class Quaternion
+	class ORYX_EXPORT Quaternion
 	{
 	public:
 

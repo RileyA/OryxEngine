@@ -49,8 +49,8 @@ namespace Oryx
 
 	void ExplosionManager::createExplosion(Vector3 position)
 	{
-		ALSubsystem* al = Engine::getPtr()->getSubsystem("ALSubsystem")->castType<ALSubsystem>();
-		al->play2D("../media/audio/boom.wav");
+		//ALSubsystem* al = Engine::getPtr()->getSubsystem("ALSubsystem")->castType<ALSubsystem>();
+		//al->play2D("../media/audio/boom.wav");
 		if(mReserve.empty())
 		{
 			mActive.push_back(new Explosion());

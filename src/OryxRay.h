@@ -26,7 +26,7 @@
 namespace Oryx
 {
 	/** Representation of a 3D Ray */
-	class Ray
+	class ORYX_EXPORT Ray
 	{
 	public:	
 

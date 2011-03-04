@@ -29,7 +29,7 @@ namespace Oryx
 	class Ray;
 
 	/** A representation of an oriented 3d box */
-	class Box
+	class ORYX_EXPORT Box
 	{
 	public:
 		

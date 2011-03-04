@@ -68,6 +68,8 @@ namespace Oryx
 		{
 			mLogger->logMessage("Oryx Engine v"+String(ORYX_VERSION)+" Initializing....");
 
+			mLogger->logMessage("Reticulating Splines...");
+
 			// resolve all dependencies
 			std::map<String,EngineSubsystem*>::iterator iter = mSubsystems.begin();
 			for(;iter!=mSubsystems.end();++iter)
@@ -80,9 +82,13 @@ namespace Oryx
 			iter = mSubsystems.begin();
 			for(;iter!=mSubsystems.end();++iter)
 				iter->second->_init();
+			
+			mLogger->logMessage("Subsystems started up!");
 
 			createBucket("Default");
 			createBucket("DefaultPerma")->setTemporary(false);
+
+			mLogger->logMessage("Default buckets allocated.");
 
 			mLogger->logMessage("Oryx Engine v"+String(ORYX_VERSION)+" Initialized successfully.");
 			mInitialized = true;
@@ -169,6 +175,7 @@ namespace Oryx
 	Bucket* Engine::createBucket(String name)
 	{
 		mBuckets[name] = new Bucket(name);
+		return mBuckets[name];
 	}
 	//-----------------------------------------------------------------------	
 

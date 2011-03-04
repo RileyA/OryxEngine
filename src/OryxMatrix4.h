@@ -28,7 +28,7 @@ namespace Oryx
 	/** a 4x4 matrix, adapted from Ogre3d's implementation (iself an 
 	 *		adaptation of the Wild Magic 0.2 Matrix library 
 	 *		(http://www.geometrictools.com/)) */
-	class Matrix4
+	class ORYX_EXPORT Matrix4
 	{
 	protected:
 

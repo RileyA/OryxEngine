@@ -21,10 +21,11 @@
 #define PHYSICS_SPHERE_SHAPE_H
 
 #include "PhysicsShape.h"
+#include "Bulletdllmain.h"
 
 namespace Oryx
 {
-	class PhysicsSphereShape : public PhysicsShape
+	class ORYX_BULLET_EXPORT PhysicsSphereShape : public PhysicsShape
 	{
 	public:
 

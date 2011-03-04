@@ -17,17 +17,44 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "Oryx.h"
-#include "Bulletdllmain.h"
-#include "Oryx3DMath.h"
+#ifndef ORYX_PLANE_H
+#define ORYX_PLANE_H
 
-class btVector3;
-class btQuaternion;
+#include "Oryx.h"
+#include "OryxMatrix3.h"
+#include "OryxVector3.h"
 
 namespace Oryx
 {
-	ORYX_BULLET_EXPORT Vector3 convertBullet(btVector3 v);
-	ORYX_BULLET_EXPORT btVector3 convertBullet(Vector3 v);
-	ORYX_BULLET_EXPORT Quaternion convertBullet(btQuaternion q);
-	ORYX_BULLET_EXPORT btQuaternion convertBullet(Quaternion q);
+	class ORYX_EXPORT Plane
+	{
+	public:
+	
+		Vector3 n;
+		Real d;
+
+		Plane()
+			:n(Vector3::ZERO),d(0.f){}
+
+		Plane(Vector3 normal, Real distance)
+			:n(normal),d(distance){}
+
+		Vector3 projectVector(const Vector3& p) const
+		{
+			// We know plane normal is unit length, so use simple method
+			Matrix3 xform;
+			xform[0][0] = 1.0f - n.x * n.x;
+			xform[0][1] = -n.x * n.y;
+			xform[0][2] = -n.x * n.z;
+			xform[1][0] = -n.y * n.x;
+			xform[1][1] = 1.0f - n.y * n.y;
+			xform[1][2] = -n.y * n.z;
+			xform[2][0] = -n.z * n.x;
+			xform[2][1] = -n.z * n.y;
+			xform[2][2] = 1.0f - n.z * n.z;
+			return xform * p;
+		}
+	};
 }
+
+#endif

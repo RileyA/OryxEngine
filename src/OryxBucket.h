@@ -29,7 +29,7 @@ namespace Oryx
 	 *		allows objects with interdependencies to be placed in different 
 	 *		batches to prevent problems. Objects in a bucket may potentially
 	 *		be updated in parallel */
-	class Bucket
+	class ORYX_EXPORT Bucket
 	{
 	public:
 

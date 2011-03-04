@@ -17,40 +17,44 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#ifndef PHYSICS_COMPOUND_SHAPE_H
-#define PHYSICS_COMPOUND_SHAPE_H
+#ifndef CHARACTER_CONTROLLER_H
+#define CHARACTER_CONTROLLER_H
 
-#include "PhysicsShape.h"
-#include "Bulletdllmain.h"
-
-struct btCompoundShape;
+#include "PhysicsObject.h"
 
 namespace Oryx
 {
-	class ORYX_BULLET_EXPORT PhysicsCompoundShape : public PhysicsShape
+	class ORYX_BULLET_EXPORT CharacterController : public PhysicsObject
 	{
 	public:
 
-		PhysicsCompoundShape();
-		virtual ~PhysicsCompoundShape();
+		CharacterController(btDynamicsWorld* w)
+			:PhysicsObject(w){}
+		
+		virtual void update(bool frame, Real interpolation, Vector3 gravity) = 0;
+		virtual Vector3 getPosition() = 0;
+		virtual Quaternion getOrientation() = 0;
 
-		PhysicsShape* getShape(size_t index);
+		virtual void setMoveVector(Vector3 move){mMove = move;}
+		virtual void setMaxSpeed(Real max){mMaxSpeed = max;}
+		virtual void setMinSpeed(Real min){mMinSpeed = min;}
+		virtual void setAcceleration(Real acc){mAcceleration = acc;}
 
-		void addShape(PhysicsShape* shape, Vector3 pos=Vector3::ZERO, 
-			Quaternion orientation = Quaternion::IDENTITY);
-		void removeShape(PhysicsShape* shape);
-		void removeShapeByIndex(size_t shape);
-		void removeAllShapes();
-
-		btCompoundShape* getCompound();
-
-		PhysicsShapeType getType(){return PST_COMPOUND;}
+		virtual Real getMaxSpeed(){return mMaxSpeed;}
+		virtual Real getMinSpeed(){return mMinSpeed;}
+		virtual Real getAcceleration(){return mAcceleration;}
+		virtual Vector3 getMoveVector(){return mMove;}
 
 	protected:
 
-		std::vector<PhysicsShape*> mShapes;
+		Real mMaxSpeed;
+		Real mMinSpeed;
+		Real mAcceleration; 
+		Vector3 mMove;
+
+	private:
+
 	};
 }
 
 #endif
-

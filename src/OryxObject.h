@@ -27,7 +27,7 @@ namespace Oryx
 {
 	/** A game Object, just about anything that isn't a subsystem or state
 	 *		(e.g. A tree, a soldier, a score handler, etc..) */
-	class Object : public EventHandler
+	class ORYX_EXPORT Object : public EventHandler
 	{
 	public:
 		

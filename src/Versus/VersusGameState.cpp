@@ -38,6 +38,7 @@ namespace Oryx
 	
 	void VersusGameState::init()
 	{
+		std::cout<<"gogogog!\n";
 		currentMat = 0;
 		OgreSubsystem* ogre = mEngine->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 		BulletSubsystem* bts = mEngine->getSubsystem("BulletSubsystem")->castType<BulletSubsystem>();
@@ -107,7 +108,8 @@ namespace Oryx
 		//qcc = bts->createQuantaCCT(Vector3(0,300,0));
 		bts->setGravity(Vector3(0,-5,0));
 
-		ct = new CharacterThingy(bts,ogre);
+		ch = bts->createQuantaCCT(Vector3(0,50,0));
+		//ct = new CharacterThingy(bts,ogre);
 	}
 
 	void VersusGameState::update(Real delta)
@@ -135,7 +137,8 @@ namespace Oryx
 		//	ct->move(move);
 		//}
 		//
-		ct->update(delta,move);
+		ch->setMoveVector(move);
+		//ct->update(delta,move);
 
 		//std::cout<<"delta: "<<TimeManager::getPtr()->getDeltaTime();
 		//	move.normalize();
@@ -144,7 +147,7 @@ namespace Oryx
 
 		if(ois->isKeyDown("KC_SPACE"))
 		{
-			ct->jump();
+			//ct->jump();
 		}
 
 		if(ois->isKeyDown("KC_ESCAPE"))
@@ -255,7 +258,7 @@ namespace Oryx
 
 			mTimer = 0.f;
 		}*/
-		std::map<byte,TestPeer*>::iterator it = mPeers.begin();
+		/*&std::map<byte,TestPeer*>::iterator it = mPeers.begin();
 		for(it;it!=mPeers.end();++it)
 		{
 			Vector2 pos = mCam->mCamera->getScreenCoords(it->second->m->getAbsolutePosition()+
@@ -264,14 +267,15 @@ namespace Oryx
 				"Test")->getWidth();
 			pos.y=((1.f-pos.y)/2.f)*768;
 			it->second->txt->setPosition(pos);
-		}
+		}*/
 
 		cmgr->generate(mCam->getPosition());
 
 		//mCam->mPosNode->setPosition(qcc->getPosition());
-		mCam->mPosNode->setPosition(ct->getPos()+Vector3(0,1.2f,0));
+		mCam->mPosNode->setPosition(ch->getPosition()+Vector3(0,1.2f,0));
+		//mCam->mPosNode->setPosition(ct->getPos()+Vector3(0,1.2f,0));
 		//mCam->mPosNode->setOrientation(qcc->getOrientation());
-		//std::cout<<"P: "<<qcc->getPosition().y<<"\n";
+		//std::cout<<"P: "<<ch->getPosition().y<<"\n";
 
 	}
 
@@ -281,7 +285,7 @@ namespace Oryx
 		// do stuff
 	}
 
-	void VersusGameState::processPackets(byte* data,size_t length,size_t id)
+/*	void VersusGameState::processPackets(byte* data,size_t length,size_t id)
 	{
 		switch(id)
 		{
@@ -319,7 +323,7 @@ namespace Oryx
 	{
 		delete mPeers[id];
 		mPeers.erase(mPeers.find(id));
-	}
+	}*/
 
 	void VersusGameState::mouse(const Message& msg)
 	{

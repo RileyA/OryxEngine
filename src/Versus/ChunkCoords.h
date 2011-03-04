@@ -176,17 +176,17 @@ namespace Oryx
 	// map tex atlas positions to faces and block indices
 	const byte MAPPINGS[5][6] = 
 	{
-		/*{1,1,1,1,1,1},
+		{1,1,1,1,1,1},
 		{1,1,1,1,1,1},
 		{2,2,2,2,2,2},
 		{3,3,3,3,3,3},
-		{4,4,4,4,4,4}*/
+		{4,4,4,4,4,4}
 		// Minecraft "terrain.png" test:
-		{1,1,1,1,1,1},
+		/*{1,1,1,1,1,1},
 		{51,51,51,51,51,51},
 		{2,2,2,2,2,2},
 		{3,3,3,3,3,3},
-		{4,4,3,1,4,4}
+		{4,4,3,1,4,4}*/
 	};
 
 	const byte FILTERVERTEX[6] = {0,3,1,3,2,1}; // convert 0-5 to 0-3 with vertices (since I'm too lazy to use shared verts...)

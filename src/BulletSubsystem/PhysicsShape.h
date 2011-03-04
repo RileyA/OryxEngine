@@ -23,6 +23,7 @@
 #include "Oryx.h"
 #include "Oryx3DMath.h"
 #include "BulletConversions.h"
+#include "Bulletdllmain.h"
 
 struct btCollisionShape;
 
@@ -39,7 +40,7 @@ namespace Oryx
 	//-----------------------------------------------------------------------
 
 	/** Wrapper class for btCollisionShape */
-	class PhysicsShape
+	class ORYX_BULLET_EXPORT PhysicsShape
 	{
 	public:
 		

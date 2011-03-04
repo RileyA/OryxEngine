@@ -30,7 +30,7 @@ namespace Oryx
 	/** a 3x3 matrix, adapted from Ogre3d's implementation (iself an 
 	 *		adaptation of the Wild Magic 0.2 Matrix library 
 	 *		(http://www.geometrictools.com/))*/
-	class Matrix3
+	class ORYX_EXPORT Matrix3
 	{	
 	public:
 

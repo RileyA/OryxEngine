@@ -20,11 +20,12 @@
 #ifndef PHYSICS_TRIMESH_SHAPE_H
 #define PHYSICS_TRIMESH_SHAPE_H
 
-#include "PhysicsShape.h"
+#include  "PhysicsShape.h"
+#include "Bulletdllmain.h"
 
 namespace Oryx
 {
-	class PhysicsTrimeshShape : public PhysicsShape
+	class ORYX_BULLET_EXPORT PhysicsTrimeshShape : public PhysicsShape
 	{
 	public:
 

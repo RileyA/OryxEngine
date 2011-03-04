@@ -1,2 +1,7 @@
-env = Environment(CPPDEFINES=['BUILD_OIS_DLL','LINUX']);
-env.SharedLibrary('OISSubsystem',['OISdllmain.cpp','OISSubsystem.cpp','OISListener.cpp'],CPPPATH=['../src','/usr/include/OIS'],LIBS=['OIS','OryxEngine'],LIBPATH=['../bin'])
+import os
+if os.name == 'nt':
+	env = Environment(ENV=os.environ,tools=['mingw','g++'],CXX=['g++'],CPPDEFINES=['BUILD_OIS_DLL','WIN32'])
+	env.SharedLibrary('OISSubsystem',['OISdllmain.cpp','OISSubsystem.cpp','OISListener.cpp'],CPPPATH=['../src','E:\Deps\OgreSDK_mingw_v1-7-2\include\OIS'],LIBS=['OryxEngine', 'OIS'],LIBPATH=['../bin','E:\Deps\OgreSDK_mingw_v1-7-2\lib\release'])
+else:
+	env = Environment(CPPDEFINES=['BUILD_OIS_DLL','LINUX']);
+	env.SharedLibrary('OISSubsystem',['OISdllmain.cpp','OISSubsystem.cpp','OISListener.cpp'],CPPPATH=['../src','/usr/include/OIS'],LIBS=['OIS','OryxEngine'],LIBPATH=['../bin'])

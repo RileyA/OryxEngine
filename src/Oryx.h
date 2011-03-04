@@ -26,7 +26,7 @@
 #define ORYX_PLATFORM_APPLE 3
 
 // Determine platform
-#if defined( __WIN32__ ) || defined( _WIN32 )
+#if defined( __WIN32__ ) || defined( _WIN32 ) || defined (WIN32)
     #define ORYX_PLATFORM ORYX_PLATFORM_WIN32
 #elif defined( __APPLE_CC__)
     #define ORYX_PLATFORM ORYX_PLATFORM_APPLE
@@ -80,9 +80,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#if defined ( ORYX_PLATFORM_LINUX )
+#if (ORYX_PLATFORM == ORYX_PLATFORM_LINUX )
 #include <netinet/in.h>
-#elif defined ( ORYX_PLATFORM_WINDOWS )
+#elif (ORYX_PLATFORM == ORYX_PLATFORM_WINDOWS )
 #include <Winsock2.h>
 #endif
 

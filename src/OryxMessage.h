@@ -25,7 +25,7 @@
 namespace Oryx
 {
 	/** A nearly abstract Message class, used to package a MessageAny<> */
-	class Message
+	class ORYX_EXPORT Message
 	{
 	public:
 

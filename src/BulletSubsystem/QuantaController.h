@@ -17,17 +17,39 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "Oryx.h"
-#include "Bulletdllmain.h"
-#include "Oryx3DMath.h"
+#ifndef QUANTA_CONTROLLER_H
+#define QUANTA_CONTROLLER_H
 
-class btVector3;
-class btQuaternion;
+#include "Oryx.h"
+#include "CharacterController.h"
+#include "CharPrimitive.h"
+#include "Bulletdllmain.h"
 
 namespace Oryx
 {
-	ORYX_BULLET_EXPORT Vector3 convertBullet(btVector3 v);
-	ORYX_BULLET_EXPORT btVector3 convertBullet(Vector3 v);
-	ORYX_BULLET_EXPORT Quaternion convertBullet(btQuaternion q);
-	ORYX_BULLET_EXPORT btQuaternion convertBullet(Quaternion q);
+	class ORYX_BULLET_EXPORT QuantaController : public CharacterController
+	{
+	public:
+
+		QuantaController(BulletSubsystem* bullet,Vector3 startPos);
+		virtual ~QuantaController();
+
+		virtual Vector3 getPosition();
+		virtual Quaternion getOrientation();
+
+		virtual void update(bool frame, Real interpolation, Vector3 gravity);
+
+	private:
+
+		void move(Vector3 d, Real dist, bool slide = false);
+
+		std::vector<CharPrimitive*> mComponents;
+		Real mInterpolation;
+
+		Vector3 mPosition[2];// 0 is last frame, 1 is next frame
+
+		static const int NUM_SPHERES = 5;
+	};
 }
+
+#endif

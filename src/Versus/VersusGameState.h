@@ -47,7 +47,7 @@ namespace Oryx
 	public:
 
 		static const Real SKIN_WIDTH=0.075f;
-		static const Real TIMESTEP = 1.f/60.f;// update 60 times/s
+		static const Real TIMESTEP = 1.f/100.f;// update 60 times/s
 
 		
 		CharacterThingy(BulletSubsystem* bs,OgreSubsystem* ogre)
@@ -94,7 +94,7 @@ namespace Oryx
 			}
 		}
 
-		void move(Vector3 direction,Real speed = 0.f,int gg=0,float offset=0.f)
+		Real move(Vector3 direction,Real speed = 0.f,int gg=0,float offset=0.f)
 		{
 			if(speed==0.f)
 				speed = mSpeed;
@@ -126,7 +126,7 @@ namespace Oryx
 					if(slide.squaredLength()>0)
 					{
 						//slide.normalize();
-						move(slide,0.f,gg+1,originalStep-step);
+						return step+move(slide,0.f,gg+1,originalStep-step);
 					}
 				}
 			}
@@ -168,6 +168,45 @@ namespace Oryx
 
 	};
 
+	// this'll be made into a nice, clean part of the physics
+	// system eventually, for now it's hacky-ness while I get it to work.
+	/*class CharCompound
+	{
+	public:
+
+		CharCompound()
+		{
+			for(int i=0;i<5;++i)
+			{
+				components.push_back(new CharacterThingy());
+				components.back().mPosition = Vector3(0,i*0.375f,0);
+			}
+		}
+
+		void update(Real delta,Vector3 move)
+		{
+			Real max = 0.f;
+			int maxInd = -1;
+			for(int i=0;i<5;++i)
+			{
+				Real m = components[i]->update(delta,move);
+				if(m > max)
+				{
+					max = m;
+					maxInd = i;
+				}
+			}
+
+			if(maxInd!=-1)
+			{
+				
+			}
+		}
+
+		std::vector<CharacterThingy*> components;
+
+	}*/
+
 	class VersusGameState : public GameState
 	{
 	public:
@@ -180,13 +219,13 @@ namespace Oryx
 
 		QuantaController* qcc;
 
-		void processPackets(byte* data,size_t length,size_t id);
-		void addPeer(byte id,String name);
-		void removePeer(byte id);
+		//void processPackets(byte* data,size_t length,size_t id);
+		//void addPeer(byte id,String name);
+		//void removePeer(byte id);
 		void mouse(const Message& msg);
 		StaticText* txt; 
-		std::map<byte,TestPeer*> mPeers;
-		Client* mClient;
+		//std::map<byte,TestPeer*> mPeers;
+		//Client* mClient;
 		FPSCamera* mCam;
 		Real mTimer;
 		GUIRectangle* curse;
@@ -197,7 +236,8 @@ namespace Oryx
 		ExplosionManager* mgr;
 		ChunkManager* cmgr;
 		int currentMat;
-
+		
+		QuantaController* ch;
 		CharacterThingy* ct;
 	};
 }

@@ -29,7 +29,7 @@
 namespace Oryx
 {
 	/** Utility class for finding simple shape intersections */
-	class Intersect
+	class ORYX_EXPORT Intersect
 	{
 	public:
 

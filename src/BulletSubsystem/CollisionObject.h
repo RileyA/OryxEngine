@@ -23,6 +23,7 @@
 #include "Oryx.h"
 #include "PhysicsShape.h"
 #include "PhysicsObject.h"
+#include "Bulletdllmain.h"
 #include "BulletConversions.h"
 
 struct btCollisionObject;
@@ -30,7 +31,7 @@ class btDynamicsWorld;
 
 namespace Oryx
 {
-	class CollisionObject : public PhysicsObject
+	class ORYX_BULLET_EXPORT CollisionObject : public PhysicsObject
 	{
 		public:
 

@@ -28,7 +28,7 @@ namespace Oryx
 {
 	/** An implementation of the Observer Pattern, based heavily on Qt's
 	 *		signals and slots. Also supports sending one-time messages. */
-	class EventHandler
+	class ORYX_EXPORT EventHandler
 	{
 	public:
 

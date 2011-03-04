@@ -62,7 +62,7 @@ namespace Oryx
 
 			Ogre::NameValuePairList miscP;
 
-			miscP["vsync"] = "true";
+			miscP["vsync"] = "false";
 			miscP["FSAA"] = "0";
 			miscP["gamma"] = "false";
 			miscP["border"] = "fixed";
@@ -111,9 +111,6 @@ namespace Oryx
 
             Logger::getPtr()->logMessage("Ogre Subsystem started up.");
             mInitialized = true;
-
-			Ogre::CompositorInstance *instance = Ogre::CompositorManager::getSingleton().addCompositor(mViewport, "TestMRT");
-			Ogre::CompositorManager::getSingleton().setCompositorEnabled(mViewport, "TestMRT", false);
 		}
     }
     //-----------------------------------------------------------------------
@@ -143,8 +140,6 @@ namespace Oryx
     void OgreSubsystem::_update(Real delta)
     {
 		renderFrame();
-		if(TimeManager::getPtr()->getTimeDecimal()>7.5f)
-			Ogre::CompositorManager::getSingleton().setCompositorEnabled(mViewport, "TestMRT", true);
     }
     //-----------------------------------------------------------------------
 

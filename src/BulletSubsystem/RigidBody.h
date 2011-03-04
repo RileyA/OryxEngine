@@ -19,9 +19,10 @@
 
 #ifndef RIGID_BODY_H
 #define RIGID_BODY_H
-
+  
 #include "Oryx.h"
 #include "CollisionObject.h"
+#include "Bulletdllmain.h"
 
 class btDynamicsWorld;
 struct btRigidBody;
@@ -30,7 +31,7 @@ struct btCollisionShape;
 
 namespace Oryx
 {
-	class RigidBody : public CollisionObject
+	class ORYX_BULLET_EXPORT RigidBody : public CollisionObject
 	{
 	public:
 

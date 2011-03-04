@@ -27,7 +27,7 @@
 namespace Oryx
 {
 	/** Simple struct representing a 3d mesh (meant for interchange between subsystems etc..) */
-	struct MeshData
+	struct ORYX_EXPORT MeshData
 	{
 		/** Add a vertex to this mesh
 		 *		@remarks Since I'm lazy, indices are just an incrementing list...

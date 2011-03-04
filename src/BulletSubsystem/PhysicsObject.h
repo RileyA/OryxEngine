@@ -21,6 +21,7 @@
 #define BULLET_PHYSICSOBJECT_H
 
 #include "Oryx.h"
+#include "Bulletdllmain.h"
 #include "Oryx3DMath.h"
 
 class btDynamicsWorld;
@@ -28,7 +29,7 @@ class btDynamicsWorld;
 namespace Oryx
 {
 	/** An abstract representation of a physics object */
-	class PhysicsObject
+	class ORYX_BULLET_EXPORT PhysicsObject
 	{
 	public:
 

@@ -29,7 +29,7 @@ namespace Oryx
 
 	/** A Qt-inspired Signal, maintains a list of listeners (Slots)
 	 *		and calls their delegates when fired */
-	class Signal
+	class ORYX_EXPORT Signal
 	{
 	public:
 
