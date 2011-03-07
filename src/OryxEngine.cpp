@@ -128,6 +128,7 @@ namespace Oryx
 
 			mStates.front()->deinit();
 			delete mStates.front();
+
 			mStates.pop_front();
 
 			std::map<String,Bucket*>::iterator it = mBuckets.begin();;
@@ -143,6 +144,10 @@ namespace Oryx
 				else
 					++it;
 			}
+
+			std::map<String,EngineSubsystem*>::iterator iter = mSubsystems.begin();
+			for(;iter!=mSubsystems.end();++iter)
+				iter->second->_endState();
 
 			createBucket("Default");// remake the default bucket
 		}
@@ -228,6 +233,8 @@ namespace Oryx
 		{
 			if(str->data=="kill")
 				shutdown();
+			else if(str->data=="end state")
+				endCurrentState();
 		}
 	}
 	//-----------------------------------------------------------------------

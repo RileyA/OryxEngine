@@ -81,11 +81,18 @@ namespace Oryx
 		Vector2 getDerivedScale();
 		void _refreshScale();
 
+		// force this element into an aspect ratio (useful for making standardized
+		// menus with
+		void setAspectRatio(int h,int v, bool preserveHeight=true);
+
 		int getLayer();
 		GUIScreen* getScreen();
 
 		void addChild(GUIElement* elem);
 		void click(Vector2 coords,bool up);	
+		void hover(Vector2 coords);	
+		void unhover();	
+		void release();	
 
 	protected:
 
@@ -93,6 +100,10 @@ namespace Oryx
 		virtual void _setScale(Vector2 dim) = 0;
 
 		virtual void _clicked();
+		virtual void _hovered(bool on);
+
+		bool mClickedOver;
+		bool mHover;
 
 		Vector2 mPosition;
 		Vector2 mScale;
@@ -103,7 +114,6 @@ namespace Oryx
 		int mLayer;
 
 		std::vector<GUIElement*> mElements;
-
 		GUIElement* mParent;
 
 		static long long msAutoNameIndex;

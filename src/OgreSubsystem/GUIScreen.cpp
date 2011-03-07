@@ -31,9 +31,9 @@ namespace Oryx
 	GUIScreen::GUIScreen(Gorilla::Screen* screen,String name)
 		:mScreen(screen),mName(name),mCursor(0)
 	{
-		createSlot("moveCursor",fastdelegate::MakeDelegate(this,&GUIScreen::moveCursor));
-		createSlot("click",fastdelegate::MakeDelegate(this,&GUIScreen::click));
-		createSlot("release",fastdelegate::MakeDelegate(this,&GUIScreen::release));
+		createSlot("moveCursor",this,&GUIScreen::moveCursor);
+		createSlot("click",this,&GUIScreen::click);
+		createSlot("release",this,&GUIScreen::release);
 		for(int i=0;i<16;++i)
 		{
 			mLayers[i] = screen->createLayer(i);
@@ -45,13 +45,7 @@ namespace Oryx
 	GUIScreen::~GUIScreen()
 	{
 		for(int i=0;i<16;++i)
-		{
-			std::vector<GUIElement*>::iterator it = mElements[i].begin();
-			for(it;it!=mElements[i].end();++it)
-			{
-				delete (*it);
-			}
-		}
+			delete mRootElements[i];
 	}
 	//-----------------------------------------------------------------------
 
@@ -60,6 +54,7 @@ namespace Oryx
 		return mScreen;
 	}
 	//-----------------------------------------------------------------------
+
 	Gorilla::Layer* GUIScreen::getLayer(int index)
 	{
 		if(index>=0&&index<16)
@@ -82,9 +77,8 @@ namespace Oryx
 
 	void GUIScreen::update(Real delta)
 	{
-		for(uint j=0;j<16;++j)
-			for(uint i=0;i<mElements[j].size();++i)
-				mElements[j][i]->update(delta);
+		for(int i=0;i<16;++i)
+			mRootElements[i]->update(delta);
 	}
 	//-----------------------------------------------------------------------
 
@@ -132,7 +126,11 @@ namespace Oryx
 		if(!mCursor)
 			return;
 		if(const MessageAny<Vector2>* ms = message_cast<Vector2>(m))
-			mCursor->setPosition(ms->data);
+		{
+			mCursor->setPosition(ms->data/Vector2(getWidth(),getHeight()));
+			for(uint i=0;i<16;++i)
+				mRootElements[i]->hover(mCursor->getDerivedPosition());
+		}
 	}
 	//-----------------------------------------------------------------------
 	
@@ -141,11 +139,7 @@ namespace Oryx
 		if(!mCursor)
 			return;
 		for(uint i=0;i<16;++i)
-		{
-			// TODO affect only topmost element?
-			for(uint j=0;j<mElements[i].size();++j)
-				mElements[i][j]->click(mCursor->getDerivedPosition(),true);
-		}
+			mRootElements[i]->click(mCursor->getDerivedPosition(),true);
 	}
 	//-----------------------------------------------------------------------
 	
@@ -154,11 +148,6 @@ namespace Oryx
 		if(!mCursor)
 			return;
 		for(uint i=0;i<16;++i)
-		{
-			// TODO affect topmost only?
-			// TODO ADD signal
-			for(uint j=0;j<mElements[i].size();++j)
-				mElements[i][j]->click(mCursor->getDerivedPosition(),false);
-		}
+			mRootElements[i]->click(mCursor->getDerivedPosition(),false);
 	}
 }

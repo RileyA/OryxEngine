@@ -27,7 +27,7 @@
 #define COLORVAL(x) Colour(x,x,x)
 //#define ALLOW_BLOCK_TRANSPARENCY
 //#define BLOCK_NORMALS
-#define SMOOTH_LIGHTING
+//#define SMOOTH_LIGHTING
 
 namespace Oryx
 {
@@ -35,9 +35,9 @@ namespace Oryx
 	// I'm working on generalizing everything though...
 	// NOTE: These must be multiples of CHUNK_STEP 
 	const byte CHUNK_STEP = 4;
-	const byte CHUNK_SIZE_X = 16;
-	const byte CHUNK_SIZE_Y = 16;
-	const byte CHUNK_SIZE_Z = 16;
+	const byte CHUNK_SIZE_X = 32;
+	const byte CHUNK_SIZE_Y = 32;
+	const byte CHUNK_SIZE_Z = 32;
 
 	const byte CHUNK_STEPS_X = CHUNK_SIZE_X/CHUNK_STEP;
 	const byte CHUNK_STEPS_Y = CHUNK_SIZE_Y/CHUNK_STEP;

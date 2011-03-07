@@ -24,7 +24,7 @@
 
 namespace Oryx
 {
-	OISListener::OISListener(size_t handle,OISSubsystem* sys)
+	OISListener::OISListener(size_t handle,OISSubsystem* sys,bool grabMouse)
 	{
 		mSubsystem = sys;
 
@@ -34,22 +34,25 @@ namespace Oryx
 		OIS::ParamList pl;
 		pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
+		if(!grabMouse)
+		{
 		#ifdef OIS_WIN32_PLATFORM
-			//pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
-			//pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
-			//pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
-			//pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
+			pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+			pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+			pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
+			pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
 		#elif defined OIS_LINUX_PLATFORM
-			//pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
-			//pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
-			//pl.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
-			//pl.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+			pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+			pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
+			pl.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
+			pl.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
 		#endif
+		}
 
 		mInputManager = OIS::InputManager::createInputSystem(pl);
 		mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, true ));
-		mKeyboard->setEventCallback(this);
 		mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, true ));
+		mKeyboard->setEventCallback(this);
 		mMouse->setEventCallback(this);
 		setInputViewSize(1024,768);
 		setMousePosition(512,350);
@@ -111,8 +114,9 @@ namespace Oryx
 
 	bool OISListener::mouseMoved(const OIS::MouseEvent& arg)
 	{
-		mCursorX += arg.state.X.rel;
-		mCursorY += arg.state.Y.rel;
+		const OIS::MouseState &ms = mMouse->getMouseState();
+		mCursorX = ms.X.abs;
+		mCursorY = ms.Y.abs;
 		checkPosition();
 		return true;
 	}

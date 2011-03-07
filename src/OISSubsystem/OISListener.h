@@ -31,7 +31,7 @@ namespace Oryx
 	{
 	public:
 
-		OISListener(size_t windowHandle,OISSubsystem* sys);
+		OISListener(size_t windowHandle,OISSubsystem* sys,bool grabMouse);
 		~OISListener();
 
 		void update();

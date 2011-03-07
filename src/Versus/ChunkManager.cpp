@@ -57,9 +57,9 @@ namespace Oryx
 			if(it->second->needsUpdate())
 			{
 				updated.push(it->second);
-				it->second->localLighting();
+				//it->second->localLighting();
 
-				for(int i=0;i<6;++i)
+				/*for(int i=0;i<6;++i)
 				{
 					// TODO update diagonals as well. optimize?
 					if(it->second->neighbors[i])
@@ -69,7 +69,7 @@ namespace Oryx
 						it->second->neighbors[i]->secondaryLighting();
 					}
 				}
-				it->second->secondaryLighting();
+				it->second->secondaryLighting();*/
 			}
 			++it;
 		}
@@ -140,18 +140,20 @@ namespace Oryx
 		if(getChunk(c))
 			return 0;
 
-		byte data[16][16][16];
+		byte data[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
 
-		for(int i=0;i<16;++i)
-			for(int j=0;j<16;++j)
-				for(int k=0;k<16;++k)
+		memset(data,(byte)0,CHUNK_VOLUME);
+
+		for(int i=0;i<CHUNK_SIZE_X;++i)
+			for(int j=0;j<CHUNK_SIZE_Y;++j)
+				for(int k=0;k<CHUNK_SIZE_Z;++k)
 		{
 				data[i][j][k] = 0;
 				if(j<5)
 					data[i][j][k] = 2;
 				else if(j<8)
 					data[i][j][k] = 3;
-				else if(j<9)
+				else if(j<25)
 					data[i][j][k] = 4;
 		}
 

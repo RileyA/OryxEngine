@@ -2688,6 +2688,9 @@ namespace Gorilla
             This shouldn't be need to be called by the user.
     */
     void               _redraw();
+
+	void scale(Ogre::Vector2 scale);
+	Ogre::Vector2 scale();
     
    protected:
     
@@ -2709,6 +2712,7 @@ namespace Gorilla
     bool                  mDirty;
     buffer<Vertex>        mVertices;
     size_t                mClippedLeftIndex, mClippedRightIndex;
+	Ogre::Vector2         mScale;
     
   };
   

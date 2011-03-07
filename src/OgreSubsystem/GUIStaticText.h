@@ -49,18 +49,27 @@ namespace Oryx
 		void setColour(Colour colour);
 		Colour getColour();
 
+		void setHoverColour(Colour colour);
+		Colour getHoverColour();
+
 		void setBackgroundColor(Colour colour);
 		Colour getBackgroundColour();
 
 		void setAlign(GUI_Align align);
 		GUI_Align getAlign();
 
+		void setTextScale(Real scale);
+		Real getTextScale();
+
 	protected:
 
 		virtual void _setPos(Vector2 pos);
 		virtual void _setScale(Vector2 dims);
+		virtual void _hovered(bool on);
 
 		Gorilla::Caption* mCaption;
+		Colour mColor;
+		Colour mHoverColor;
 
 	};
 }

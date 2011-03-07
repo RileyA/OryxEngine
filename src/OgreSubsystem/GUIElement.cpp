@@ -32,10 +32,12 @@ namespace Oryx
 {
 	long long GUIElement::msAutoNameIndex=0;
 	GUIElement::GUIElement(GUIElement* parent,String name,int layer)
-		:mPosition(0,0),mScale(1,1),mParent(parent),mLayer(layer),mName(name)
+		:mPosition(0,0),mScale(1,1),mParent(parent),mLayer(layer),mName(name),
+			mHover(0),mClickedOver(0)
 	{
 		createSignal("clicked");
 		createSignal("hovered");
+		createSignal("unhovered");
 		createSignal("released");
 
 		if(mName==""||mName=="AUTO")
@@ -59,6 +61,7 @@ namespace Oryx
 	{
 		createSignal("clicked");
 		createSignal("hovered");
+		createSignal("unhovered");
 		createSignal("released");
 
 		if(mScreen)
@@ -98,14 +101,14 @@ namespace Oryx
 	Vector2 GUIElement::getDerivedPosition()
 	{
 		if(mParent)
-			return mPosition+mParent->getDerivedPosition();
+			return mPosition*mParent->getScale()+mParent->getDerivedPosition();
 		return mPosition;
 	}
 	//-----------------------------------------------------------------------
 
 	void GUIElement::_refreshPosition()
 	{
-		_setPos(getDerivedPosition());
+		_setPos(getDerivedPosition()*Vector2(mScreen->getWidth(),mScreen->getHeight()));
 		for(unsigned int i=0;i<mElements.size();++i)
 			mElements[i]->_refreshPosition();// get the children to recalculate their positions
 	}
@@ -140,6 +143,27 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	void GUIElement::setAspectRatio(int w,int h,bool preserveHeight)
+	{
+		Real ratio = static_cast<float>(w)/h;
+		Real curRatio = mScreen->getWidth()/mScreen->getHeight();// screen ratio
+
+		if(preserveHeight)
+		{
+			Real oldX = mScale.x;
+			mScale.x *= ratio/curRatio;
+			mPosition.x += (oldX-mScale.x)/2;
+		}
+		else
+		{
+			Real oldY = mScale.y;
+			mScale.y *= 1.f/(ratio/curRatio);
+			mPosition.y += (oldY-mScale.y)/2;
+		}
+		_refreshPosition();
+	}
+	//-----------------------------------------------------------------------
+	
 	int GUIElement::getLayer()
 	{
 		return mLayer;
@@ -160,22 +184,77 @@ namespace Oryx
 	
 	void GUIElement::click(Vector2 coords,bool up)
 	{
-		Vector2 realScale = getScale()*Vector2(getScreen()->getWidth(),getScreen()->getHeight());
-
-		if(coords.x>getDerivedPosition().x&&coords.x<getDerivedPosition().x+realScale.x &&
-				coords.y>getDerivedPosition().y&&coords.y<getDerivedPosition().y+realScale.y)
+		coords-=getPosition();
+		coords /= mScale;
+		if(coords.x<1.f&&coords.x>0.f&&coords.y<1.f&&coords.y>0.f)
 		{
 			if(!up)
-				_clicked();// run callback
+				mClickedOver = true;
+			else if(mClickedOver)
+			{
+				_clicked();
+				mClickedOver = false;
+			}
 			for(unsigned int i=0;i<mElements.size();++i)
 				mElements[i]->click(coords,up);// notify children
 		}
+		else if(up)
+		{
+			release();
+		}
+	}
+	//-----------------------------------------------------------------------
+
+	void GUIElement::release()
+	{
+		mClickedOver = false;
+		for(int i=0;i<mElements.size();++i)
+			mElements[i]->release();
+	}
+
+	void GUIElement::hover(Vector2 coords)
+	{
+		coords-=getPosition();
+		coords /= mScale;
+		if(coords.x<1.f&&coords.x>0.f&&coords.y<1.f&&coords.y>0.f)
+		{
+			if(!mHover)
+			{
+				mHover = true;
+				_hovered(true);
+			}
+
+			for(unsigned int i=0;i<mElements.size();++i)
+				mElements[i]->hover(coords);// notify children
+		}
+		else if(mHover)
+		{
+			unhover();
+		}
+	}
+	
+	void GUIElement::unhover()
+	{
+		if(mHover)
+		{
+			_hovered(false);
+		}
+		mHover = false;
+		for(unsigned int i=0;i<mElements.size();++i)
+			mElements[i]->unhover();// notify children
 	}
 	//-----------------------------------------------------------------------
 	
+	void GUIElement::_hovered(bool on)
+	{
+		if(on)
+			getSignal("hovered")->fire(0);
+		else
+			getSignal("unhovered")->fire(0);
+	}
+	//-----------------------------------------------------------------------
 	void GUIElement::_clicked()
 	{
 		getSignal("clicked")->fire(0);
 	}
-	//-----------------------------------------------------------------------
 }

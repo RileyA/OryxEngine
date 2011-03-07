@@ -42,7 +42,7 @@ namespace Oryx
 		mPosition = position;
 		mOgre = Engine::getPtr()->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 
-		memset(light,(byte)0,CHUNK_VOLUME);
+		memset(light,15,CHUNK_VOLUME);
 		memcpy(blocked,data,CHUNK_VOLUME);
 	
 		BulletSubsystem* b = Engine::getPtr()->getSubsystem("BulletSubsystem")->

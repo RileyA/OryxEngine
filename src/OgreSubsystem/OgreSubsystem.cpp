@@ -147,6 +147,8 @@ namespace Oryx
     {
 		if(mNeedsRestart)
 			restart();
+		delete mGUI;
+		mGUI = new GUI();
     }
     //-----------------------------------------------------------------------
 
@@ -364,8 +366,9 @@ namespace Oryx
 		m->load();
 		m->touch();
 
-		m->_setBounds(AxisAlignedBox(-8,-8,-8,8,8,8));
-		m->_setBoundingSphereRadius(11.313f);
+		int dims = 32;
+		m->_setBounds(AxisAlignedBox(-dims/2,-dims/2,-dims/2,dims/2,dims/2,dims/2));
+		m->_setBoundingSphereRadius(sqrt(dims*dims*2)/2);//11.313f);
 
 		sm->setMaterialName("MeinKraft");
 

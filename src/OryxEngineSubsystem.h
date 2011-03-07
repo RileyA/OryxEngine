@@ -52,7 +52,7 @@ namespace Oryx
         virtual void _update(Real delta) = 0;
 
 		/** Gets the name of this subsystem */
-        virtual String getName() = 0;
+        virtual String getName(){return "UnnamedSubsystem";}
 
 		// Helper for casting to a derived type
         template<typename T> T* castType(){return dynamic_cast<T*>(this);}

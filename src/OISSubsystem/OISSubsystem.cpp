@@ -31,9 +31,9 @@ namespace Oryx
     const String OISSubsystem::mDependencies[1];// nothin'
 
 	OISSubsystem::OISSubsystem()
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount),mInitialized(0)
+        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount),mInitialized(false),
+		mGrabbedMouse(false),mListener(0),mHandle(0)
 	{
-		mListener = 0;
 		EventHandler::registerDestination(getName(),this);
 	}
     //-----------------------------------------------------------------------
@@ -61,8 +61,8 @@ namespace Oryx
 			{
 				mKeyNames[it->second] = it->first;
 				mKeyStates[it->first] = false;
-				createSignal("released_"+it->first);
-				createSignal("pressed_"+it->first);
+				createSignal("released_"+it->second);
+				createSignal("pressed_"+it->second);
 			}
 
 			std::vector<String>::iterator iter = mButtons.begin();
@@ -76,6 +76,9 @@ namespace Oryx
 				++i;
 			}
 
+			mKeyPresses = mKeyStates;
+			mButtonPresses = mButtonStates;
+
             Logger::getPtr()->logMessage("OIS Subsystem started up.");
             mInitialized = true;
         }
@@ -86,13 +89,13 @@ namespace Oryx
     {
         if(mInitialized)
         {
-            Logger::getPtr()->logMessage("Ogre Subsystem shutting down...");
+            Logger::getPtr()->logMessage("OIS Subsystem shutting down...");
 			if(mListener)
 			{
 				delete mListener;
 				mListener = 0;
 			}
-            Logger::getPtr()->logMessage("Ogre Subsystem shut down.");
+            Logger::getPtr()->logMessage("OIS Subsystem shut down.");
             mInitialized = false;
         }
     }
@@ -125,29 +128,79 @@ namespace Oryx
 	{
 		return mKeyStates[key];
 	}
-
+	//-----------------------------------------------------------------------
+	
 	bool OISSubsystem::isKeyDown(String key)
 	{
 		return mKeyStates[mKeyNames[key]];
 	}
+	//-----------------------------------------------------------------------
 
+	bool OISSubsystem::wasKeyPressed(uint key)
+	{
+		bool wasPressed = mKeyPresses[key];
+		mKeyPresses[key] = false;
+		return wasPressed;
+	}
+	//-----------------------------------------------------------------------
+	
+	bool OISSubsystem::wasKeyPressed(String key)
+	{
+		return wasKeyPressed(mKeyNames[key]);
+	}
+	//-----------------------------------------------------------------------
+	
 	bool OISSubsystem::isButtonDown(uint button)
 	{
 		return mButtonStates[button];
 	}
+	//-----------------------------------------------------------------------
 
 	bool OISSubsystem::isButtonDown(String button)
 	{
 		return mButtonStates[mButtonNames[button]];
 	}
+	//-----------------------------------------------------------------------
 
-	void OISSubsystem::initInput(size_t handle)
+	bool OISSubsystem::wasButtonPressed(uint button)
 	{
-		if(!mListener)
-			mListener = new OISListener(handle,this);
+		bool wasPressed = mButtonPresses[button];
+		mButtonPresses[button] = false;
+		return wasPressed;
+	}
+	//-----------------------------------------------------------------------
+	
+	bool OISSubsystem::wasButtonPressed(String button)
+	{
+		return wasButtonPressed(mButtonNames[button]);
 	}
 	//-----------------------------------------------------------------------
 
+	void OISSubsystem::initInput(size_t handle, bool grabMouse = false)
+	{
+		mHandle = handle;
+		mGrabbedMouse = grabMouse;
+		if(!mListener)
+			mListener = new OISListener(handle,this,grabMouse);
+	}
+	//-----------------------------------------------------------------------
+
+	void OISSubsystem::deinitInput()
+	{
+		if(mListener)
+			delete mListener;
+		mListener = 0;
+	}
+	//-----------------------------------------------------------------------
+	
+	void OISSubsystem::toggleMouseGrab()
+	{
+		mGrabbedMouse = !mGrabbedMouse;
+		deinitInput();
+		initInput(mHandle,mGrabbedMouse);
+	}
+	//-----------------------------------------------------------------------
+	
 	void OISSubsystem::_setMousePos(int x,int y, int relx, int rely)
 	{
 		mMousePos = Vector2(x,y);
@@ -159,7 +212,13 @@ namespace Oryx
 	void OISSubsystem::_key(uint key, bool up)
 	{
 		mKeyStates[key] = up;
+		if(!up)
+			mKeyPresses[key] = true;
 		getSignal("keyPressed")->fire(MessageAny<uint>(key));
+		if(up)
+			getSignal(String("released_")+String(mKeys[key]))->fire(0);
+		else
+			getSignal(String("pressed_")+String(mKeys[key]))->fire(0);
 	}
 	//-----------------------------------------------------------------------	
 
@@ -167,6 +226,7 @@ namespace Oryx
 	{
 		mButtonStates[button] = up;
 		getSignal("mousePressed")->fire(MessageAny<uint>(button));
+		mButtonPresses[button] = up || true;
 		if(up)
 			getSignal(String("released_")+String(mButtons[button]))->fire(0);
 		else

@@ -31,6 +31,8 @@ namespace Oryx
 		mCaption = mScreen->getLayer(parent->getLayer())->createCaption(text,pos.x,pos.y,caption);
 		setPosition(pos);
 		setScale(dimensions);
+		setColour(Colour(1,1,1));
+		setHoverColour(Colour(1,1,1));
 	}
 	//-----------------------------------------------------------------------
 
@@ -69,6 +71,7 @@ namespace Oryx
 	void StaticText::setColour(Colour colour)
 	{
 		mCaption->colour(convertOgre(colour));
+		mColor = colour;
 	}
 	//-----------------------------------------------------------------------
 
@@ -78,6 +81,20 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	void StaticText::setHoverColour(Colour colour)
+	{
+		if(mHover)
+			mCaption->colour(convertOgre(colour));
+		mHoverColor = colour;
+	}
+	//-----------------------------------------------------------------------
+
+	Colour StaticText::getHoverColour()
+	{
+		return mHoverColor;
+	}
+	//-----------------------------------------------------------------------
+	
 	void StaticText::setBackgroundColor(Colour colour)
 	{
 		mCaption->background(convertOgre(colour));
@@ -121,6 +138,28 @@ namespace Oryx
 				return GA_RIGHT;
 		}
 		return GA_LEFT;// default for now...
+	}
+	//-----------------------------------------------------------------------
+	
+	void StaticText::setTextScale(Real scale)
+	{
+		mCaption->scale(Ogre::Vector2(scale,scale));
+	}
+	//-----------------------------------------------------------------------
+	
+	Real StaticText::getTextScale()
+	{
+		return mCaption->scale().x;
+	}
+	//-----------------------------------------------------------------------
+
+	void StaticText::_hovered(bool on)
+	{
+		GUIElement::_hovered(on);
+		if(on)
+			mCaption->colour(convertOgre(mHoverColor));
+		else
+			mCaption->colour(convertOgre(mColor));
 	}
 	//-----------------------------------------------------------------------
 }

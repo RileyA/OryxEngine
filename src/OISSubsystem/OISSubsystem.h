@@ -53,12 +53,24 @@ namespace Oryx
 		bool isKeyDown(uint key);
 		bool isKeyDown(String key);
 
+		/** Shortcut for detecting a single key press */
+		bool wasKeyPressed(uint key);
+		/** Shortcut for detecting a single key press */
+		bool wasKeyPressed(String key);
+
 		bool isButtonDown(uint button);
 		bool isButtonDown(String button);
 
+		bool wasButtonPressed(uint button);
+		bool wasButtonPressed(String button);
+
 		/** Starts up the input system (must be done per state) 
-		 *		@param handle Handle of the window from which to track input */
-		void initInput(size_t handle);
+		 *		@param handle Handle of the window from which to track input 
+		 *		@param grabMouse Does the application take over the OS mouse cursor	*/	
+		void initInput(size_t handle, bool grabMouse);
+		void deinitInput();
+
+		void toggleMouseGrab();
 
 		void _setMousePos(int x,int y,int relx,int rely);
 		void _key(uint key,bool up);
@@ -72,15 +84,20 @@ namespace Oryx
     protected:
 
         bool mInitialized;
+		size_t mHandle;
 		OISListener* mListener;
 		std::map<uint,String> mKeys;
 		std::map<String,uint> mKeyNames;
 		std::vector<String> mButtons;
 		std::map<String,uint> mButtonNames;
 		std::map<uint, bool> mKeyStates;
+		std::map<uint, bool> mKeyPresses;
 		std::vector<bool> mButtonStates;
+		std::vector<bool> mButtonPresses;
 
 		Vector2 mMousePos;
+
+		bool mGrabbedMouse;
 
     };
 }
