@@ -104,5 +104,6 @@ namespace Oryx
 #include "OryxTimeManager.h"
 #include "OryxLogger.h"
 #include "OryxException.h"
+#include "OryxRand.h"
 
 #endif
