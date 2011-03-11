@@ -1,9 +1,0 @@
-import os
-if os.name == 'nt':
-	env = Environment(ENV=os.environ,tools=['mingw','g++'],CXX=['g++'],CPPDEFINES=['BUILD_OGRE_DLL','WIN32'])
-	env['ENV']['LD_RUN_PATH']='.'
-	env.Program('Versus',['Versus.cpp','FPSCamera.cpp','Chunk.cpp','ChunkManager.cpp','VersusGameState.cpp','VersusPeer.cpp','ExplosionManager.cpp','PhysicsBlock.cpp','ChunkCoords.cpp'],CPPPATH=['../src'],LIBS=['OryxEngine','OgreSubsystem','OISSubsystem','BulletSubsystem','noise'],LIBPATH='../bin')
-else:
-	env = Environment();
-	env['ENV']['LD_RUN_PATH']='.'
-	env.Program('Versus',['Versus.cpp','FPSCamera.cpp','Chunk.cpp','ChunkManager.cpp','VersusGameState.cpp','VersusPeer.cpp','ExplosionManager.cpp','PhysicsBlock.cpp','ChunkCoords.cpp'],CPPPATH=['../src'],LIBS=['OryxEngine','ALSubsystem','OgreSubsystem','ChaiscriptSubsystem','OISSubsystem','ENetSubsystem','BulletSubsystem','noise'],LIBPATH='../bin')

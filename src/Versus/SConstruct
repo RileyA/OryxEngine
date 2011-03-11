@@ -1,1 +1,0 @@
-SConscript('Versus.scons',variant_dir='../../bin',src='.',duplicate=0)
