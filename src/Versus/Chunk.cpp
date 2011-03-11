@@ -36,19 +36,22 @@ namespace Oryx
 	Chunk::Chunk(Vector3 position,ChunkManager* parent,byte* data)
 		:mPosition(position),mParent(parent)
 	{	
-		mAtlasDimensions = 2;
-		mMaterial = "Debug1";
+		mAtlasDimensions = 16;
+		mMaterial = "MeinKraft";
 		mChunk = 0;
 		mPosition = position;
 		mOgre = Engine::getPtr()->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 
-		memset(light,15,CHUNK_VOLUME);
+		memset(light,0,CHUNK_VOLUME);
 		memcpy(blocked,data,CHUNK_VOLUME);
 	
 		BulletSubsystem* b = Engine::getPtr()->getSubsystem("BulletSubsystem")->
 			castType<BulletSubsystem>();
 
 		mBlock = new PhysicsBlock(0,0,0,position,0,this);
+
+		mActive = false;
+		mDirty = false;
 
 		for(int p=0;p<6;++p)
 			neighbors[p] = 0;
@@ -66,6 +69,11 @@ namespace Oryx
 	
 	void Chunk::build(bool physics)
 	{
+		if(!mActive)
+		{
+			mDirty = false;
+			return;
+		}
 		MeshData d;
 		d.addTexcoordSet();
 		d.addTexcoordSet();
@@ -128,6 +136,8 @@ namespace Oryx
 	
 	void Chunk::killBlock(Vector3 p,Vector3 n)
 	{
+		if(!mActive)
+			return;
 		p += OFFSET;
 		p -= mPosition;
 
@@ -143,6 +153,8 @@ namespace Oryx
 	
 	void Chunk::killBlocks(Vector3 p,float radius)
 	{
+		if(!mActive)
+			return;
 		p += OFFSET;
 		p -= mPosition;
 
@@ -162,6 +174,8 @@ namespace Oryx
 	
 	void Chunk::addBlock(Vector3 p,Vector3 n,byte type)
 	{
+		if(!mActive)
+			return;
 		p += OFFSET;
 		p-=mPosition;
 		float x = (n.x<0) ? -n.x : n.x;
@@ -191,6 +205,8 @@ namespace Oryx
 
 	void Chunk::rebuildPhysics(MeshData& d)
 	{
+		if(!mActive)
+			return;
 		mBlock->rebuild(d);
 	}
 	//-----------------------------------------------------------------------
@@ -282,9 +298,12 @@ namespace Oryx
 	
 	void Chunk::setMaterial(String material,size_t atlas)
 	{
-		mMaterial = material;
-		mAtlasDimensions = atlas;
-		mChunk->setMaterialName(material);
+		if(mChunk&&mActive)
+		{
+			mMaterial = material;
+			mAtlasDimensions = atlas;
+			mChunk->setMaterialName(material);
+		}
 	}
 	//-----------------------------------------------------------------------
 

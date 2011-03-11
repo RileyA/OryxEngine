@@ -23,6 +23,7 @@
 #include "Oryx.h"
 #include "OryxSlot.h"
 #include "OryxSignal.h"
+#include "OryxMessageAny.h"
 
 namespace Oryx
 {
@@ -84,6 +85,20 @@ namespace Oryx
 		 *		@param message The message to semd 
 		 *		@param destination The name of the destination */
 		void sendMessage(const Message& message,String destination);
+
+		/** Shortcut that takes a piece of data and handles packing it into a message on its own
+		 *		@param data The data to send along (be careful about its type) */
+		template<class T> void send(const T& data,OryxID destination)
+		{
+			sendMessage(MessageAny<T>(data),destination);
+		}
+
+		/** Shortcut that takes a piece of data and handles packing it into a message on its own
+		 *		@param data The data to send along (be careful about its type) */
+		template<class T> void send(const T& data,String destination)
+		{
+			sendMessage(MessageAny<T>(data),destination);
+		}
 
 		/** Recieves a message sent with sendMessage()
 		 *		@param message The message

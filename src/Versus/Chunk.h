@@ -154,6 +154,9 @@ namespace Oryx
 		}
 
 		void setMaterial(String mat,size_t atlas);
+
+		bool isActive(){return mActive;}
+		void setActive(bool act){mActive = act;markDirty();}
 	
 		// The states of the voxels
 		byte blocked[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
@@ -222,6 +225,8 @@ namespace Oryx
 		size_t mAtlasDimensions;
 
 		int mNumBlocks;
+
+		bool mActive;
 	};
 }
 

@@ -366,9 +366,9 @@ namespace Oryx
 		m->load();
 		m->touch();
 
-		int dims = 32;
-		m->_setBounds(AxisAlignedBox(-dims/2,-dims/2,-dims/2,dims/2,dims/2,dims/2));
-		m->_setBoundingSphereRadius(sqrt(dims*dims*2)/2);//11.313f);
+		int dims = 16;
+		m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
+		m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
 
 		sm->setMaterialName("MeinKraft");
 

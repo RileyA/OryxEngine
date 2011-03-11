@@ -43,9 +43,9 @@ namespace Oryx
 		OgreSubsystem* ogre = mEngine->getSubsystem("OgreSubsystem")->castType<OgreSubsystem>();
 		BulletSubsystem* bts = mEngine->getSubsystem("BulletSubsystem")->castType<BulletSubsystem>();
 		OISSubsystem* ois = mEngine->getSubsystem("OISSubsystem")->castType<OISSubsystem>();
-		ois->initInput(ogre->getWindowHandle());
+		ois->initInput(ogre->getWindowHandle(),false);
 		ogre->setBackgroundColor(Colour(0.3f,0.6f,0.9f));
-		//ogre->setLinearFog(30.f,45.f,Colour(0.3f,0.6f,0.9f));
+		ogre->setLinearFog(125.f,175.f,Colour(0.3f,0.6f,0.9f));
 		mgr = new ExplosionManager();
 
 		/*ENetSubsystem* enet = mEngine->getSubsystem("ENetSubsystem")->castType<ENetSubsystem>();
@@ -59,8 +59,8 @@ namespace Oryx
 		GUIScreen* scrn = ogre->getGUI()->createScreen(ogre->getMainViewport(),"TechDemo","Test");
 
 		txt = new StaticText(scrn->getRootElement(0),
-			"Text01",0,20,Vector2(10,10),Vector2(0.5,1.f/12.f),"Test!");
-		txt->setColour(Colour(0.6,0.75,0.9));
+			"Text01",0,20,Vector2(0.01f,0.01f),Vector2(0.5,1.f/12.f),"Test!");
+		txt->setColour(Colour(0.9,0.8,0.9));
 		//txt->setAlign(GA_CENTER);
 		//txt->getSignal("clicked")->addListener(getSlot("clk"));
 
@@ -108,7 +108,8 @@ namespace Oryx
 		//qcc = bts->createQuantaCCT(Vector3(0,300,0));
 		bts->setGravity(Vector3(0,-5,0));
 
-		ch = bts->createQuantaCCT(Vector3(0,50,0));
+		// TODO ch = bts->createQuantaCCT(Vector3(0,50,0));
+		
 		//ct = new CharacterThingy(bts,ogre);
 	}
 
@@ -137,7 +138,7 @@ namespace Oryx
 		//	ct->move(move);
 		//}
 		//
-		ch->setMoveVector(move);
+		//TODO ch->setMoveVector(move);
 		//ct->update(delta,move);
 
 		//std::cout<<"delta: "<<TimeManager::getPtr()->getDeltaTime();
@@ -199,7 +200,7 @@ namespace Oryx
 					Chunk* xc = (Chunk*)r.userData;
 					if(ois->isKeyDown("KC_G"))
 					{
-						xc->killBlocks(r.position,2);
+						xc->killBlocks(r.position,4);
 						mgr->createExplosion(r.position);
 					}
 					else
@@ -272,7 +273,7 @@ namespace Oryx
 		cmgr->generate(mCam->getPosition());
 
 		//mCam->mPosNode->setPosition(qcc->getPosition());
-		mCam->mPosNode->setPosition(ch->getPosition()+Vector3(0,1.2f,0));
+		// TODO mCam->mPosNode->setPosition(ch->getPosition()+Vector3(0,1.2f,0));
 		//mCam->mPosNode->setPosition(ct->getPos()+Vector3(0,1.2f,0));
 		//mCam->mPosNode->setOrientation(qcc->getOrientation());
 		//std::cout<<"P: "<<ch->getPosition().y<<"\n";

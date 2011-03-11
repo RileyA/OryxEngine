@@ -28,6 +28,14 @@
 #include "OISSubsystem/OISSubsystem.h"
 #include "BulletSubsystem/BulletSubsystem.h"
 
+namespace noise
+{
+	namespace module
+	{
+		class Perlin;
+	}
+}
+
 namespace Oryx
 {
 	class ChunkManager : public Object
@@ -52,7 +60,7 @@ namespace Oryx
 		std::map<ChunkCoords,Chunk*> mChunks;
 		int radius;
 		ChunkCoords mLast;
-
+		noise::module::Perlin* mPerlin;
 
 	};
 }

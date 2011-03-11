@@ -21,6 +21,7 @@
 #define ORYX_SIGNAL_H
 
 #include "Oryx.h"
+#include "OryxMessageAny.h"
 
 namespace Oryx
 {
@@ -45,6 +46,13 @@ namespace Oryx
 		/** Fires this signal (calls all listeners' delegates) with a given message
 		 *		@param message The message to send */
 		void fire(const Message& message) const;
+
+		/** Fires this signal
+		 *		@param data The message to be packed and sent */
+		template<class T> void send(const T& data) const
+		{
+			fire(MessageAny<T>(data));
+		}
 
 		/** Adds a listener to this Signal
 		 *		@param Slot Pointer to the Slot */

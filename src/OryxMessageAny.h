@@ -36,6 +36,14 @@ namespace Oryx
 		{}
 	};
 
+	template<class T> const T* unpackMsg(const Message& msg)
+	{
+		if(const MessageAny<T>* message = dynamic_cast<const MessageAny<T>* >(&msg))
+			return &(message->data);
+		else
+			return 0;
+	}
+
 	/** Convenience function for casting a message into a given type */
 	template<class T> const MessageAny<T>* message_cast(const Message& msg)
 	{
