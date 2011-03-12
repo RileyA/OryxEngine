@@ -1,0 +1,2 @@
+env = Environment(CPPDEFINE=['BUILD_RAKNET_DLL','LINUX']);
+env.SharedLibrary('ENetSubsystem',['ENetdllmain.cpp','ENetSubsystem.cpp','Client.cpp','Server.cpp','Packet.cpp'],CPPPATH=['../src'],LIBS=['enet','OryxEngine'],LIBPATH=['../bin'])
