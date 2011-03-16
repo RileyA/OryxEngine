@@ -104,7 +104,8 @@ namespace Oryx
 
     void BulletSubsystem::_endState()
     {
-
+		if(mStarted)
+			stopSimulation();
     }
     //-----------------------------------------------------------------------
 

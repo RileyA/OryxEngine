@@ -53,7 +53,7 @@ namespace Oryx
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
 			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
-			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");
 			mRoot->setRenderSystem(rs);
@@ -254,131 +254,131 @@ namespace Oryx
 
 	Mesh* OgreSubsystem::createMesh(const MeshData& data,String name)
 	{
-		String nombre = name;
-		if(name=="AUTO_NAME_ME")
-		{
-			nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
-			++mAutoNameIndex;
-		}
+		 String nombre = name;
+	if(name=="AUTO_NAME_ME")
+	{
+	nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
+	++mAutoNameIndex;
+	}
 
-		using namespace Ogre;
+	using namespace Ogre;
 
-		bool hasVertexColor = data.getDiffuse();
-		bool hasNormals = data.getNormals();
-		
-		int numFaces = data.indices.size()/3;
-		int numVertices = data.vertices.size()/3;
-		
-		HardwareVertexBufferSharedPtr posVertexBuffer;
-		HardwareVertexBufferSharedPtr normVertexBuffer;
-		std::vector<HardwareVertexBufferSharedPtr> texcoordsVertexBuffer;
-		HardwareVertexBufferSharedPtr diffuseVertexBuffer;
-		HardwareIndexBufferSharedPtr indexBuffer;
+	bool hasVertexColor = data.getDiffuse();
+	bool hasNormals = data.getNormals();
 
-		Ogre::Mesh* m = Ogre::MeshManager::getSingletonPtr()->createManual(
-			nombre,ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).get();
-		
-		Ogre::SubMesh* sm = m->createSubMesh();
-		sm->useSharedVertices = false;
-		sm->vertexData = new VertexData();
-		sm->vertexData->vertexStart = 0;
-		sm->vertexData->vertexCount = numVertices;
+	int numFaces = data.indices.size()/3;
+	int numVertices = data.vertices.size()/3;
 
-		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
-		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+	HardwareVertexBufferSharedPtr posVertexBuffer;
+	HardwareVertexBufferSharedPtr normVertexBuffer;
+	std::vector<HardwareVertexBufferSharedPtr> texcoordsVertexBuffer;
+	HardwareVertexBufferSharedPtr diffuseVertexBuffer;
+	HardwareIndexBufferSharedPtr indexBuffer;
 
-		size_t bufferCount = 0;
+	Ogre::Mesh* m = Ogre::MeshManager::getSingletonPtr()->createManual(
+	nombre,ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).get();
 
-		vdecl->addElement(bufferCount, 0, VET_FLOAT3, VES_POSITION);
+	Ogre::SubMesh* sm = m->createSubMesh();
+	sm->useSharedVertices = false;
+	sm->vertexData = new VertexData();
+	sm->vertexData->vertexStart = 0;
+	sm->vertexData->vertexCount = numVertices;
 
-		if(hasNormals)
-			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
-		
-		if(hasVertexColor)
-			vdecl->addElement(++bufferCount, 0, VET_FLOAT4, VES_DIFFUSE);
-		
-		for(int i=0;i<data.texcoords.size();++i)
-			vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES,i);
-		
-		bufferCount = 0;
+	Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+	Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
 
-		// Positions
-		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+	size_t bufferCount = 0;
 
-		vbind->setBinding(bufferCount, posVertexBuffer);
+	vdecl->addElement(bufferCount, 0, VET_FLOAT3, VES_POSITION);
 
-		float* vertices = data.getVertices(); 
-		float* normals = data.getNormals();
-		float* diffuse = data.getDiffuse();
-		unsigned short* indices = data.getIndices();
+	if(hasNormals)
+	vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
 
-		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
+	if(hasVertexColor)
+	vdecl->addElement(++bufferCount, 0, VET_FLOAT4, VES_DIFFUSE);
 
-		// Normals
-		if(hasNormals)
-		{
-			normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-				3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+	for(int i=0;i<data.texcoords.size();++i)
+	vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES,i);
 
-			vbind->setBinding(++bufferCount, normVertexBuffer);
+	bufferCount = 0;
 
-			normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
-		}
-		
-		if(hasVertexColor)
-		{
-			diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-				4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+	// Positions
+	posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+	3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-			vbind->setBinding(++bufferCount, diffuseVertexBuffer);
+	vbind->setBinding(bufferCount, posVertexBuffer);
 
-			diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
-		}
+	float* vertices = data.getVertices();
+	float* normals = data.getNormals();
+	float* diffuse = data.getDiffuse();
+	unsigned short* indices = data.getIndices();
 
-		// Texcoords
-		for(int i=0;i<data.texcoords.size();++i)
-		{
-			texcoordsVertexBuffer.push_back(HardwareBufferManager::getSingleton().createVertexBuffer(
-				2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY));
+	posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
 
-			vbind->setBinding(++bufferCount, texcoordsVertexBuffer[i]);
-			
-			texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
-		}
+	// Normals
+	if(hasNormals)
+	{
+	normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+	3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-		// Prepare buffer for indices
-		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
-			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+	vbind->setBinding(++bufferCount, normVertexBuffer);
 
-		unsigned short *faceVertexIndices = (unsigned short*)
-		indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
+	normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
+	}
 
-		// Set index buffer for this submesh
-		sm->indexData->indexBuffer = indexBuffer;
-		sm->indexData->indexStart = 0;
-		sm->indexData->indexCount = 3*numFaces;
+	if(hasVertexColor)
+	{
+	diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+	4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+	vbind->setBinding(++bufferCount, diffuseVertexBuffer);
 
-		vdecl->sort();
+	diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
+	}
 
-		m->load();
-		m->touch();
+	// Texcoords
+	for(int i=0;i<data.texcoords.size();++i)
+	{
+	texcoordsVertexBuffer.push_back(HardwareBufferManager::getSingleton().createVertexBuffer(
+	2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY));
 
-		int dims = 16;
-		m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
-		m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
+	vbind->setBinding(++bufferCount, texcoordsVertexBuffer[i]);
 
-		sm->setMaterialName("MeinKraft");
+	texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
+	}
 
-		Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
-		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
-		node->attachObject(ent);
-		ent->setCastShadows(true);
-		Mesh* mm = new Mesh(nombre,node,ent);
-		mSceneNodes.push_back(mm);
-		return mm;
+	// Prepare buffer for indices
+	indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+	HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+
+	//unsigned short *faceVertexIndices = (unsigned short*)
+	//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
+
+	// Set index buffer for this submesh
+	sm->indexData->indexBuffer = indexBuffer;
+	sm->indexData->indexStart = 0;
+	sm->indexData->indexCount = 3*numFaces;
+
+	indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+
+	//vdecl->sort();
+
+	m->load();
+	m->touch();
+
+	int dims = 16;
+	m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
+	m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
+
+	sm->setMaterialName("MeinKraft");
+
+	Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
+	Ogre::SceneNode* node = mSceneManager->createSceneNode(nombre);
+	node->attachObject(ent);
+	ent->setCastShadows(true);
+	Mesh* mm = new Mesh(nombre,node,ent);
+	mSceneNodes.push_back(mm);
+	return mm;
 	}
 	//-----------------------------------------------------------------------
 	
@@ -564,3 +564,94 @@ namespace Oryx
 		return handle;
 	}
 }
+
+
+/*
+String nombre = name;
+		if(name=="AUTO_NAME_ME")
+		{
+			nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
+			++mAutoNameIndex;
+		}
+
+		using namespace Ogre;
+
+		int numFaces = data.indices.size()/3;
+		std::cout<<"ONDEX COUNT!!!! "<<data.indices.size()<<"\n\n\n";
+		int numVertices = data.vertices.size()/3;
+		
+		//HardwareVertexBufferSharedPtr posVertexBuffer;
+		HardwareIndexBufferSharedPtr indexBuffer;
+
+		Ogre::Mesh* m = Ogre::MeshManager::getSingletonPtr()->createManual(
+			nombre,ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).get();
+		
+		Ogre::SubMesh* sm = m->createSubMesh(nombre);
+		sm->useSharedVertices = false;
+		sm->vertexData = new VertexData();
+		sm->vertexData->vertexStart = 0;
+		sm->vertexData->vertexCount = numVertices;
+
+		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+
+/		vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
+
+		// Positions
+		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_STATIC);
+
+		vbind->setBinding(0, posVertexBuffer);
+
+		float* vertices = data.getVertices(); 
+		float* normals = data.getNormals();
+		float* diffuse = data.getDiffuse();
+		unsigned short* indices = data.getIndices();
+
+		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, false);
+/
+
+        float *pFloat = 0;
+        HardwareVertexBufferSharedPtr vbuf;
+        // float* pVertices (x, y, z order x numVertices)
+        vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
+        vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
+            vdecl->getVertexSize(0),
+            numVertices,
+			Ogre::HardwareBuffer::HBU_STATIC,
+			false);
+        pFloat = static_cast<float*>(
+            vbuf->lock(HardwareBuffer::HBL_DISCARD));
+        //readFloats(stream, pFloat, dest->vertexCount * 3);
+		memcpy(pFloat, data.getVertices(), sizeof(float) * data.vertices.size());
+        vbuf->unlock();
+        vbind->setBinding(0, vbuf);
+
+
+		// Prepare buffer for indices
+		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, false);
+
+		// Set index buffer for this submesh
+		sm->indexData->indexBuffer = indexBuffer;
+		sm->indexData->indexStart = 0;
+		sm->indexData->indexCount = 3*numFaces;
+
+		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),data.getIndices(),false);
+
+		m->load();
+		m->touch();
+
+		int dims = 16;
+		m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
+		m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
+
+		sm->setMaterialName("MeinKraft");
+
+		Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
+		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
+		node->attachObject(ent);
+		Mesh* mm = new Mesh(nombre,node,ent);
+		mSceneNodes.push_back(mm);
+		return mm;
+*/

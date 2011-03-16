@@ -48,10 +48,11 @@ namespace Oryx
 		
 		void setMaterialName(String name);
 
+		void update(MeshData& d);
+
 	protected:
 
 		Ogre::Entity* mEntity;
-
 	};
 }
 

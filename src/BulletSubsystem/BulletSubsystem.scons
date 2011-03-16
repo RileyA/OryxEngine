@@ -4,4 +4,7 @@ if os.name == 'nt':
 	env.SharedLibrary('BulletSubsystem',['Bulletdllmain.cpp','BulletSubsystem.cpp','PhysicsObject.cpp','BulletConversions.cpp','CollisionObject.cpp','PhysicsBoxShape.cpp','PhysicsSphereShape.cpp','PhysicsConvexShape.cpp','PhysicsTrimeshShape.cpp','PhysicsCompoundShape.cpp','PhysicsShape.cpp','RigidBody.cpp','CharPrimitive.cpp','QuantaController.cpp'],CPPPATH=['../src','E:\Deps/bullet-2.77/src'],LIBPATH=['../bin','E:\Deps/bt2/lib'],LIBS=['OryxEngine','BulletDynamics','BulletCollision','LinearMath'])
 else:
 	env = Environment(CPPDEFINES=['BUILD_BULLET_DLL','LINUX'])
+	debug = ARGUMENTS.get('debug', 0)
+	if int(debug):
+		env.Append(CCFLAGS = '-g')
 	env.SharedLibrary('BulletSubsystem',['Bulletdllmain.cpp','BulletSubsystem.cpp','PhysicsObject.cpp','BulletConversions.cpp','CollisionObject.cpp','PhysicsBoxShape.cpp','PhysicsSphereShape.cpp','PhysicsConvexShape.cpp','PhysicsTrimeshShape.cpp','PhysicsCompoundShape.cpp','PhysicsShape.cpp','RigidBody.cpp','CharPrimitive.cpp','QuantaController.cpp'],CPPPATH=['../src','/usr/include/bullet'],LIBPATH='../bin',LIBS=['OryxEngine','BulletCollision','BulletDynamics','LinearMath'])

@@ -54,7 +54,9 @@ namespace Oryx
 		mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject( OIS::OISMouse, true ));
 		mKeyboard->setEventCallback(this);
 		mMouse->setEventCallback(this);
-		setInputViewSize(1024,768);
+		const OIS::MouseState &ms = mMouse->getMouseState();
+		ms.width = 1024;
+		ms.height = 768;
 		setMousePosition(512,350);
 	}
 

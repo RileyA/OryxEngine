@@ -104,23 +104,23 @@ namespace Oryx
 
 		while(!mStates.empty()&&!mKill)
 		{
-			mStates.front()->init();
+			mStates[0]->init();
 			mKillState = false;
 
-			while(!mStates.front()->isDone()&&!mKillState)
+			while(!mKillState)
 			{
 				mTimeManager->update();
 				Real delta = mTimeManager->getDeltaTime();
 				
-				// update subsystems
-				std::map<String,EngineSubsystem*>::iterator iter = mSubsystems.begin();
-				for(;iter!=mSubsystems.end();++iter)
-					iter->second->_update(delta);
-
 				// update buckets and objects
 				std::map<String,Bucket*>::iterator ite = mBuckets.begin();
 				for(ite;ite!=mBuckets.end();++ite)
 					ite->second->update(delta);
+
+				// update subsystems
+				std::map<String,EngineSubsystem*>::iterator iter = mSubsystems.begin();
+				for(;iter!=mSubsystems.end();++iter)
+					iter->second->_update(delta);
 
 				// update the state
 				mStates.front()->update(delta);

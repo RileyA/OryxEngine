@@ -31,10 +31,14 @@ namespace Oryx
 
 	Mesh::~Mesh()
 	{
-		Ogre::MeshPtr m = mEntity->getMesh();
 		mNode->getCreator()->destroyEntity(mEntity);
-		Ogre::MeshManager::getSingleton().unload(m->getName());
-		Ogre::MeshManager::getSingleton().remove(m->getName());
+		Ogre::MeshPtr m = mEntity->getMesh();
+		// TODO: improve this, as-is a manually loaded and reused mesh would cause a crash here
+		if(m->isManuallyLoaded())
+		{
+			Ogre::MeshManager::getSingleton().unload(m->getName());
+			Ogre::MeshManager::getSingleton().remove(m->getName());
+		}
 	}
 	//--------------------------------------------------------------------------
 	
@@ -202,5 +206,108 @@ namespace Oryx
 		}
 
 		std::cout<<"Mesh Data output: v: "<<out.vertices.size()<<" i: "<<out.indices.size()<<"\n";
+	}
+
+	void Mesh::update(MeshData& data)
+	{
+		using namespace Ogre;
+
+		bool hasVertexColor = data.getDiffuse();
+		bool hasNormals = data.getNormals();
+		
+		int numFaces = data.indices.size()/3;
+		int numVertices = data.vertices.size()/3;
+		
+		HardwareVertexBufferSharedPtr posVertexBuffer;
+		HardwareVertexBufferSharedPtr normVertexBuffer;
+		std::vector<HardwareVertexBufferSharedPtr> texcoordsVertexBuffer;
+		HardwareVertexBufferSharedPtr diffuseVertexBuffer;
+		HardwareIndexBufferSharedPtr indexBuffer;
+
+		Ogre::SubMesh* sm = mEntity->getMesh()->getSubMesh(0);
+		sm->vertexData->vertexStart = 0;
+		sm->vertexData->vertexCount = data.vertices.size()/3;
+
+		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+
+		size_t bufferCount = 0;
+
+		vdecl->addElement(bufferCount, 0, VET_FLOAT3, VES_POSITION);
+
+		if(hasNormals)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
+		
+		if(hasVertexColor)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT4, VES_DIFFUSE);
+		
+		for(int i=0;i<data.texcoords.size();++i)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES,i);
+		
+		bufferCount = 0;
+
+		// Positions
+		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+
+		vbind->setBinding(bufferCount, posVertexBuffer);
+
+		float* vertices = data.getVertices(); 
+		float* normals = data.getNormals();
+		float* diffuse = data.getDiffuse();
+		unsigned short* indices = data.getIndices();
+
+		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
+
+		// Normals
+		if(hasNormals)
+		{
+			normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+				3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+
+			vbind->setBinding(++bufferCount, normVertexBuffer);
+
+			normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
+		}
+		
+		if(hasVertexColor)
+		{
+			diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+				4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+
+			vbind->setBinding(++bufferCount, diffuseVertexBuffer);
+
+			diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
+		}
+
+		// Texcoords
+		for(int i=0;i<data.texcoords.size();++i)
+		{
+			texcoordsVertexBuffer.push_back(HardwareBufferManager::getSingleton().createVertexBuffer(
+				2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY));
+
+			vbind->setBinding(++bufferCount, texcoordsVertexBuffer[i]);
+			
+			texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
+		}
+
+		// Prepare buffer for indices
+		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+
+		//unsigned short *faceVertexIndices = (unsigned short*)
+		//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
+
+		// Set index buffer for this submesh
+		sm->indexData->indexBuffer = indexBuffer;
+		sm->indexData->indexStart = 0;
+		sm->indexData->indexCount = 3*numFaces;
+
+		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+
+		//vdecl->sort();
+
+		//mEntity->getMesh()->load();
+		//mEntity->getMesh()->touch();
 	}
 }
