@@ -31,7 +31,6 @@ namespace Oryx
 
 	Mesh::~Mesh()
 	{
-		mNode->getCreator()->destroyEntity(mEntity);
 		Ogre::MeshPtr m = mEntity->getMesh();
 		// TODO: improve this, as-is a manually loaded and reused mesh would cause a crash here
 		if(m->isManuallyLoaded())
@@ -39,6 +38,7 @@ namespace Oryx
 			Ogre::MeshManager::getSingleton().unload(m->getName());
 			Ogre::MeshManager::getSingleton().remove(m->getName());
 		}
+		mNode->getCreator()->destroyEntity(mEntity);
 	}
 	//--------------------------------------------------------------------------
 	
@@ -307,7 +307,7 @@ namespace Oryx
 
 		//vdecl->sort();
 
-		//mEntity->getMesh()->load();
-		//mEntity->getMesh()->touch();
+		mEntity->getMesh()->load();
+		mEntity->getMesh()->touch();
 	}
 }

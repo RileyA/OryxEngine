@@ -255,130 +255,130 @@ namespace Oryx
 	Mesh* OgreSubsystem::createMesh(const MeshData& data,String name)
 	{
 		 String nombre = name;
-	if(name=="AUTO_NAME_ME")
-	{
-	nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
-	++mAutoNameIndex;
-	}
+		if(name=="AUTO_NAME_ME")
+		{
+			nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
+			++mAutoNameIndex;
+		}
 
-	using namespace Ogre;
+		using namespace Ogre;
 
-	bool hasVertexColor = data.getDiffuse();
-	bool hasNormals = data.getNormals();
+		bool hasVertexColor = data.getDiffuse();
+		bool hasNormals = data.getNormals();
 
-	int numFaces = data.indices.size()/3;
-	int numVertices = data.vertices.size()/3;
+		int numFaces = data.indices.size()/3;
+		int numVertices = data.vertices.size()/3;
 
-	HardwareVertexBufferSharedPtr posVertexBuffer;
-	HardwareVertexBufferSharedPtr normVertexBuffer;
-	std::vector<HardwareVertexBufferSharedPtr> texcoordsVertexBuffer;
-	HardwareVertexBufferSharedPtr diffuseVertexBuffer;
-	HardwareIndexBufferSharedPtr indexBuffer;
+		HardwareVertexBufferSharedPtr posVertexBuffer;
+		HardwareVertexBufferSharedPtr normVertexBuffer;
+		std::vector<HardwareVertexBufferSharedPtr> texcoordsVertexBuffer;
+		HardwareVertexBufferSharedPtr diffuseVertexBuffer;
+		HardwareIndexBufferSharedPtr indexBuffer;
 
-	Ogre::Mesh* m = Ogre::MeshManager::getSingletonPtr()->createManual(
-	nombre,ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).get();
+		Ogre::Mesh* m = Ogre::MeshManager::getSingletonPtr()->createManual(
+		nombre,ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).get();
 
-	Ogre::SubMesh* sm = m->createSubMesh();
-	sm->useSharedVertices = false;
-	sm->vertexData = new VertexData();
-	sm->vertexData->vertexStart = 0;
-	sm->vertexData->vertexCount = numVertices;
+		Ogre::SubMesh* sm = m->createSubMesh();
+		sm->useSharedVertices = false;
+		sm->vertexData = new VertexData();
+		sm->vertexData->vertexStart = 0;
+		sm->vertexData->vertexCount = numVertices;
 
-	Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
-	Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
 
-	size_t bufferCount = 0;
+		size_t bufferCount = 0;
 
-	vdecl->addElement(bufferCount, 0, VET_FLOAT3, VES_POSITION);
+		vdecl->addElement(bufferCount, 0, VET_FLOAT3, VES_POSITION);
 
-	if(hasNormals)
-	vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
+		if(hasNormals)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT3, VES_NORMAL);
 
-	if(hasVertexColor)
-	vdecl->addElement(++bufferCount, 0, VET_FLOAT4, VES_DIFFUSE);
+		if(hasVertexColor)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT4, VES_DIFFUSE);
 
-	for(int i=0;i<data.texcoords.size();++i)
-	vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES,i);
+		for(int i=0;i<data.texcoords.size();++i)
+			vdecl->addElement(++bufferCount, 0, VET_FLOAT2, VES_TEXTURE_COORDINATES,i);
 
-	bufferCount = 0;
+		bufferCount = 0;
 
-	// Positions
-	posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-	3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+		// Positions
+		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-	vbind->setBinding(bufferCount, posVertexBuffer);
+		vbind->setBinding(bufferCount, posVertexBuffer);
 
-	float* vertices = data.getVertices();
-	float* normals = data.getNormals();
-	float* diffuse = data.getDiffuse();
-	unsigned short* indices = data.getIndices();
+		float* vertices = data.getVertices();
+		float* normals = data.getNormals();
+		float* diffuse = data.getDiffuse();
+		unsigned short* indices = data.getIndices();
 
-	posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
+		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, true);
 
-	// Normals
-	if(hasNormals)
-	{
-	normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-	3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+		// Normals
+		if(hasNormals)
+		{
+			normVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+			3*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-	vbind->setBinding(++bufferCount, normVertexBuffer);
+			vbind->setBinding(++bufferCount, normVertexBuffer);
 
-	normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
-	}
+			normVertexBuffer->writeData(0,normVertexBuffer->getSizeInBytes(),normals, true);
+		}
 
-	if(hasVertexColor)
-	{
-	diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-	4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+		if(hasVertexColor)
+		{
+			diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
+			4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-	vbind->setBinding(++bufferCount, diffuseVertexBuffer);
+			vbind->setBinding(++bufferCount, diffuseVertexBuffer);
 
-	diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
-	}
+			diffuseVertexBuffer->writeData(0,diffuseVertexBuffer->getSizeInBytes(), diffuse, true);
+		}
 
-	// Texcoords
-	for(int i=0;i<data.texcoords.size();++i)
-	{
-	texcoordsVertexBuffer.push_back(HardwareBufferManager::getSingleton().createVertexBuffer(
-	2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY));
+		// Texcoords
+		for(int i=0;i<data.texcoords.size();++i)
+		{
+			texcoordsVertexBuffer.push_back(HardwareBufferManager::getSingleton().createVertexBuffer(
+			2*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY));
 
-	vbind->setBinding(++bufferCount, texcoordsVertexBuffer[i]);
+			vbind->setBinding(++bufferCount, texcoordsVertexBuffer[i]);
 
-	texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
-	}
+			texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
+		}
 
-	// Prepare buffer for indices
-	indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
-	HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+		// Prepare buffer for indices
+		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+		HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
 
-	//unsigned short *faceVertexIndices = (unsigned short*)
-	//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
+		//unsigned short *faceVertexIndices = (unsigned short*)
+		//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
 
-	// Set index buffer for this submesh
-	sm->indexData->indexBuffer = indexBuffer;
-	sm->indexData->indexStart = 0;
-	sm->indexData->indexCount = 3*numFaces;
+		// Set index buffer for this submesh
+		sm->indexData->indexBuffer = indexBuffer;
+		sm->indexData->indexStart = 0;
+		sm->indexData->indexCount = 3*numFaces;
 
-	indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
 
-	//vdecl->sort();
+		//vdecl->sort();
 
-	m->load();
-	m->touch();
+		m->load();
+		m->touch();
 
-	int dims = 16;
-	m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
-	m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
+		int dims = 16;
+		m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
+		m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
 
-	sm->setMaterialName("MeinKraft");
+		sm->setMaterialName("MeinKraft");
 
-	Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
-	Ogre::SceneNode* node = mSceneManager->createSceneNode(nombre);
-	node->attachObject(ent);
-	ent->setCastShadows(true);
-	Mesh* mm = new Mesh(nombre,node,ent);
-	mSceneNodes.push_back(mm);
-	return mm;
+		Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
+		Ogre::SceneNode* node = mSceneManager->createSceneNode(nombre);
+		node->attachObject(ent);
+		ent->setCastShadows(true);
+		Mesh* mm = new Mesh(nombre,node,ent);
+		mSceneNodes.push_back(mm);
+		return mm;
 	}
 	//-----------------------------------------------------------------------
 	

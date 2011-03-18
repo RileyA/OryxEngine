@@ -23,7 +23,7 @@
 namespace Oryx
 {
 	QuantaController::QuantaController(BulletSubsystem* bullet,Vector3 startPos)
-		:CharacterController(bullet->getWorld())
+		:CharacterController(bullet->getWorld()),mGravityFactor(1.f)
 	{
 		for(int i = 0; i < NUM_SPHERES; ++i)
 			mComponents.push_back(new CharPrimitive(bullet,startPos+Vector3(0,0.375*i,0)));
@@ -55,14 +55,26 @@ namespace Oryx
 
 		if(frame)
 		{
+			if(mGravityFactor < 1.f)
+			{
+				mGravityFactor += 0.01f;
+				if(mGravityFactor > 1.f)
+					mGravityFactor = 1.f;
+			}
 			mPosition[0] = mPosition[1];
-			move(Vector3(0,-1,0),0.1f);// gravity
+			move(Vector3(0,-1,0),0.1f*mGravityFactor);// gravity
 			move(mMove,0.05f,true);    // motion
 			mPosition[1] = mComponents[0]->getPosition();
 		}
 	}
 	//-----------------------------------------------------------------------
 	
+	void QuantaController::jump(Real strength)
+	{
+		mGravityFactor = strength;
+	}
+	//-----------------------------------------------------------------------
+
 	void QuantaController::move(Vector3 d, Real dist, bool slide)
 	{
 		Vector3 minMove = Vector3(100,100,100);

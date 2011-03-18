@@ -35,6 +35,8 @@ namespace Oryx
 		virtual Vector3 getPosition() = 0;
 		virtual Quaternion getOrientation() = 0;
 
+		virtual void jump(Real strength) = 0;
+
 		virtual void setMoveVector(Vector3 move){mMove = move;}
 		virtual void setMaxSpeed(Real max){mMaxSpeed = max;}
 		virtual void setMinSpeed(Real min){mMinSpeed = min;}

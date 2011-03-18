@@ -38,11 +38,13 @@ namespace Oryx
 		virtual Quaternion getOrientation();
 
 		virtual void update(bool frame, Real interpolation, Vector3 gravity);
+		virtual void jump(Real strength);
 
 	private:
 
 		void move(Vector3 d, Real dist, bool slide = false);
 
+		Real mGravityFactor;
 		std::vector<CharPrimitive*> mComponents;
 		Real mInterpolation;
 
