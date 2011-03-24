@@ -137,13 +137,13 @@ namespace Oryx
 
 	bool OISListener::keyPressed(const OIS::KeyEvent& arg)
 	{
-		mSubsystem->_key(arg.key,true);
+		mSubsystem->_key(arg.key,true,arg.text);
 		return true;
 	}
 
 	bool OISListener::keyReleased(const OIS::KeyEvent& arg)
 	{
-		mSubsystem->_key(arg.key,false);
+		mSubsystem->_key(arg.key,false,arg.text);
 		return true;
 	}
 }

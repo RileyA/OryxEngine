@@ -49,10 +49,13 @@ namespace Oryx
         {
             Logger::getPtr()->logMessage("OIS Subsystem starting up...");
 
-			createSignal("keyPressed");
-			createSignal("mousePressed");
-			createSignal("mouseMoved");
-			createSignal("mouseMovedAbs");
+			createSignal("keyPressed");   // passes keycode on press
+			createSignal("keyReleased");  // passes keycode on release
+			createSignal("charPressed");  // passes char value on press
+			createSignal("mousePressed"); // passes mouse button code on click
+			createSignal("mousePressed"); // passes mouse button code on release
+			createSignal("mouseMoved");   // passes mouse pos on move
+			createSignal("mouseMovedAbs");// passes absolute mouse pos when moved
 
 			assignConversions();
 
@@ -209,16 +212,22 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void OISSubsystem::_key(uint key, bool up)
+	void OISSubsystem::_key(uint key, bool up, uint val)
 	{
 		mKeyStates[key] = up;
-		if(!up)
-			mKeyPresses[key] = true;
-		getSignal("keyPressed")->fire(MessageAny<uint>(key));
+
 		if(up)
-			getSignal(String("released_")+String(mKeys[key]))->fire(0);
-		else
+		{
+			getSignal("charPressed")->fire(MessageAny<uint>(val));
+			getSignal("keyPressed")->fire(MessageAny<uint>(key));
 			getSignal(String("pressed_")+String(mKeys[key]))->fire(0);
+		}
+		else
+		{
+			mKeyPresses[key] = true;
+			getSignal(String("released_")+String(mKeys[key]))->fire(0);
+			getSignal("keyReleased")->fire(MessageAny<uint>(key));
+		}
 	}
 	//-----------------------------------------------------------------------	
 

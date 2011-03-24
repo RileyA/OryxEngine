@@ -73,7 +73,7 @@ namespace Oryx
 		void toggleMouseGrab();
 
 		void _setMousePos(int x,int y,int relx,int rely);
-		void _key(uint key,bool up);
+		void _key(uint key,bool up,uint val);
 		void _mouseButton(uint button,bool up);
 
 		void assignConversions();
