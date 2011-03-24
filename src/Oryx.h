@@ -101,6 +101,7 @@ namespace Oryx
 
 // Some basic stuff that should be accessible from just about anywhere:
 #include "OryxStringUtils.h"
+#include "OryxEventHandler.h"
 #include "OryxTimeManager.h"
 #include "OryxLogger.h"
 #include "OryxException.h"

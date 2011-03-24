@@ -26,6 +26,7 @@ namespace Oryx
     Logger::Logger() : mActive(true)
 	{
 		mLogFile.open("Oryx.log");
+		createSignal("Log");
 	}
 	//-----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ namespace Oryx
 			if(mLogFile.is_open())
 				mLogFile<<timeStampStr<<" "<<message<<"\n";
 			mLogFile.flush();
+			getSignal("Log")->send(message);
 		}
 	}
 	//-----------------------------------------------------------------------

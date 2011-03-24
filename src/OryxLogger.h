@@ -25,7 +25,7 @@
 namespace Oryx
 {
 	/** Very simple singleton class for logging game events */
-    class ORYX_EXPORT Logger
+    class ORYX_EXPORT Logger : public EventHandler
     {
     public:
 
