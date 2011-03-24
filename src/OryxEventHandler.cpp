@@ -29,9 +29,10 @@ namespace Oryx
 	std::map<String,EventHandler*> EventHandler::mMessageDestinations 
 		= std::map<String,EventHandler*>();
 
-	void EventHandler::createSignal(String name)
+	Signal* EventHandler::createSignal(String name)
 	{
 		mSignals[name] = Signal();
+		return &mSignals[name];
 	}
 	//-----------------------------------------------------------------------
 	
@@ -49,9 +50,10 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	void EventHandler::createSlot(String name,Delegate del)
+	Slot* EventHandler::createSlot(String name,Delegate del)
 	{
 		mSlots[name] = Slot(del);
+		return &mSlots[name];
 	}
 	//-----------------------------------------------------------------------
 	

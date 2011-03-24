@@ -40,7 +40,7 @@ namespace Oryx
 
 		/** Creates a named Signal object 
 		 *		@param name What this Signal will be called*/
-		void createSignal(String name);
+		Signal* createSignal(String name);
 
 		/** Gets whether or not a named Signal exists
 		 *		@param name The name to look for 
@@ -55,15 +55,15 @@ namespace Oryx
 		/** Creates a Slot
 		 *		@param name What to call the new Slot 
 		 *		@param del The Delegate corresponding to the callback function */
-		void createSlot(String name,Delegate del);
+		Slot* createSlot(String name,Delegate del);
 
 		/** Creates a Slot
 		 *		@param name What to call the new Slot 
 		 *		@param context The context from which to call the function
 		 *		@param function The function to call */
-		template <typename obj,typename func> void createSlot(String name, obj context, func function)
+		template <typename obj,typename func> Slot* createSlot(String name, obj context, func function)
 		{
-			createSlot(name,fastdelegate::MakeDelegate(context,function));
+			return createSlot(name,fastdelegate::MakeDelegate(context,function));
 		}
 		
 		/** Gets whether or not a named Slot exists
