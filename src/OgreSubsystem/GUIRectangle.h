@@ -49,6 +49,7 @@ namespace Oryx
 
 		virtual ~GUIRectangle();
 		void setSprite(String sprite);
+		virtual void update(Real delta);
 
 	protected:
 

@@ -72,4 +72,11 @@ namespace Oryx
 	{
 		mRectangle->background_image(sprite);
 	}
+	//-----------------------------------------------------------------------
+
+	void GUIRectangle::update(Real delta)
+	{
+		GUIElement::update(delta);
+		mRectangle->_redraw();
+	}
 }

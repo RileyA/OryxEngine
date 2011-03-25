@@ -596,14 +596,14 @@ namespace Gorilla
  Silverback::Silverback()
  {
   
-  Ogre::Root::getSingletonPtr()->addFrameListener(this);
+  //Ogre::Root::getSingletonPtr()->addFrameListener(this);
   
  }
 
  Silverback::~Silverback()
  {
   
-  Ogre::Root::getSingletonPtr()->removeFrameListener(this);
+  //Ogre::Root::getSingletonPtr()->removeFrameListener(this);
   
   // Delete Screens.
   for (std::vector<Screen*>::iterator it = mScreens.begin(); it != mScreens.end(); it++)

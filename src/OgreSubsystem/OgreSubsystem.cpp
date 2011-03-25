@@ -84,6 +84,7 @@ namespace Oryx
 			mDefaultCamera->setFarClip(50);
 			mDefaultCamera->setNearClip(0.1f);
 			mDefaultCamera->setFOV(60.f);
+			mDefaultCamera->getCamera()->setPolygonMode(Ogre::PM_WIREFRAME);
 
 			mViewport = mWindow->addViewport(mDefaultCamera->getCamera());
 			mViewport->setBackgroundColour(Ogre::ColourValue(1.0f,0.5f,0.2f));
