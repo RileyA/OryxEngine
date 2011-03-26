@@ -51,7 +51,6 @@ namespace Oryx
 
 		void translate(Vector3 v);
 		Vector3 getPosition();
-		bool overlapCheck(Vector3 position);
 
 	private:
 

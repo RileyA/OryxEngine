@@ -62,7 +62,7 @@ namespace Oryx
 					mGravityFactor = 1.f;
 			}
 			mPosition[0] = mPosition[1];
-			move(Vector3(0,-1,0),0.1f*mGravityFactor);// gravity
+			//move(Vector3(0,:!1,0),0.1f*mGravityFactor);// gravity
 			move(mMove,0.05f,true);    // motion
 			mPosition[1] = mComponents[0]->getPosition();
 		}
@@ -81,21 +81,6 @@ namespace Oryx
 		for(int i = 0;i < NUM_SPHERES; ++i)
 		{
 			Vector3 delta = mComponents[i]->move(d,dist,slide?5:1);
-
-			/*bool plausible = true;
-			for(int j=0;j<NUM_SPHERES;++j)
-			{
-				if(!mComponents[j]->overlapCheck(mComponents[j]->getPosition()+delta))
-				{
-					plausible = false;
-					break;
-				}
-			}
-
-			if(!plausible)
-				continue;*/
-
-			//Vector3 delta = mComponents[i]->move(d+Vector3(0,slide?0.5f:0.f,0),dist,slide?5:1);
 
 			if(delta.squaredLength() < minMove.squaredLength())
 				minMove = delta;

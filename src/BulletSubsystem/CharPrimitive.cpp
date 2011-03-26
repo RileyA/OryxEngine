@@ -49,8 +49,8 @@ namespace Oryx
 
 			Vector3 slide = direction + s.normal * direction.dotProduct(s.normal * -1);
 			// TODO: get rid of this?
-			Plane pl = Plane(Vector3(0,1,0),0);
-			slide = pl.projectVector(slide);
+			//Plane pl = Plane(Vector3(0,1,0),0);
+			//slide = pl.projectVector(slide);
 
 			return direction * travel + move(slide, distance - travel, maxDepth -1);
 		}
@@ -68,40 +68,4 @@ namespace Oryx
 		return mPosition;
 	}
 	//-----------------------------------------------------------------------
-	
-	bool CharPrimitive::overlapCheck(Vector3 pos)
-	{
-		
-		OverlapResultCallback2 overlapCall = OverlapResultCallback2();
-		overlapCall.m_collisionFilterGroup = 65535^COLLISION_GROUP_3;
-		overlapCall.m_collisionFilterMask = 65535^COLLISION_GROUP_3;//|COLLISION_GROUP_2|COLLISION_GROUP_7;
-
-		btSphereShape s(0.25f);
-		btCollisionObject* bcobj = new btCollisionObject();
-		bcobj->setWorldTransform(btTransform(btQuaternion(0,0,0,1),convertBullet(pos)));
-		bcobj->setCollisionShape(&s);
-		mBullet->getWorld()->contactTest(bcobj,overlapCall);
-		delete bcobj;
-		return overlapCall.hits<=0;
-		/*if(overlapCall.hits<=0)
-		{
-			if(set)
-			{
-				position = pos;
-				act->setWorldTransform(btTransform(btQuaternion(0,0,0,1),btVector3(pos.x(),pos.y(),pos.z())));
-			}
-			if(!set)
-			{
-				sph.center = old;
-			}
-			return true;
-		}
-		else
-		{
-			//std::cout<<"failed: "<<overlapCall.hits<<"\n";
-			//std::cout<<"Hmm: "<<numOverlap<<"\n";
-			sph.center = old;
-			return false;
-		}*/
-	}
 }

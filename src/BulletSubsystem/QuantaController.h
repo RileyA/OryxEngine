@@ -50,7 +50,7 @@ namespace Oryx
 
 		Vector3 mPosition[2];// 0 is last frame, 1 is next frame
 
-		static const int NUM_SPHERES = 5;
+		static const int NUM_SPHERES = 1;
 	};
 }
 
