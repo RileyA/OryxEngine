@@ -35,7 +35,8 @@ namespace Oryx
 		PST_SPHERE,
 		PST_CONVEX,
 		PST_TRIMESH,
-		PST_COMPOUND
+		PST_COMPOUND,
+		PST_CAPSULE
 	};
 	//-----------------------------------------------------------------------
 

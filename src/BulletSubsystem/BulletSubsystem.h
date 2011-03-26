@@ -30,6 +30,7 @@
 #include "PhysicsShape.h"
 #include "PhysicsBoxShape.h"
 #include "PhysicsSphereShape.h"
+#include "PhysicsCapsuleShape.h"
 #include "PhysicsConvexShape.h"
 #include "PhysicsCompoundShape.h"
 #include "PhysicsTrimeshShape.h"
@@ -48,6 +49,8 @@ class btSequentialImpulseConstraintSolver;
 
 namespace Oryx
 {
+	class BasicCharacterController;
+
 	/** Bullet physics subsystem, does 3d physics simulation */
     class ORYX_BULLET_EXPORT BulletSubsystem : public EngineSubsystem
     {
@@ -124,6 +127,10 @@ namespace Oryx
 		 *		@param mass The desired mass, 0 makes a static object
 		 *		@returns a pointer to the PhysicsObject */
 		PhysicsObject* createSphere(float radius,Vector3 pos,float mass=10.f);
+		
+		// TODO document!
+		PhysicsObject* createCapsule(float radius, float height,Vector3 pos,float mass=10.f);
+
 		/** Creates a cube primitive, with a given radius
 		 *		@param scale The extents of the box to create
 		 *		@param pos Where to place the new object 
@@ -147,6 +154,10 @@ namespace Oryx
 		 *		@param radius The desired radius
 		 *		@return The created object */
 		PhysicsSphereShape* createSphereShape(Real radius);
+
+		// TODO document! 
+		PhysicsCapsuleShape* createCapsuleShape(Real radius, Real height);
+		
 		/** Creates a convex hull primitive from a point cloud 
 		 *		@param points The points, stored in a MeshData object 
 		 *		@param name The name of the mesh (so if it already exists, we can reuse)
@@ -180,6 +191,7 @@ namespace Oryx
 		CollisionObject* createStatic(PhysicsShape* shape, Vector3 position);
 
 		QuantaController* createQuantaCCT(Vector3 pos);
+		BasicCharacterController* createBasicCharacterController(Vector3 pos);
 
 		btDynamicsWorld* getWorld(){return mDynamicsWorld;}
 

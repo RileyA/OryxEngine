@@ -31,6 +31,7 @@
 #include "Oryx3DMath.h"
 #include "OryxStringUtils.h"
 
+#include "BasicCharacterController.h"
 #include "PhysicsObject.h"
 
 #include "btBulletDynamicsCommon.h"
@@ -281,6 +282,12 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
+	PhysicsObject* BulletSubsystem::createCapsule(float radius, float height,Vector3 pos,float mass)
+	{
+		return createObject(createCapsuleShape(radius,height),pos,mass);
+	}
+	//-----------------------------------------------------------------------
+	
 	PhysicsObject* BulletSubsystem::createCube(Vector3 scale,Vector3 pos,float mass)
 	{
 		return createObject(createBoxShape(scale),pos,mass);
@@ -358,7 +365,35 @@ namespace Oryx
 		return sphere;
 	}
 	//-----------------------------------------------------------------------
-	
+
+	PhysicsCapsuleShape* BulletSubsystem::createCapsuleShape(Real radius, Real height)
+	{
+		PhysicsCapsuleShape* capsule;
+		String name = "CAPSULE_"+StringUtils::toString(radius)+"_"+
+			StringUtils::toString(height);
+		
+		if(name!="NULL")
+		{
+			PhysicsShape* shape = getShape(name);
+			if(!shape)
+			{
+				capsule = new PhysicsCapsuleShape(radius,height);
+				mShapes[name] = capsule;
+			}
+			else
+			{
+				if(shape->getType() != PST_SPHERE)
+					throw NonUniqueNameException(name);
+				capsule = static_cast<PhysicsCapsuleShape*>(shape);
+			}
+		}
+		else
+			capsule = new PhysicsCapsuleShape(radius,height);
+
+		return capsule;
+	}
+	//-----------------------------------------------------------------------
+	//
 	PhysicsConvexShape* BulletSubsystem::createConvexShape(MeshData& points, String name)
 	{
 		PhysicsConvexShape* con;
@@ -478,6 +513,13 @@ namespace Oryx
 	{
 		mObjects.push_back(new QuantaController(this,pos));
 		return static_cast<QuantaController*>(mObjects.back());
+	}
+	//-----------------------------------------------------------------------
+
+	BasicCharacterController* BulletSubsystem::createBasicCharacterController(Vector3 pos)
+	{
+		mObjects.push_back(new BasicCharacterController(pos));
+		return static_cast<BasicCharacterController*>(mObjects.back());
 	}
 	//-----------------------------------------------------------------------
 }

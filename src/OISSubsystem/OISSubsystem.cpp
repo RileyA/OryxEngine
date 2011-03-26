@@ -235,7 +235,7 @@ namespace Oryx
 	{
 		mButtonStates[button] = up;
 		getSignal("mousePressed")->fire(MessageAny<uint>(button));
-		mButtonPresses[button] = up || true;
+		mButtonPresses[button] = !up || true;
 		if(up)
 			getSignal(String("released_")+String(mButtons[button]))->fire(0);
 		else
