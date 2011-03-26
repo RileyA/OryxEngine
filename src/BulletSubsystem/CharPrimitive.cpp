@@ -19,6 +19,8 @@
 
 #include "CharPrimitive.h"
 #include "BulletSubsystem.h"
+#include "CCT_Primitive.h"
+#include "btBulletDynamicsCommon.h"
 
 namespace Oryx
 {
@@ -66,4 +68,40 @@ namespace Oryx
 		return mPosition;
 	}
 	//-----------------------------------------------------------------------
+	
+	bool CharPrimitive::overlapCheck(Vector3 pos)
+	{
+		
+		OverlapResultCallback2 overlapCall = OverlapResultCallback2();
+		overlapCall.m_collisionFilterGroup = 65535^COLLISION_GROUP_3;
+		overlapCall.m_collisionFilterMask = 65535^COLLISION_GROUP_3;//|COLLISION_GROUP_2|COLLISION_GROUP_7;
+
+		btSphereShape s(0.25f);
+		btCollisionObject* bcobj = new btCollisionObject();
+		bcobj->setWorldTransform(btTransform(btQuaternion(0,0,0,1),convertBullet(pos)));
+		bcobj->setCollisionShape(&s);
+		mBullet->getWorld()->contactTest(bcobj,overlapCall);
+		delete bcobj;
+		return overlapCall.hits<=0;
+		/*if(overlapCall.hits<=0)
+		{
+			if(set)
+			{
+				position = pos;
+				act->setWorldTransform(btTransform(btQuaternion(0,0,0,1),btVector3(pos.x(),pos.y(),pos.z())));
+			}
+			if(!set)
+			{
+				sph.center = old;
+			}
+			return true;
+		}
+		else
+		{
+			//std::cout<<"failed: "<<overlapCall.hits<<"\n";
+			//std::cout<<"Hmm: "<<numOverlap<<"\n";
+			sph.center = old;
+			return false;
+		}*/
+	}
 }

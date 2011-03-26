@@ -26,7 +26,7 @@ namespace Oryx
 		:CharacterController(bullet->getWorld()),mGravityFactor(1.f)
 	{
 		for(int i = 0; i < NUM_SPHERES; ++i)
-			mComponents.push_back(new CharPrimitive(bullet,startPos+Vector3(0,0.375*i,0)));
+			mComponents.push_back(new CharPrimitive(bullet,startPos+Vector3(0,0.2*i,0)));
 	}
 	//-----------------------------------------------------------------------
 	
@@ -57,7 +57,7 @@ namespace Oryx
 		{
 			if(mGravityFactor < 1.f)
 			{
-				mGravityFactor += 0.01f;
+				mGravityFactor += 0.02f;
 				if(mGravityFactor > 1.f)
 					mGravityFactor = 1.f;
 			}
@@ -71,7 +71,7 @@ namespace Oryx
 	
 	void QuantaController::jump(Real strength)
 	{
-		mGravityFactor = strength;
+		mGravityFactor = strength*2;
 	}
 	//-----------------------------------------------------------------------
 
@@ -81,6 +81,22 @@ namespace Oryx
 		for(int i = 0;i < NUM_SPHERES; ++i)
 		{
 			Vector3 delta = mComponents[i]->move(d,dist,slide?5:1);
+
+			/*bool plausible = true;
+			for(int j=0;j<NUM_SPHERES;++j)
+			{
+				if(!mComponents[j]->overlapCheck(mComponents[j]->getPosition()+delta))
+				{
+					plausible = false;
+					break;
+				}
+			}
+
+			if(!plausible)
+				continue;*/
+
+			//Vector3 delta = mComponents[i]->move(d+Vector3(0,slide?0.5f:0.f,0),dist,slide?5:1);
+
 			if(delta.squaredLength() < minMove.squaredLength())
 				minMove = delta;
 		}

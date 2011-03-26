@@ -33,11 +33,11 @@ namespace Oryx
 	{
 		mInterpolation = interpolation;
 
-		if(gravity!=Vector3::ZERO)
+		/*if(gravity!=Vector3::ZERO)
 		{
 			mBody->activate();
 			mBody->setGravity(convertBullet(gravity));
-		}
+		}*/
 
 		mPosition[1] = mPosition[0];
 		mPosition[0] = convertBullet(mBody->getCenterOfMassPosition());

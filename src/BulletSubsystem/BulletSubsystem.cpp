@@ -80,6 +80,8 @@ namespace Oryx
 		{
 			mAccumulation += delta;
 
+			mAccumulation = mAccumulation < 0.5f ? mAccumulation : 0.5f;
+
 			while(mAccumulation>=mTimeStep)
 			{
 				mDynamicsWorld->stepSimulation(mTimeStep,0);
@@ -479,9 +481,9 @@ namespace Oryx
 		shape->getBtShape()->calculateLocalInertia(mass,localInertia);
 
 		btRigidBody* actor = new btRigidBody(mass,0,shape->getBtShape(),localInertia);	
-		actor->setRestitution(0.3f);
-		actor->setFriction(0.8f);
-		actor->setAnisotropicFriction(btVector3(0.9f,0.9f,0.9f));
+		actor->setRestitution(0.f);
+		actor->setFriction(0.f);
+		actor->setAnisotropicFriction(btVector3(0.f,0.f,0.f));
 		actor->setWorldTransform(btTransform(btQuaternion::getIdentity(),
 			btVector3(position.x,position.y,position.z)));
 
@@ -499,8 +501,8 @@ namespace Oryx
 		btCollisionObject* actor = new btCollisionObject();
 		actor->setCollisionShape(shape->getBtShape());
 		actor->setWorldTransform(btTransform(btQuaternion::getIdentity(),convertBullet(position)));
-		actor->setRestitution(0.3f);
-		actor->setFriction(0.8f);
+		actor->setRestitution(0.f);
+		actor->setFriction(0.f);
 
 		mDynamicsWorld->addCollisionObject(actor,COLLISION_GROUP_1);
 		CollisionObject* obj = new CollisionObject(mDynamicsWorld,actor,shape);
