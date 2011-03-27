@@ -37,6 +37,9 @@ namespace Oryx
 		void addPoint(Vector3 p);
 		Vector3 interpolate(Real t);
 
+		void setAutoCalc(bool calc);
+		void recalc();
+
 	private:
 	
 		Ogre::SimpleSpline* mSpline;

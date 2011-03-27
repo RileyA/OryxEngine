@@ -51,4 +51,45 @@ namespace Oryx
 		// No separating axis, the line intersects
 		return true;
 	}
+
+
+	bool Intersect::intersects(const Ray& ray,const Sphere& sphere)
+	{
+		Vector3 raydir = ray.direction;
+        // Adjust ray origin relative to sphere center
+        Vector3 rayorig = ray.origin - sphere.center;
+        Real radius = sphere.radius;
+
+        // Check origin inside first
+        if (rayorig.squaredLength() <= radius*radius)
+        {
+			return true;
+            //return std::pair<bool, Real>(true, 0);
+        }
+
+        // Mmm, quadratics
+        // Build coeffs which can be used with std quadratic solver
+        // ie t = (-b +/- sqrt(b*b + 4ac)) / 2a
+        Real a = raydir.dotProduct(raydir);
+        Real b = 2 * rayorig.dotProduct(raydir);
+        Real c = rayorig.dotProduct(rayorig) - radius*radius;
+
+        // Calc determinant
+        Real d = (b*b) - (4 * a * c);
+        if (d < 0)
+        {
+            // No intersection
+			return false;
+        }
+        else
+        {
+            // BTW, if d=0 there is one intersection, if d > 0 there are 2
+            // But we only want the closest one, so that's ok, just use the 
+            // '-' version of the solver
+            Real t = ( -b - sqrt(d) ) / (2 * a);
+            if (t < 0)
+                t = ( -b + sqrt(d) ) / (2 * a);
+            return true;
+        }	
+	}
 }

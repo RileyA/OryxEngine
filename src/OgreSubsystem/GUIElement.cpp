@@ -40,6 +40,8 @@ namespace Oryx
 		createSignal("unhovered");
 		createSignal("released");
 
+		mHover = false;
+
 		if(mName==""||mName=="AUTO")
 		{
 			mName = "GUIElementAutoName"+StringUtils::toString(msAutoNameIndex);
@@ -212,8 +214,9 @@ namespace Oryx
 			mElements[i]->release();
 	}
 
-	void GUIElement::hover(Vector2 coords)
+	void GUIElement::hover(Vector2 coord)
 	{
+		Vector2 coords = coord;
 		coords-=getPosition();
 		coords /= mScale;
 		if(coords.x<1.f&&coords.x>0.f&&coords.y<1.f&&coords.y>0.f)

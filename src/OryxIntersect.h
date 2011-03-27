@@ -25,6 +25,7 @@
 #include "OryxRay.h"
 #include "OryxVector3.h"
 #include "OryxBox.h"
+#include "OryxSphere.h"
 
 namespace Oryx
 {
@@ -40,6 +41,10 @@ namespace Oryx
 		 *		@param Box The Box 
 		 *		@return Whether or not they intersect */
 		static bool intersects(const Ray& ray,const Box& box);
+
+
+		//static bool intersects(const Ray& ray,const Box& box);
+		static bool intersects(const Ray& ray,const Sphere& sphere);
 
 		//static bool intersects(const Ray& ray,const AxisAlignedBox& aabox);
 	};

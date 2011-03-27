@@ -27,5 +27,7 @@
 #include "OryxQuaternion.h"
 #include "OryxMeshData.h"
 #include "OryxPlane.h"
+#include "OryxRay.h"
+#include "OryxSphere.h"
 
 #endif

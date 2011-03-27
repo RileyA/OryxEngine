@@ -79,4 +79,13 @@ namespace Oryx
 		GUIElement::update(delta);
 		mRectangle->_redraw();
 	}
+	//-----------------------------------------------------------------------
+	
+	void GUIRectangle::setBackground(Colour c)
+	{
+		mRectangle->background_colour(convertOgre(c));
+	}
+	//-----------------------------------------------------------------------
+	
+
 }

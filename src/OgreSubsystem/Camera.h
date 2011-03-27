@@ -63,6 +63,8 @@ namespace Oryx
 		Vector3 getAbsoluteDown();
 		Vector3 getDown();
 
+		void setDirection(Vector3 dir);
+
 		// TODO: lots...
 
 	protected:

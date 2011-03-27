@@ -51,6 +51,8 @@ namespace Oryx
 		void setSprite(String sprite);
 		virtual void update(Real delta);
 
+		void setBackground(Colour c);
+
 	protected:
 
 		virtual void _setPos(Vector2 pos);

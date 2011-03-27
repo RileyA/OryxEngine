@@ -63,6 +63,7 @@ namespace Oryx
 				{
 					mActive = false;
 					clear();
+					std::cout<<"DONE@!!!\n";
 					return;
 				}
 
@@ -131,7 +132,7 @@ namespace Oryx
 			alGetError();
 
 			alSourcei(mSource,AL_BUFFER,mData.mBuffer->getBuffer());
-			alSourcei(mSource,AL_LOOPING,mData.mLooping);
+			alSourcei(mSource,AL_LOOPING,true);
 			alSourcef(mSource,AL_MIN_GAIN,0.f);
 			alSourcef(mSource,AL_MAX_GAIN,1.f);
 			alSourcef(mSource,AL_GAIN,1.f);

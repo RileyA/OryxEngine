@@ -17,7 +17,7 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
-#include "Ogre.h"
+#include "OgreSimpleSpline.h"
 #include "Spline.h"
 #include "OgreConversions.h"
 
@@ -41,5 +41,15 @@ namespace Oryx
 	Vector3 Spline::interpolate(Real t)
 	{
 		return convertOgre(mSpline->interpolate(t));
+	}
+
+	void Spline::setAutoCalc(bool calc)
+	{
+		mSpline->setAutoCalculate(calc);
+	}
+
+	void Spline::recalc()
+	{
+		mSpline->recalcTangents();
 	}
 }

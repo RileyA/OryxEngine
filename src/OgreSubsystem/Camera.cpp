@@ -126,4 +126,10 @@ namespace Oryx
 		return getUp()*-1.f;
 	}
 	//-----------------------------------------------------------------------	
+	
+	void Camera::setDirection(Vector3 dir)
+	{
+		mCamera->setDirection(convertOgre(dir));
+	}
+	//-----------------------------------------------------------------------
 }

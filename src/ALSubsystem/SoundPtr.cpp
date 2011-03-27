@@ -50,4 +50,9 @@ namespace Oryx
 		return mAudioMgr->getActiveSound(mSoundIndex)->getStartTime() == mStart;
 	}
 	//-----------------------------------------------------------------------
+
+	bool SoundPtr::isActive()
+	{
+		return isValid() && mAudioMgr->getActiveSound(mSoundIndex)->isActive();
+	}
 }

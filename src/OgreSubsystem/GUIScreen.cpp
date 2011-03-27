@@ -101,8 +101,8 @@ namespace Oryx
 	{
 		return mScreen->getWidth();
 	}
-
 	//-----------------------------------------------------------------------
+	
 	Real GUIScreen::getHeight()
 	{
 		return mScreen->getHeight();

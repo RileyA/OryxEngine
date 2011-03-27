@@ -41,6 +41,7 @@ namespace Oryx
 		SoundPtr();
 
 		bool isValid();
+		bool isActive();
 
 		SoundData& getData();
 
