@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2011
+//(C) Copyright Riley Adams 2010-2011
 
 //This file is part of Oryx Engine.
 
@@ -57,8 +57,9 @@ namespace Oryx
 		const OIS::MouseState &ms = mMouse->getMouseState();
 		ms.width = 1024;
 		ms.height = 768;
-		setMousePosition(512,350);
+		setMousePosition(ms.width/2,ms.height/2);
 	}
+	//-----------------------------------------------------------------------
 
 	OISListener::~OISListener()
 	{
@@ -78,19 +79,22 @@ namespace Oryx
 			mInputManager = 0;
 		}
 	}
+	//-----------------------------------------------------------------------
 
 	void OISListener::update()
 	{
 		mMouse->capture();
 		mKeyboard->capture();
 	}
-
+	//-----------------------------------------------------------------------
+	
 	void OISListener::setMousePosition(int x,int y)
 	{
 		mCursorX = x;
 		mCursorY = y;
 		checkPosition();
 	}
+	//-----------------------------------------------------------------------
 
 	void OISListener::setInputViewSize(int width,int height)
 	{
@@ -99,6 +103,7 @@ namespace Oryx
 		ms.height = height;
 		checkPosition();
 	}
+	//-----------------------------------------------------------------------
 
 	void OISListener::checkPosition()
 	{
@@ -113,6 +118,7 @@ namespace Oryx
 			mCursorY = ms.height - 1;
 		mSubsystem->_setMousePos(mCursorX,mCursorY,ms.X.rel,ms.Y.rel);
 	}
+	//-----------------------------------------------------------------------
 
 	bool OISListener::mouseMoved(const OIS::MouseEvent& arg)
 	{
@@ -122,28 +128,33 @@ namespace Oryx
 		checkPosition();
 		return true;
 	}
+	//-----------------------------------------------------------------------
 
 	bool OISListener::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 	{
 		mSubsystem->_mouseButton(id,true);
 		return true;
 	}
+	//-----------------------------------------------------------------------
 
 	bool OISListener::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
 	{
 		mSubsystem->_mouseButton(id,false);
 		return true;
 	}
+	//-----------------------------------------------------------------------
 
 	bool OISListener::keyPressed(const OIS::KeyEvent& arg)
 	{
 		mSubsystem->_key(arg.key,true,arg.text);
 		return true;
 	}
+	//-----------------------------------------------------------------------
 
 	bool OISListener::keyReleased(const OIS::KeyEvent& arg)
 	{
 		mSubsystem->_key(arg.key,false,arg.text);
 		return true;
 	}
+	//-----------------------------------------------------------------------
 }

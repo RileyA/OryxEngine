@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2010
+//(C) Copyright Riley Adams 2010-2011
 
 //This file is part of Oryx Engine.
 
@@ -27,11 +27,8 @@
 
 namespace Oryx
 {
-    const size_t OISSubsystem::mDependencyCount = 0;
-    const String OISSubsystem::mDependencies[1];// nothin'
-
 	OISSubsystem::OISSubsystem()
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount),mInitialized(false),
+        :EngineSubsystem(),mInitialized(false),
 		mGrabbedMouse(false),mListener(0),mHandle(0)
 	{
 		EventHandler::registerDestination(getName(),this);
@@ -404,4 +401,5 @@ namespace Oryx
 		mKeys[OIS::KC_MAIL] = String("KC_MAIL");
 		mKeys[OIS::KC_MEDIASELECT] = String("KC_MEDIASELECT");
 	}
+	//-----------------------------------------------------------------------
 }

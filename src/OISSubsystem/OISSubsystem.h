@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2010
+//(C) Copyright Riley Adams 2010-2011
 
 //This file is part of Oryx Engine.
 
@@ -50,7 +50,9 @@ namespace Oryx
 			@return The name ("OgreSubsystem") */
         virtual String getName();
 
+		/** Gets whether or not a key is down by keycode */
 		bool isKeyDown(uint key);
+		/** Gets whether or not a key is down by name */
 		bool isKeyDown(String key);
 
 		/** Shortcut for detecting a single key press */
@@ -58,28 +60,35 @@ namespace Oryx
 		/** Shortcut for detecting a single key press */
 		bool wasKeyPressed(String key);
 
+		/** Gets whether or not a mouse button is down by index */
 		bool isButtonDown(uint button);
+		/** Gets whether or not a mouse button is down by name */
 		bool isButtonDown(String button);
 
+		/** Shortcut for handling a single button press (by index) */
 		bool wasButtonPressed(uint button);
+		/** Shortcut for handling a single button press (by name) */
 		bool wasButtonPressed(String button);
 
 		/** Starts up the input system (must be done per state) 
 		 *		@param handle Handle of the window from which to track input 
 		 *		@param grabMouse Does the application take over the OS mouse cursor	*/	
 		void initInput(size_t handle, bool grabMouse);
+		/** Shuts the input system down */
 		void deinitInput();
-
+		
+		/** Toggles whether or not the mouse is "trapped" by the window */
 		void toggleMouseGrab();
 
+		/** Called when the mouse moves */
 		void _setMousePos(int x,int y,int relx,int rely);
+		/** Called on each key event */
 		void _key(uint key,bool up,uint val);
+		/** Called on mouse button events */
 		void _mouseButton(uint button,bool up);
 
+		/** Set up string -> keycode conversions */
 		void assignConversions();
-
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
 
     protected:
 

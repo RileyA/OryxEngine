@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2011
+//(C) Copyright Riley Adams 2010-2011
 
 //This file is part of Oryx Engine.
 
@@ -27,6 +27,8 @@ namespace Oryx
 {
 	class OISSubsystem;
 
+	/** Internal class that serves as the OIS lsitener
+	 *		TODO: add joystick support */
 	class OISListener : public OIS::KeyListener, public OIS::MouseListener
 	{
 	public:

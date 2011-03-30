@@ -32,7 +32,7 @@ namespace Oryx
     public:
 
 		/** Constructor */
-        EngineSubsystem(String* deps,size_t count)
+        EngineSubsystem(String* deps=0,size_t count=0)
         {
             for(size_t i=0;i<count;++i)
                 mDependencies[deps[i]] = 0;
