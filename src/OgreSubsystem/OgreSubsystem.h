@@ -164,9 +164,6 @@ namespace Oryx
 
 		size_t getWindowHandle();
 
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
-
     protected:
 
         bool mInitialized;

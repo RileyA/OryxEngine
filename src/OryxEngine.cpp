@@ -70,16 +70,7 @@ namespace Oryx
 
 			mLogger->logMessage("Reticulating Splines...");
 
-			// resolve all dependencies
 			std::map<String,EngineSubsystem*>::iterator iter = mSubsystems.begin();
-			for(;iter!=mSubsystems.end();++iter)
-			{
-				if(!_resolveDependencies(iter->second))
-					return false;
-			}
-
-			// all good for dependencies, iterate again, init-ing it all
-			iter = mSubsystems.begin();
 			for(;iter!=mSubsystems.end();++iter)
 				iter->second->_init();
 			
@@ -259,25 +250,6 @@ namespace Oryx
 			mLogger->logMessage("Oryx Engine v"+String(ORYX_VERSION)+" Shut down successfully.");
 			mInitialized = false;
 		}
-	}
-	//-----------------------------------------------------------------------
-
-	bool Engine::_resolveDependencies(EngineSubsystem* system)
-	{
-		std::map<String,EngineSubsystem*>::iterator iter = mSubsystems.begin();
-		for(;iter!=mSubsystems.end();++iter)
-		{
-			std::map<String,EngineSubsystem*>::iterator it =
-				iter->second->getDependencies().begin();
-			for(;it!=iter->second->getDependencies().end();++it)
-			{
-				if(EngineSubsystem* sys = getSubsystem(it->first))
-					it->second = sys;
-				else
-					return false;
-			}
-		}
-		return true;
 	}
 	//-----------------------------------------------------------------------
 }

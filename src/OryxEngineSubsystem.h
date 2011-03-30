@@ -32,11 +32,7 @@ namespace Oryx
     public:
 
 		/** Constructor */
-        EngineSubsystem(String* deps=0,size_t count=0)
-        {
-            for(size_t i=0;i<count;++i)
-                mDependencies[deps[i]] = 0;
-        }
+        EngineSubsystem(){}
 
 		// should initialize the subsystem
         virtual void _init() = 0;
@@ -56,15 +52,6 @@ namespace Oryx
 
 		// Helper for casting to a derived type
         template<typename T> T* castType(){return dynamic_cast<T*>(this);}
-
-		// Gets the Subsystems this subsystem depends on
-        std::map<String,EngineSubsystem*>& getDependencies(){return mDependencies;}
-
-    protected:
-
-		// Pointers to dependencies
-        std::map<String,EngineSubsystem*> mDependencies;
-
     };
 }
 

@@ -53,9 +53,6 @@ namespace Oryx
 
 		ActiveSound* getActiveSound(unsigned int index);
 
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
-
     protected:
 
         bool mInitialized;

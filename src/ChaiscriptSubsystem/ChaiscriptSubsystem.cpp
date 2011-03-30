@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2010
+//(C) Copyright Riley Adams 2010-2011
 
 //This file is part of Oryx Engine.
 
@@ -55,12 +55,9 @@ namespace Oryx
 		return Engine::getPtr()->getSubsystem("ALSubsystem")->castType<ALSubsystem>();
 	}
 	#endif
-    const size_t ChaiscriptSubsystem::mDependencyCount = 0;
-	const String ChaiscriptSubsystem::mDependencies[1];// nothin'
 
     ChaiscriptSubsystem::ChaiscriptSubsystem()
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount)
-        ,mInitialized(0),mChai(0){}
+        :EngineSubsystem(),mInitialized(0),mChai(0){}
     //-----------------------------------------------------------------------
 
     ChaiscriptSubsystem::~ChaiscriptSubsystem()
@@ -196,7 +193,6 @@ namespace Oryx
 
         // register subsystems
         #ifdef ORYX_CHAI_REGISTER_OPENAL
-
 		mChai->registerFunction(&getAL,"getAL");
 
         mChai->registerType<ALSubsystem>("ALSubsystem");
@@ -209,8 +205,8 @@ namespace Oryx
 		mChai->registerFunction(&ALSubsystem::bufferSound, "bufferSound");
 		mChai->registerFunction(&ALSubsystem::setDefaultVolume, "setVolume");
 		mChai->registerFunction(&ALSubsystem::setDefaultVolumeOgg, "setVolumeOgg");
-		
         #endif
+		
         #ifdef ORYX_CHAI_REGISTER_OGRE
 
 		mChai->registerFunction(&getOgre,"getOgre");

@@ -26,15 +26,8 @@
 
 namespace Oryx
 {
-    const size_t SDLSubsystem::mDependencyCount = 0;
-    const String SDLSubsystem::mDependencies[1];// nothin'
-
     SDLSubsystem::SDLSubsystem(int width,int height)
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount),
-            mInitialized(0),
-            mWidth(width),
-            mHeight(height),
-            mManual(0) {}
+        :EngineSubsystem(),mInitialized(0),mWidth(width),mHeight(height),mManual(0) {}
     //-----------------------------------------------------------------------
 
     SDLSubsystem::~SDLSubsystem()

@@ -119,10 +119,6 @@ namespace Oryx
 
     private:
 
-        /** Ensures that all subsystems have access to their dependencies
-         *		@param The Subsystem in question */
-        bool _resolveDependencies(EngineSubsystem* system);
-
 		// The states
         std::deque<GameState*> mStates;
         std::map<String,EngineSubsystem*> mSubsystems;

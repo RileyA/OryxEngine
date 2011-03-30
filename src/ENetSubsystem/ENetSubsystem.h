@@ -44,10 +44,6 @@ namespace Oryx
 		Client* createClient();
 		Server* createServer(int port);
 
-
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
-
     protected:
 
         bool mInitialized;

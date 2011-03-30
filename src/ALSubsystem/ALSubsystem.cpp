@@ -33,11 +33,8 @@
 
 namespace Oryx
 {
-    const size_t ALSubsystem::mDependencyCount = 0;
-    const String ALSubsystem::mDependencies[1];// nothin'
-
     ALSubsystem::ALSubsystem()
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount),mInitialized(0){}
+        :EngineSubsystem(),mInitialized(0){}
     //-----------------------------------------------------------------------
 
     ALSubsystem::~ALSubsystem()

@@ -62,9 +62,6 @@ namespace Oryx
 		/** Gets a pointer to the ChaiWrapper */
 		ChaiWrapper* getWrapper();
 
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
-
     protected:
 
         void _registerBasicTypes();

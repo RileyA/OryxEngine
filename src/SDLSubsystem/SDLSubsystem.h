@@ -51,9 +51,6 @@ namespace Oryx
         void setBackgroundColour(Colour col);
         Colour getBackgroundColour();
 
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
-
     protected:
 
         bool mInitialized;

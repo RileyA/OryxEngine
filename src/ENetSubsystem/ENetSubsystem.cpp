@@ -25,12 +25,8 @@
 
 namespace Oryx
 {
-    const size_t ENetSubsystem::mDependencyCount = 0;
-    const String ENetSubsystem::mDependencies[1];// nothin'
-
 	ENetSubsystem::ENetSubsystem()
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount)
-        ,mInitialized(0){}
+        :EngineSubsystem(),mInitialized(0){}
     //-----------------------------------------------------------------------
 
     ENetSubsystem::~ENetSubsystem()

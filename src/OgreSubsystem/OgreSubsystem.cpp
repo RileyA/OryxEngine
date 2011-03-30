@@ -28,14 +28,10 @@
 
 namespace Oryx
 {
-    const size_t OgreSubsystem::mDependencyCount = 0;
-    const String OgreSubsystem::mDependencies[1];// nothin'
-
 	OgreSubsystem::OgreSubsystem(unsigned int resX,unsigned int resY,bool fullscreen,
 		std::map<String,String> params)
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount),mInitialized(0),
-		mResolutionX(resX),mResolutionY(resY),mFullscreen(fullscreen),mParams(params),
-		mAutoNameIndex(0),mNeedsRestart(false){}
+        :EngineSubsystem(),mInitialized(0),mResolutionX(resX),mResolutionY(resY),
+		mFullscreen(fullscreen),mParams(params),mAutoNameIndex(0),mNeedsRestart(false){}
     //-----------------------------------------------------------------------
 
     OgreSubsystem::~OgreSubsystem()
@@ -52,8 +48,7 @@ namespace Oryx
 			mRoot = new Ogre::Root("","");
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
-			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
-			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
+
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");
 			mRoot->setRenderSystem(rs);
