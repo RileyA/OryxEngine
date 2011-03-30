@@ -169,16 +169,6 @@ namespace Oryx
 			std::map<String,PhysicsShape*>::iterator iter = mShapes.begin();
 			while(iter != mShapes.end())
 			{
-				btTriangleMesh* tr = 0;
-
-				// TODO put this in trimesh's dtor...
-				if(iter->second->getType() == PST_TRIMESH)
-					tr = dynamic_cast<btTriangleMesh*>(dynamic_cast<btBvhTriangleMeshShape*>(
-						iter->second->getBtShape())->getMeshInterface());
-
-				if(tr)
-					delete tr;// clear triangle data!
-
 				delete iter->second;
 				++iter;
 			}
@@ -218,10 +208,8 @@ namespace Oryx
 				cb.m_collisionObject->getUserPointer());
 		}
 		else
-		{
 			return RaycastReport();
-		}	
-	}
+	}	
 	//-----------------------------------------------------------------------
 
 	SweepReport BulletSubsystem::sweep(PhysicsShape* shape, Vector3 origin,Vector3 direction,
@@ -252,10 +240,7 @@ namespace Oryx
 				cb.m_hitCollisionObject->getUserPointer());
 		}
 		else
-		{
 			return SweepReport();
-		}	
-	
 	}
 	//-----------------------------------------------------------------------
 
@@ -390,7 +375,7 @@ namespace Oryx
 		return capsule;
 	}
 	//-----------------------------------------------------------------------
-	//
+
 	PhysicsConvexShape* BulletSubsystem::createConvexShape(MeshData& points, String name)
 	{
 		PhysicsConvexShape* con;
@@ -442,7 +427,7 @@ namespace Oryx
 		return tri;
 	}
 	//-----------------------------------------------------------------------
-	// TODO add orientation options
+
 	PhysicsCompoundShape* BulletSubsystem::createCompoundShape(
 		const std::vector<PhysicsShape*>& shapes,
 		const std::vector<Vector3>& positions)

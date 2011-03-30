@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-//(C) Copyright Riley Adams 2010
+//(C) Copyright Riley Adams 2010-2011
 
 //This file is part of Oryx Engine.
 
@@ -56,6 +56,7 @@ namespace Oryx
 
 		/** Constructor */
         BulletSubsystem();
+
 		/** Destructor */
         ~BulletSubsystem();
 
@@ -89,8 +90,11 @@ namespace Oryx
 		/** Get the current accumulation factor */
 		float getInterpolation();
 
-		/** Get the current direction and magnitude of gravity */
+		/** Get the current direction and magnitude of gravity 
+		 *		@return The gravity vector */
 		Vector3 getGravity();
+		/** Sets gravity
+		 *		@param g The gravity value */
 		void setGravity(Vector3 g);
 
 		/** Performs a simple raycast and returns the results
@@ -99,7 +103,11 @@ namespace Oryx
 		 *		@param length The max distance to raycast out to (default:  10k meters)*/
 		RaycastReport raycast(Vector3 origin,Vector3 direction,
 			float length=10000.f,short group=0,short mask=0);
-
+		/** Performs a sweep test and returns the results
+		 *		@param shape The shae to sweep (or 'cast' with
+		 *		@param origin Where to fire the ray from
+		 *		@param direction The direction in which to fire the ray 
+		 *		@param length The max distance to raycast out to (default:  10k meters)*/
 		SweepReport sweep(PhysicsShape* shape, Vector3 origin,Vector3 direction,
 			float length=10000.f,short group=0,short mask=0);
 
@@ -125,10 +133,13 @@ namespace Oryx
 		 *		@param mass The desired mass, 0 makes a static object
 		 *		@returns a pointer to the PhysicsObject */
 		PhysicsObject* createSphere(float radius,Vector3 pos,float mass=10.f);
-		
-		// TODO document!
+		/** Creates a capsule primitive object, with a given radius
+		 *		@param radius The radius
+		 *		@param height The desired height
+		 *		@param pos Where to place the new object 
+		 *		@param mass The desired mass, 0 makes a static object
+		 *		@returns a pointer to the PhysicsObject */
 		PhysicsObject* createCapsule(float radius, float height,Vector3 pos,float mass=10.f);
-
 		/** Creates a cube primitive, with a given radius
 		 *		@param scale The extents of the box to create
 		 *		@param pos Where to place the new object 
@@ -150,12 +161,13 @@ namespace Oryx
 		PhysicsBoxShape* createBoxShape(Vector3 extents);
 		/** Creates a primitive sphere shape
 		 *		@param radius The desired radius
-		 *		@return The created object */
+		 *		@return The created shape */
 		PhysicsSphereShape* createSphereShape(Real radius);
-
-		// TODO document! 
+		/** Creates a primitive capsule shape
+		 *		@param radius The desired radius
+		 *		@param height The height of the capsule
+		 *		@return The created shape */
 		PhysicsCapsuleShape* createCapsuleShape(Real radius, Real height);
-		
 		/** Creates a convex hull primitive from a point cloud 
 		 *		@param points The points, stored in a MeshData object 
 		 *		@param name The name of the mesh (so if it already exists, we can reuse)
@@ -176,6 +188,9 @@ namespace Oryx
 		 *		@param position Where to spawn the physics object 
 		 *		@param mass The desired mass (0 if a static object) */
 		PhysicsObject* createObject(PhysicsShape* shape, Vector3 position, float mass);
+		/** Creates a single-shape static physics object
+		 *		@param shape The physics shape to be used
+		 *		@param position Where to spawn the physics object */
 		PhysicsObject* createObject(PhysicsShape* shape, Vector3 position);
 
 		/** Creates a dynamic rigid body object
@@ -188,8 +203,11 @@ namespace Oryx
 		 *		@param position Where to place the object */
 		CollisionObject* createStatic(PhysicsShape* shape, Vector3 position);
 
+		/** Creates an experimental character controller
+		 *		@param pos The start position */
 		QuantaController* createQuantaCCT(Vector3 pos);
 
+		/** Gets a pointer to the bullet world itself */
 		btDynamicsWorld* getWorld(){return mDynamicsWorld;}
 
     protected:

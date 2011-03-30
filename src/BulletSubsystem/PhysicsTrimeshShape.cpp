@@ -38,4 +38,11 @@ namespace Oryx
 		}
 		mShape = new btBvhTriangleMeshShape(triMesh,true);
 	}
+
+	PhysicsTrimeshShape::~PhysicsTrimeshShape()
+	{
+		// clear triangle data
+		delete dynamic_cast<btTriangleMesh*>(
+			dynamic_cast<btBvhTriangleMeshShape*>(mShape)->getMeshInterface());
+	}
 }

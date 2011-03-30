@@ -30,6 +30,7 @@ namespace Oryx
 	public:
 
 		PhysicsTrimeshShape(MeshData& data, String name = "NULL");
+		virtual ~PhysicsTrimeshShape();
 
 		PhysicsShapeType getType(){return PST_TRIMESH;}
 
