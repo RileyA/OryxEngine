@@ -31,7 +31,6 @@
 #include "Oryx3DMath.h"
 #include "OryxStringUtils.h"
 
-#include "BasicCharacterController.h"
 #include "PhysicsObject.h"
 
 #include "btBulletDynamicsCommon.h"
@@ -39,12 +38,8 @@
 
 namespace Oryx
 {
-    const size_t BulletSubsystem::mDependencyCount = 0;
-	const String BulletSubsystem::mDependencies[1];// nothin'
-
     BulletSubsystem::BulletSubsystem()
-        :EngineSubsystem(const_cast<String*>(mDependencies),mDependencyCount)
-        ,mInitialized(0),mStarted(0){}
+        :EngineSubsystem(),mInitialized(0),mStarted(0){}
     //-----------------------------------------------------------------------
 
     BulletSubsystem::~BulletSubsystem()
@@ -515,13 +510,6 @@ namespace Oryx
 	{
 		mObjects.push_back(new QuantaController(this,pos));
 		return static_cast<QuantaController*>(mObjects.back());
-	}
-	//-----------------------------------------------------------------------
-
-	BasicCharacterController* BulletSubsystem::createBasicCharacterController(Vector3 pos)
-	{
-		mObjects.push_back(new BasicCharacterController(pos));
-		return static_cast<BasicCharacterController*>(mObjects.back());
 	}
 	//-----------------------------------------------------------------------
 }

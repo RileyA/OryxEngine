@@ -49,8 +49,6 @@ class btSequentialImpulseConstraintSolver;
 
 namespace Oryx
 {
-	class BasicCharacterController;
-
 	/** Bullet physics subsystem, does 3d physics simulation */
     class ORYX_BULLET_EXPORT BulletSubsystem : public EngineSubsystem
     {
@@ -191,12 +189,8 @@ namespace Oryx
 		CollisionObject* createStatic(PhysicsShape* shape, Vector3 position);
 
 		QuantaController* createQuantaCCT(Vector3 pos);
-		BasicCharacterController* createBasicCharacterController(Vector3 pos);
 
 		btDynamicsWorld* getWorld(){return mDynamicsWorld;}
-
-        static const size_t mDependencyCount;
-        static const String mDependencies[];
 
     protected:
 
