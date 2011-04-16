@@ -28,22 +28,53 @@ namespace Oryx
 	class ORYX_EXPORT Vector2
 	{
 	public:
-		Vector2()
-			:x(0),
-			 y(0)
+		
+		Real x;
+		Real y;
+
+		Vector2() : x(0),y(0) {}
+		Vector2(const float _x,const float _y) : x(_x),y(_y){}
+		Vector2(float coords[2]) : x(coords[0]),y(coords[1]){}
+
+		/** Normalize the vector, (make it unit length).
+		 *		@return The length prior to normalizing */
+		float normalize()
 		{
+			float fLength = sqrt( x * x + y * y );
+
+            if ( fLength > 1e-08 )
+            {
+                float fInvLength = 1.0f / fLength;
+                x *= fInvLength;
+                y *= fInvLength;
+            }
+
+            return fLength;
 		}
 
-		Vector2(const float _x,const float _y)
-			:x(_x),y(_y)
+		/** Gets the length of the vector
+		 *		@return The length 
+		 *		@remarks This requires a costly sqrt, so use squaredLength() when possible */
+		float length() const
 		{
+			return sqrt(x * x + y * y);
 		}
 
-		Vector2(float coords[2])
-			:x(coords[0]),y(coords[1])
+		/** Gets the squared length of a vector
+		 *		@returns The length */
+		float squaredLength()
 		{
+			return float(x * x + y * y);
 		}
 
+		/** Gets the distance between this vector and another
+		 *		@param vect The vector to test against 
+		 *		@return The distance */
+		float distance(const Vector2& vect) const
+        {
+            return (*this - vect).length();
+        }
+		
 		bool operator==(const Vector2 vect)
 		{
 			return(x==vect.x&&y==vect.y);
@@ -145,40 +176,6 @@ namespace Oryx
         {
             return *(&x+i);
         }
-
-		/** Normalize the vector, (make it unit length). Returns the previous length. */
-		float normalize()
-		{
-			float fLength = sqrt( x * x + y * y );
-
-            if ( fLength > 1e-08 )
-            {
-                float fInvLength = 1.0f / fLength;
-                x *= fInvLength;
-                y *= fInvLength;
-            }
-
-            return fLength;
-		}
-
-		float length() const
-		{
-			return sqrt(x * x + y * y);
-		}
-
-		float squaredLength()
-		{
-			return float(x * x + y * y);
-		}
-
-		float distance(const Vector2& vect) const
-        {
-            return (*this - vect).length();
-        }
-
-		// the coords
-		Real x;
-		Real y;
 	};
 }
 

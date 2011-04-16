@@ -40,10 +40,7 @@ namespace Oryx
 
 	public:
 
-        Matrix4()
-        {
-        }
-
+        Matrix4(){}
         Matrix4(
             Real m00, Real m01, Real m02, Real m03,
             Real m10, Real m11, Real m12, Real m13,
@@ -68,19 +65,17 @@ namespace Oryx
             m[3][3] = m33;
         }
 
-        /** Creates a standard 4x4 transformation matrix with a zero translation part from a rotation/scaling 3x3 matrix.
-         */
-
+        /** Creates a standard 4x4 transformation matrix with a zero 
+		 *	translation part from a rotation/scaling 3x3 matrix. 
+		 *		@param m3x3 The rotation matrix to use */
         Matrix4(const Matrix3& m3x3)
         {
           operator=(IDENTITY);
           operator=(m3x3);
         }
 
-		        /** Creates a standard 4x4 transformation matrix with a zero translation part from a rotation/scaling Quaternion.
-         */
-        
-        inline Matrix4(const Quaternion& rot)
+		/** Creates a standard 4x4 transformation matrix with a zero translation part from a rotation/scaling Quaternion.*/
+        Matrix4(const Quaternion& rot)
         {
           Matrix3 m3x3;
           rot.ToRotationMatrix(m3x3);
@@ -91,7 +86,7 @@ namespace Oryx
 
 		/** Exchange the contents of this matrix with another. 
 		*/
-		inline void swap(Matrix4& other)
+		void swap(Matrix4& other)
 		{
 			std::swap(m[0][0], other.m[0][0]);
 			std::swap(m[0][1], other.m[0][1]);
@@ -111,17 +106,17 @@ namespace Oryx
 			std::swap(m[3][3], other.m[3][3]);
 		}
 
-		inline Real* operator [] ( size_t iRow )
+		Real* operator [] ( size_t iRow )
         {
             return m[iRow];
         }
 
-        inline const Real *operator [] ( size_t iRow ) const
+        const Real *operator [] ( size_t iRow ) const
         {
             return m[iRow];
         }
 
-        inline Matrix4 concatenate(const Matrix4 &m2) const
+        Matrix4 concatenate(const Matrix4 &m2) const
         {
             Matrix4 r;
             r.m[0][0] = m[0][0] * m2.m[0][0] + m[0][1] * m2.m[1][0] + m[0][2] * m2.m[2][0]
@@ -165,7 +160,7 @@ namespace Oryx
 
         /** Matrix concatenation using '*'.
         */
-        inline Matrix4 operator * ( const Matrix4 &m2 ) const
+        Matrix4 operator * ( const Matrix4 &m2 ) const
         {
             return concatenate( m2 );
         }
@@ -179,7 +174,7 @@ namespace Oryx
                 and then all the tree elements of the resulting 3-D vector are
                 divided by the resulting <i>w</i>.
         */
-        inline Vector3 operator * ( const Vector3 &v ) const
+        Vector3 operator * ( const Vector3 &v ) const
         {
             Vector3 r;
 
@@ -192,24 +187,9 @@ namespace Oryx
             return r;
         }
 
-   //     inline Plane operator * (const Plane& p) const
-   //     {
-   //         Plane ret;
-			//Matrix4 invTrans = inverse().transpose();
-			//Vector4 v4( p.normal.x, p.normal.y, p.normal.z, p.d );
-			//v4 = invTrans * v4;
-			//ret.normal.x = v4.x; 
-			//ret.normal.y = v4.y; 
-			//ret.normal.z = v4.z;
-			//ret.d = v4.w / ret.normal.normalise();
-
-   //         return ret;
-   //     }
-
-
         /** Matrix addition.
         */
-        inline Matrix4 operator + ( const Matrix4 &m2 ) const
+        Matrix4 operator + ( const Matrix4 &m2 ) const
         {
             Matrix4 r;
 
@@ -238,7 +218,7 @@ namespace Oryx
 
         /** Matrix subtraction.
         */
-        inline Matrix4 operator - ( const Matrix4 &m2 ) const
+        Matrix4 operator - ( const Matrix4 &m2 ) const
         {
             Matrix4 r;
             r.m[0][0] = m[0][0] - m2.m[0][0];
@@ -266,7 +246,7 @@ namespace Oryx
 
         /** Tests 2 matrices for equality.
         */
-        inline bool operator == ( const Matrix4& m2 ) const
+        bool operator == ( const Matrix4& m2 ) const
         {
             if( 
                 m[0][0] != m2.m[0][0] || m[0][1] != m2.m[0][1] || m[0][2] != m2.m[0][2] 
@@ -283,7 +263,7 @@ namespace Oryx
 
         /** Tests 2 matrices for inequality.
         */
-        inline bool operator != ( const Matrix4& m2 ) const
+        bool operator != ( const Matrix4& m2 ) const
         {
             if( 
                 m[0][0] != m2.m[0][0] || m[0][1] != m2.m[0][1] || m[0][2] != m2.m[0][2] 
@@ -300,14 +280,14 @@ namespace Oryx
 
         /** Assignment from 3x3 matrix.
         */
-        inline void operator = ( const Matrix3& mat3 )
+        void operator = ( const Matrix3& mat3 )
         {
             m[0][0] = mat3.m[0][0]; m[0][1] = mat3.m[0][1]; m[0][2] = mat3.m[0][2];
             m[1][0] = mat3.m[1][0]; m[1][1] = mat3.m[1][1]; m[1][2] = mat3.m[1][2];
             m[2][0] = mat3.m[2][0]; m[2][1] = mat3.m[2][1]; m[2][2] = mat3.m[2][2];
         }
 
-        inline Matrix4 transpose(void) const
+        Matrix4 transpose(void) const
         {
             return Matrix4(m[0][0], m[1][0], m[2][0], m[3][0],
                            m[0][1], m[1][1], m[2][1], m[3][1],
@@ -322,7 +302,7 @@ namespace Oryx
         */
         /** Sets the translation transformation part of the matrix.
         */
-        inline void setTrans( const Vector3& v )
+        void setTrans( const Vector3& v )
         {
             m[0][3] = v.x;
             m[1][3] = v.y;
@@ -331,7 +311,7 @@ namespace Oryx
 
         /** Extracts the translation transformation part of the matrix.
          */
-        inline Vector3 getTrans() const
+        Vector3 getTrans() const
         {
           return Vector3(m[0][3], m[1][3], m[2][3]);
         }
@@ -339,7 +319,7 @@ namespace Oryx
 
         /** Builds a translation matrix
         */
-        inline void makeTrans( const Vector3& v )
+        void makeTrans( const Vector3& v )
         {
             m[0][0] = 1.0; m[0][1] = 0.0; m[0][2] = 0.0; m[0][3] = v.x;
             m[1][0] = 0.0; m[1][1] = 1.0; m[1][2] = 0.0; m[1][3] = v.y;
@@ -347,7 +327,7 @@ namespace Oryx
             m[3][0] = 0.0; m[3][1] = 0.0; m[3][2] = 0.0; m[3][3] = 1.0;
         }
 
-        inline void makeTrans( Real tx, Real ty, Real tz )
+        void makeTrans( Real tx, Real ty, Real tz )
         {
             m[0][0] = 1.0; m[0][1] = 0.0; m[0][2] = 0.0; m[0][3] = tx;
             m[1][0] = 0.0; m[1][1] = 1.0; m[1][2] = 0.0; m[1][3] = ty;
@@ -357,7 +337,7 @@ namespace Oryx
 
         /** Gets a translation matrix.
         */
-        inline static Matrix4 getTrans( const Vector3& v )
+        static Matrix4 getTrans( const Vector3& v )
         {
             Matrix4 r;
 
@@ -371,7 +351,7 @@ namespace Oryx
 
         /** Gets a translation matrix - variation for not using a vector.
         */
-        inline static Matrix4 getTrans( Real t_x, Real t_y, Real t_z )
+        static Matrix4 getTrans( Real t_x, Real t_y, Real t_z )
         {
             Matrix4 r;
 
@@ -390,7 +370,7 @@ namespace Oryx
         */
         /** Sets the scale part of the matrix.
         */
-        inline void setScale( const Vector3& v )
+        void setScale( const Vector3& v )
         {
             m[0][0] = v.x;
             m[1][1] = v.y;
@@ -399,7 +379,7 @@ namespace Oryx
 
         /** Gets a scale matrix.
         */
-        inline static Matrix4 getScale( const Vector3& v )
+        static Matrix4 getScale( const Vector3& v )
         {
             Matrix4 r;
             r.m[0][0] = v.x; r.m[0][1] = 0.0; r.m[0][2] = 0.0; r.m[0][3] = 0.0;
@@ -412,7 +392,7 @@ namespace Oryx
 
         /** Gets a scale matrix - variation for not using a vector.
         */
-        inline static Matrix4 getScale( Real s_x, Real s_y, Real s_z )
+        static Matrix4 getScale( Real s_x, Real s_y, Real s_z )
         {
             Matrix4 r;
             r.m[0][0] = s_x; r.m[0][1] = 0.0; r.m[0][2] = 0.0; r.m[0][3] = 0.0;
@@ -426,7 +406,7 @@ namespace Oryx
         /** Extracts the rotation / scaling part of the Matrix as a 3x3 matrix. 
         @param m3x3 Destination Matrix3
         */
-        inline void extract3x3Matrix(Matrix3& m3x3) const
+        void extract3x3Matrix(Matrix3& m3x3) const
         {
             m3x3.m[0][0] = m[0][0];
             m3x3.m[0][1] = m[0][1];
@@ -440,32 +420,8 @@ namespace Oryx
 
         }
 
-		/** Determines if this matrix involves a scaling. */
-		//inline bool hasScale() const
-		//{
-		//	// check magnitude of column vectors (==local axes)
-		//	Real t = m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0];
-		//	if (!Math::RealEqual(t, 1.0, (Real)1e-04))
-		//		return true;
-		//	t = m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1];
-		//	if (!Math::RealEqual(t, 1.0, (Real)1e-04))
-		//		return true;
-		//	t = m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2];
-		//	if (!Math::RealEqual(t, 1.0, (Real)1e-04))
-		//		return true;
-
-		//	return false;
-		//}
-
-		/** Determines if this matrix involves a negative scaling. */
-		//inline bool hasNegativeScale() const
-		//{
-		//	return determinant() < 0;
-		//}
-
-		/** Extracts the rotation / scaling part as a quaternion from the Matrix.
-         */
-        inline Quaternion extractQuaternion() const
+		/** Extracts the rotation / scaling part as a quaternion from the Matrix. */
+        Quaternion extractQuaternion() const
         {
           Matrix3 m3x3;
           extract3x3Matrix(m3x3);
@@ -474,11 +430,11 @@ namespace Oryx
 
         static const Matrix4 ZERO;
         static const Matrix4 IDENTITY;
-        /** Useful little matrix which takes 2D clipspace {-1, 1} to {0,1}
-            and inverts the Y. */
+
+        /** Useful little matrix which takes 2D clipspace {-1, 1} to {0,1} and inverts the Y. */
         static const Matrix4 CLIPSPACE2DTOIMAGESPACE;
 
-        inline Matrix4 operator*(Real scalar) const
+        Matrix4 operator*(Real scalar) const
         {
             return Matrix4(
                 scalar*m[0][0], scalar*m[0][1], scalar*m[0][2], scalar*m[0][3],
@@ -487,23 +443,12 @@ namespace Oryx
                 scalar*m[3][0], scalar*m[3][1], scalar*m[3][2], scalar*m[3][3]);
         }
 
-		//Matrix4 adjoint() const;
-		//Real determinant() const;
 		Matrix4 inverse() const;
 
-        /** Building a Matrix4 from orientation / scale / position.
-        @remarks
-            Transform is performed in the order scale, rotate, translation, i.e. translation is independent
-            of orientation axes, scale does not affect size of translation, rotation and scaling are always
-            centered on the origin.
-        */
+        /** Building a Matrix4 from orientation / scale / position. */
         void makeTransform(const Vector3& position, const Vector3& scale, const Quaternion& orientation);
 
-        /** Building an inverse Matrix4 from orientation / scale / position.
-        @remarks
-            As makeTransform except it build the inverse given the same data as makeTransform, so
-            performing -translation, -rotate, 1/scale in that order.
-        */
+        /** Building an inverse Matrix4 from orientation / scale / position. */
         void makeInverseTransform(const Vector3& position, const Vector3& scale, const Quaternion& orientation);
 	};
 }

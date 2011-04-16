@@ -21,5 +21,5 @@
 
 namespace Oryx
 {
-	//...add constants eventually...
+	// TODO: Add constants
 }

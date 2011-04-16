@@ -36,53 +36,64 @@ namespace Oryx
 	{
 	public:
 
+		static const Quaternion IDENTITY;
+		static const Quaternion ZERO;
+
 		Real x;
 		Real y;
 		Real z;
 		Real w;
 
-		Quaternion()
-			:x(0),y(0),z(0),w(0)
-		{
-		}
-
-		Quaternion(Real x_,Real y_,Real z_,Real w_)
-			:x(x_),y(y_),z(z_),w(w_)
-		{
-		}
+		Quaternion() : x(0),y(0),z(0),w(0) {}
+		Quaternion(Real x_,Real y_,Real z_,Real w_) : x(x_),y(y_),z(z_),w(w_) {}
 
 		Quaternion(const Matrix3& mat)
 		{
 			this->FromRotationMatrix(mat);
 		}
 
-		Vector3 operator*(Vector3 vect);
-		Quaternion operator- (const Quaternion& rkQ) const;
-		Quaternion operator+ (const Quaternion& rkQ) const;
-		Quaternion operator* (const Quaternion& rkQ) const;
-		Quaternion operator* (Real fScalar) const;
-		Quaternion operator- () const;
-
-		friend Quaternion operator* (Real fScalar,
-            const Quaternion& rkQ);
-
-		// performs spherical linear interpolation between two Quaternions
-		static Quaternion Slerp (Real fT, const Quaternion& rkP,
+		/** Performs spherical linear interpolation between two Quaternions 
+		 *		@param fT The interpolation factor 
+		 *		@param rkP The first Quaternion 
+		 *		@param rkQ The second Quaternion
+		 *		@param shortestPath Whether or not to use the shortest path */
+		static Quaternion Slerp(Real fT, const Quaternion& rkP,
 			const Quaternion& rkQ, bool shortestPath = true);
 
-        Real Dot (const Quaternion& rkQ) const;  // dot product
+		/** Dots this Quaternion with another
+		 *		@param rkQ The Quaternion to dot with 
+		 *		@return The dot product */
+        Real dotProduct(const Quaternion& rkQ) const;
+
+		/** Normalizes the Quaternion
+		 *		@return The original length */
         Real normalize(void); 
 
-		//Real normalize(); 
-		//Real Quaternion::Norm ();
+		/** Constructs a quaternion from an angle and an axis
+		 *		@param angle The angle
+		 *		@param kAxis The axis */
 		void FromAngleAxis(const Real& angle,const Vector3& kAxis);
-		void FromRotationMatrix (const Matrix3& kRot);
-		void ToRotationMatrix (Matrix3& kRot) const;
 
-        Quaternion Inverse () const;  // apply to non-zero quaternion
+		/** Constructs a quaternion from a 3x3 matrix
+		 *		@param kRot The matrix to use */
+		void FromRotationMatrix(const Matrix3& kRot);
 
-		static const Quaternion IDENTITY;
-		static const Quaternion ZERO;
+		/** Returns a matrix representation of this rotation
+		 *		@param kRot The matrix to output to */
+		void ToRotationMatrix(Matrix3& kRot) const;
+
+		/** Computes and returns the inverse of this Quaternion 
+		 *		@returns The inverse Quaternion */
+        Quaternion inverse() const;
+
+		Vector3 operator*(Vector3 vect);
+		Quaternion operator-(const Quaternion& rkQ) const;
+		Quaternion operator+(const Quaternion& rkQ) const;
+		Quaternion operator*(const Quaternion& rkQ) const;
+		Quaternion operator*(Real fScalar) const;
+		Quaternion operator-() const;
+		friend Quaternion operator*(Real fScalar, const Quaternion& rkQ);
+
 	};
 }
 

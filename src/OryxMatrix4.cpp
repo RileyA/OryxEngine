@@ -39,38 +39,8 @@ namespace Oryx
           0, -0.5,  0, 0.5, 
           0,    0,  1,   0,
           0,    0,  0,   1);
-	//-----------------------------------------------------------------------
-    //Matrix4 Matrix4::adjoint() const
-    //{
-    //    return Matrix4( MINOR(*this, 1, 2, 3, 1, 2, 3),
-    //        -MINOR(*this, 0, 2, 3, 1, 2, 3),
-    //        MINOR(*this, 0, 1, 3, 1, 2, 3),
-    //        -MINOR(*this, 0, 1, 2, 1, 2, 3),
-
-    //        -MINOR(*this, 1, 2, 3, 0, 2, 3),
-    //        MINOR(*this, 0, 2, 3, 0, 2, 3),
-    //        -MINOR(*this, 0, 1, 3, 0, 2, 3),
-    //        MINOR(*this, 0, 1, 2, 0, 2, 3),
-
-    //        MINOR(*this, 1, 2, 3, 0, 1, 3),
-    //        -MINOR(*this, 0, 2, 3, 0, 1, 3),
-    //        MINOR(*this, 0, 1, 3, 0, 1, 3),
-    //        -MINOR(*this, 0, 1, 2, 0, 1, 3),
-
-    //        -MINOR(*this, 1, 2, 3, 0, 1, 2),
-    //        MINOR(*this, 0, 2, 3, 0, 1, 2),
-    //        -MINOR(*this, 0, 1, 3, 0, 1, 2),
-    //        MINOR(*this, 0, 1, 2, 0, 1, 2));
-    //}
-    ////-----------------------------------------------------------------------
-    //Real Matrix4::determinant() const
-    //{
-    //    return m[0][0] * MINOR(*this, 1, 2, 3, 1, 2, 3) -
-    //        m[0][1] * MINOR(*this, 1, 2, 3, 0, 2, 3) +
-    //        m[0][2] * MINOR(*this, 1, 2, 3, 0, 1, 3) -
-    //        m[0][3] * MINOR(*this, 1, 2, 3, 0, 1, 2);
-    //}
     //-----------------------------------------------------------------------
+
     Matrix4 Matrix4::inverse() const
     {
         Real m00 = m[0][0], m01 = m[0][1], m02 = m[0][2], m03 = m[0][3];
@@ -132,8 +102,8 @@ namespace Oryx
             d20, d21, d22, d23,
             d30, d31, d32, d33);
     }
-
     //-----------------------------------------------------------------------
+
     void Matrix4::makeTransform(const Vector3& position, const Vector3& scale, const Quaternion& orientation)
     {
         // Ordering:
@@ -152,14 +122,14 @@ namespace Oryx
         // No projection term
         m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
     }
-
     //-----------------------------------------------------------------------
+
     void Matrix4::makeInverseTransform(const Vector3& position, const Vector3& scale, const Quaternion& orientation)
     {
         // Invert the parameters
         Vector3 invTranslate = Vector3(-position.x,-position.y,-position.z);
         Vector3 invScale(1 / scale.x, 1 / scale.y, 1 / scale.z);
-        Quaternion invRot = orientation.Inverse();
+        Quaternion invRot = orientation.inverse();
 
         // Because we're inverting, order is translation, rotation, scale
         // So make translation relative to scale & rotation
@@ -178,4 +148,5 @@ namespace Oryx
         // No projection term
         m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
     }
+	//-----------------------------------------------------------------------
 }

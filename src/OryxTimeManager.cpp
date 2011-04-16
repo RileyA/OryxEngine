@@ -29,6 +29,7 @@ namespace Oryx
 		long ms = (seconds*1000+useconds/1000.f)+0.5;
 		return (seconds*1000.f+useconds/1000.f)/1000.f;
 	}
+	//-----------------------------------------------------------------------
 
     void TimeManager::setTimeSpeed(Real speed)
     {
@@ -45,11 +46,11 @@ namespace Oryx
     Real TimeManager::getTimeDecimal()
     {
 		#ifdef ORYX_PLATFORM_LINUX 
-    	struct timeval now;
-		gettimeofday(&now,0);
-		return tDifference(mStart,now);
+			struct timeval now;
+			gettimeofday(&now,0);
+			return tDifference(mStart,now);
 		#elif defined( ORYX_PLATFORM_WINDOWS )
-		return static_cast<Real>(clock())/CLOCKS_PER_SEC;
+			return static_cast<Real>(clock())/CLOCKS_PER_SEC;
 		#endif
     }
     //-----------------------------------------------------------------------

@@ -26,6 +26,7 @@ namespace Oryx
 {
 	const Quaternion Quaternion::ZERO(0,0,0,0);
     const Quaternion Quaternion::IDENTITY(0,0,0,1);
+	//-----------------------------------------------------------------------
 
     void Quaternion::FromAngleAxis (const Real& rfAngle,
         const Vector3& rkAxis)
@@ -36,61 +37,6 @@ namespace Oryx
         x = fSin*rkAxis.x;
         y = fSin*rkAxis.y;
         z = fSin*rkAxis.z;
-    }
-
-	Vector3 Quaternion::operator* (Vector3 v)
-    {
-		Vector3 uv, uuv;
-		Vector3 qvec(x, y, z);
-		uv = qvec.crossProduct(v);
-		uuv = qvec.crossProduct(uv);
-		uv *= (2.0f * w);
-		uuv *= 2.0f;
-		return v + uv + uuv;
-    }
-    //-----------------------------------------------------------------------
-	Quaternion Quaternion::operator+ (const Quaternion& rkQ) const
-    {
-        return Quaternion(w+rkQ.w,x+rkQ.x,y+rkQ.y,z+rkQ.z);
-    }
-    //----------------------------------------------------------------------
-    Quaternion Quaternion::operator- (const Quaternion& rkQ) const
-    {
-        return Quaternion(w-rkQ.w,x-rkQ.x,y-rkQ.y,z-rkQ.z);
-    }
-    //-----------------------------------------------------------------------
-	
-    Quaternion Quaternion::operator* (const Quaternion& rkQ) const
-    {
-        // NOTE:  Multiplication is not generally commutative, so in most
-        // cases p*q != q*p.
-
-        return Quaternion
-        (
-            w * rkQ.w - x * rkQ.x - y * rkQ.y - z * rkQ.z,
-            w * rkQ.x + x * rkQ.w + y * rkQ.z - z * rkQ.y,
-            w * rkQ.y + y * rkQ.w + z * rkQ.x - x * rkQ.z,
-            w * rkQ.z + z * rkQ.w + x * rkQ.y - y * rkQ.x
-        );
-    }
-    //-----------------------------------------------------------------------
-	
-    Quaternion Quaternion::operator* (Real fScalar) const
-    {
-        return Quaternion(fScalar*w,fScalar*x,fScalar*y,fScalar*z);
-    }
-	//-----------------------------------------------------------------------
-
-    Quaternion Quaternion::operator- () const
-    {
-        return Quaternion(-w,-x,-y,-z);
-    }
-	//-----------------------------------------------------------------------
-
-    Quaternion operator* (Real fScalar, const Quaternion& rkQ)
-    {
-        return Quaternion(fScalar*rkQ.w,fScalar*rkQ.x,fScalar*rkQ.y,
-            fScalar*rkQ.z);
     }
 	//-----------------------------------------------------------------------
 	
@@ -133,6 +79,7 @@ namespace Oryx
             *apkQuat[k] = (kRot[k][i]+kRot[i][k])*fRoot;
         }
     }
+	//-----------------------------------------------------------------------
 
 	void Quaternion::ToRotationMatrix (Matrix3& kRot) const
     {
@@ -170,13 +117,13 @@ namespace Oryx
     }
 	//-----------------------------------------------------------------------
 	
-    Real Quaternion::Dot (const Quaternion& rkQ) const
+    Real Quaternion::dotProduct(const Quaternion& rkQ) const
     {
         return w*rkQ.w+x*rkQ.x+y*rkQ.y+z*rkQ.z;
     }
 	//-----------------------------------------------------------------------
 	
-    Quaternion Quaternion::Inverse () const
+    Quaternion Quaternion::inverse () const
     {
         Real fNorm = w*w+x*x+y*y+z*z;
         if ( fNorm > 0.0 )
@@ -195,7 +142,7 @@ namespace Oryx
     Quaternion Quaternion::Slerp (Real fT, const Quaternion& rkP,
         const Quaternion& rkQ, bool shortestPath)
     {
-        Real fCos = rkP.Dot(rkQ);
+        Real fCos = rkP.dotProduct(rkQ);
         Quaternion rkT;
 
         // Do we need to invert rotation?
@@ -233,4 +180,63 @@ namespace Oryx
             return t;
         }
     }
+	//-----------------------------------------------------------------------
+
+	Vector3 Quaternion::operator* (Vector3 v)
+    {
+		Vector3 uv, uuv;
+		Vector3 qvec(x, y, z);
+		uv = qvec.crossProduct(v);
+		uuv = qvec.crossProduct(uv);
+		uv *= (2.0f * w);
+		uuv *= 2.0f;
+		return v + uv + uuv;
+    }
+    //-----------------------------------------------------------------------
+
+	Quaternion Quaternion::operator+ (const Quaternion& rkQ) const
+    {
+        return Quaternion(w+rkQ.w,x+rkQ.x,y+rkQ.y,z+rkQ.z);
+    }
+    //----------------------------------------------------------------------
+
+    Quaternion Quaternion::operator- (const Quaternion& rkQ) const
+    {
+        return Quaternion(w-rkQ.w,x-rkQ.x,y-rkQ.y,z-rkQ.z);
+    }
+    //-----------------------------------------------------------------------
+	
+    Quaternion Quaternion::operator* (const Quaternion& rkQ) const
+    {
+        // NOTE:  Multiplication is not generally commutative, so in most
+        // cases p*q != q*p.
+
+        return Quaternion
+        (
+            w * rkQ.w - x * rkQ.x - y * rkQ.y - z * rkQ.z,
+            w * rkQ.x + x * rkQ.w + y * rkQ.z - z * rkQ.y,
+            w * rkQ.y + y * rkQ.w + z * rkQ.x - x * rkQ.z,
+            w * rkQ.z + z * rkQ.w + x * rkQ.y - y * rkQ.x
+        );
+    }
+    //-----------------------------------------------------------------------
+	
+    Quaternion Quaternion::operator* (Real fScalar) const
+    {
+        return Quaternion(fScalar*w,fScalar*x,fScalar*y,fScalar*z);
+    }
+	//-----------------------------------------------------------------------
+
+    Quaternion Quaternion::operator- () const
+    {
+        return Quaternion(-w,-x,-y,-z);
+    }
+	//-----------------------------------------------------------------------
+
+    Quaternion operator* (Real fScalar, const Quaternion& rkQ)
+    {
+        return Quaternion(fScalar*rkQ.w,fScalar*rkQ.x,fScalar*rkQ.y,
+            fScalar*rkQ.z);
+    }
+	//-----------------------------------------------------------------------
 }

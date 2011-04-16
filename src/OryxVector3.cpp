@@ -1,3 +1,4 @@
+//-----------------------------------------------------------------------
 // Copyright Riley Adams 2010
 
 // This file is part of Oryx Engine.
@@ -14,7 +15,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with Oryx Engine.  If not, see <http://www.gnu.org/licenses/>.
-
+//-----------------------------------------------------------------------
 
 #include "Oryx.h"
 #include "OryxVector3.h"
@@ -30,28 +31,29 @@ namespace Oryx
     const Vector3 Vector3::NEGATIVE_UNIT_Y(  0, -1,  0 );
     const Vector3 Vector3::NEGATIVE_UNIT_Z(  0,  0, -1 );
     const Vector3 Vector3::UNIT_SCALE(1, 1, 1);
+	//-----------------------------------------------------------------------
 
 	Quaternion Vector3::getRotationTo(const Vector3& dest) const
 	{
-		Vector3 fallbackAxis = Vector3::ZERO;
 		// Based on Stan Melax's article in Game Programming Gems
+		Vector3 fallbackAxis = Vector3::ZERO;
 		Quaternion q;
-		// Copy, since cannot modify local
 		Vector3 v0 = *this;
 		Vector3 v1 = dest;
 		v0.normalize();
 		v1.normalize();
 
 		Real d = v0.dotProduct(v1);
+
 		// If dot == 1, vectors are the same
-		if (d >= 1.0f)
+		if(d >= 1.0f)
 		{
 			return Quaternion::IDENTITY;
 		}
 
-		if (d < (1e-6f - 1.0f))
+		if(d < (1e-6f - 1.0f))
 		{
-			if (fallbackAxis != Vector3::ZERO)
+			if(fallbackAxis != Vector3::ZERO)
 			{
 				// rotate 180 degrees about the fallback axis
 				q.FromAngleAxis(3.141592, fallbackAxis);
@@ -61,10 +63,12 @@ namespace Oryx
 				// Generate an axis
 				Vector3 axis = Vector3::UNIT_X.crossProduct(*this);
 
-				if (axis.isZeroLength()) // pick another if colinear
+				if(axis.isZeroLength()) // pick another if colinear
+				{
 					axis = Vector3::UNIT_Y.crossProduct(*this);
 					axis.normalize();
 					q.FromAngleAxis(3.141592, axis);
+				}
 			}
 		}
 		else
@@ -80,6 +84,5 @@ namespace Oryx
 		}
 		return q;
 	}
-
-
+	//-----------------------------------------------------------------------
 }

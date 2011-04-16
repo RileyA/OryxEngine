@@ -34,10 +34,12 @@ namespace Oryx
         return (r == col.r && g == col.g &&
             b == col.b && a == col.a);
     }
+	//-----------------------------------------------------------------------
+	
 
     bool Colour::operator!=(const Colour& col) const
     {
         return !(*this == col);
     }
-
+	//-----------------------------------------------------------------------
 }

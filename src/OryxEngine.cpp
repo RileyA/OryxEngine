@@ -98,7 +98,7 @@ namespace Oryx
 			mStates[0]->init();
 			mKillState = false;
 
-			while(!mKillState)
+			while(!mKillState && !mStates.front()->isDone())
 			{
 				mTimeManager->update();
 				Real delta = mTimeManager->getDeltaTime();
@@ -123,7 +123,8 @@ namespace Oryx
 			mStates.pop_front();
 
 			std::map<String,Bucket*>::iterator it = mBuckets.begin();;
-			for(it;it!=mBuckets.end();)
+
+			while(it != mBuckets.end())
 			{
 				if(it->second->isTemporary())
 				{

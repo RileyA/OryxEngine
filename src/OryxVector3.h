@@ -30,22 +30,133 @@ namespace Oryx
 	class ORYX_EXPORT Vector3
 	{
 	public:
-		Vector3()
-			:x(0),
-			 y(0),
-			 z(0)
+
+		Real x;
+		Real y;
+		Real z;
+
+		static const Vector3 ZERO;
+        static const Vector3 UNIT_X;
+        static const Vector3 UNIT_Y;
+        static const Vector3 UNIT_Z;
+        static const Vector3 NEGATIVE_UNIT_X;
+        static const Vector3 NEGATIVE_UNIT_Y;
+        static const Vector3 NEGATIVE_UNIT_Z;
+        static const Vector3 UNIT_SCALE;
+
+		Vector3() : x(0), y(0),z(0){}
+		Vector3(Real coords[3]) : x(coords[0]),y(coords[1]),z(coords[2]){}
+		Vector3(const Real _x,const Real _y,const Real _z) 
+			:x(_x),y(_y),z(_z) {}
+
+		/** Tests if this vector's direction equals that of another
+		 *		@param vect The vector to test with 
+		 *		@param tolerance The angle of tolerance (degrees) */
+		bool directionEquals(const Vector3& vect, const Real& tolerance)
 		{
+				Real dot = dotProduct(vect);
+				Real angle = acos(dot);
+				return abs(angle) <= (3.14159f/180.f) * tolerance;
 		}
 
-		Vector3(const float _x,const float _y,const float _z)
-			:x(_x),y(_y),z(_z)
+		/** Normalize the vector, (make it unit length). Returns the previous length. */
+		Real normalize()
 		{
+			Real fLength = sqrt( x * x + y * y + z * z );
+
+            if ( fLength > 1e-08 )
+            {
+                Real fInvLength = 1.0f / fLength;
+                x *= fInvLength;
+                y *= fInvLength;
+                z *= fInvLength;
+            }
+
+            return fLength;
 		}
 
-		Vector3(float coords[3])
-			:x(coords[0]),y(coords[1]),z(coords[2])
+		/** Gets the length of this vector
+		 *		@return The length 
+		 *		@remarks When possible use squaredLength(), as this requires a costly
+		 *			sqrt() operation. */
+		Real length() const
 		{
+			return sqrt(x * x + y * y + z * z);
 		}
+
+		/** Gets the squared length of this vector
+		 *		@return The squared length */
+		Real squaredLength()
+		{
+			return Real(x * x + y * y + z * z);
+		}
+
+		/** Gets the cross product of this vector with another
+		 *		@param vect The vector to cross with
+		 *		@returns The result of the cross product */
+		Vector3 crossProduct(const Vector3& vect) const
+		{
+			return Vector3( y * vect.z - z * vect.y,
+							z * vect.x - x * vect.z,
+							x * vect.y - y * vect.x);
+		}
+
+		/** Gets the distance between this vector and another
+		 *		@param The vector to compare with 
+		 *		@return The distance 
+		 *		@remarks The */
+		Real distance(const Vector3& vect) const
+        {
+            return (*this - vect).length();
+        }
+
+		/** Gets the squared distance between this vector and another
+		 *		@param vect The vector to get the dist to
+		 *		@return The squared distance */
+		Real squaredDistance(const Vector3& vect) const
+        {
+            return (*this - vect).length();
+        }
+
+		/** Computes the dot (scalar) product of this vector with another 
+		 *		@param vect The vector to dot with 
+		 *		@return The scalar product */
+		Real dotProduct(const Vector3 vect)
+		{
+			return x*vect.x + y*vect.y + z*vect.z;
+		}
+
+		/** Get the angle between this vector and another
+		 *		@param dest The vector to get the angle to */
+		Real angleBetween( Vector3 dest)
+		{
+			Real lenProduct = length() * dest.length();
+
+			// Divide by zero check
+			if(lenProduct < 1e-6f)
+				lenProduct = 1e-6f;
+
+			Real f = dotProduct(dest) / lenProduct;
+
+			if(f>1.f)
+				f = 1.f;
+			if(f<-1.f)
+				f = -1.f;
+			return (180.f/3.14159265f)*(acos(f));
+		}
+
+		/** Gets whether or not this Vector has a length of zero
+		 *		@param Whether it's zero or not */
+		bool isZeroLength()
+		{
+			Real sqlen = (x * x) + (y * y) + (z * z);
+            return (sqlen < (1e-06 * 1e-06));
+		}
+
+		/** Gets the Quaternion required to rotate this vector to another
+		 *		@param dest The destination vector 
+		 *		@return The rotation (as a Quaternion) */
+        Quaternion getRotationTo(const Vector3& dest) const;
 
 		bool operator==(const Vector3 vect)
 		{
@@ -80,7 +191,7 @@ namespace Oryx
 			return Vector3(x*vect.x,y*vect.y,z*vect.z);
 		}
 
-		Vector3 operator*(const float scalar) const
+		Vector3 operator*(const Real scalar) const
 		{
 			return Vector3(x*scalar,y*scalar,z*scalar);
 		}
@@ -90,7 +201,7 @@ namespace Oryx
 			return Vector3(x/vect.x,y/vect.y,z/vect.z);
 		}
 
-		Vector3 operator/(const float scalar) const
+		Vector3 operator/(const Real scalar) const
 		{
 			return Vector3(x/scalar,y/scalar,z/scalar);
 		}
@@ -119,7 +230,7 @@ namespace Oryx
 			return *this;
 		}
 
-		Vector3& operator*=(const float scalar)
+		Vector3& operator*=(const Real scalar)
 		{
 			x*=scalar;
 			y*=scalar;
@@ -135,124 +246,30 @@ namespace Oryx
 			return *this;
 		}
 
-		Vector3& operator/=(const float scalar)
+		Vector3& operator/=(const Real scalar)
 		{
 			if(scalar==0)
 			{
-				// an exception should probably be thrown here, once the exception handling stuff is set up...
+				// TODO: throw an exception here...
 				return *this;
 			}
-			float invScalar = 1/scalar;
+			Real invScalar = 1/scalar;
 			x/=invScalar;
 			y/=invScalar;
 			z/=invScalar;
 			return *this;
 		}
 
-		float& operator [] ( const size_t i )
+		Real& operator [] ( const size_t i )
         {
             return *(&x+i);
         }
 
-		const float& operator [] ( const size_t i ) const
+		const Real& operator [] ( const size_t i ) const
         {
             return *(&x+i);
         }
 
-		inline bool directionEquals(const Vector3& rhs,
-				const Real& tolerance)
-		{
-				Real dot = dotProduct(rhs);
-				Real angle = acos(dot);
-				return abs(angle) <= (3.14159f/180.f) * tolerance;
-		}
-
-		/** Normalize the vector, (make it unit length). Returns the previous length. */
-		float normalize()
-		{
-			float fLength = sqrt( x * x + y * y + z * z );
-
-            if ( fLength > 1e-08 )
-            {
-                float fInvLength = 1.0f / fLength;
-                x *= fInvLength;
-                y *= fInvLength;
-                z *= fInvLength;
-            }
-
-            return fLength;
-		}
-
-		float length() const
-		{
-			return sqrt(x * x + y * y + z * z);
-		}
-
-		float squaredLength()
-		{
-			return float(x * x + y * y + z * z);
-		}
-
-		Vector3 crossProduct(const Vector3& vect) const
-		{
-			return Vector3( y * vect.z - z * vect.y,
-							z * vect.x - x * vect.z,
-							x * vect.y - y * vect.x);
-		}
-
-		float distance(const Vector3& vect) const
-        {
-            return (*this - vect).length();
-        }
-
-		float dotProduct(const Vector3 vect)
-		{
-			return x*vect.x + y*vect.y + z*vect.z;
-		}
-
-		float angleBetween( Vector3 dest)
-		{
-			Real lenProduct = length() * dest.length();
-
-			// Divide by zero check
-			if(lenProduct < 1e-6f)
-				lenProduct = 1e-6f;
-
-			Real f = dotProduct(dest) / lenProduct;
-
-			if(f>1.f)
-			{
-				f = 1.f;
-			}
-			if(f<-1.f)
-			{
-				f = -1.f;
-			}
-			return (180.f/3.14159265f)*(acos(f));
-
-		}
-
-		bool isZeroLength()
-		{
-			Real sqlen = (x * x) + (y * y) + (z * z);
-            return (sqlen < (1e-06 * 1e-06));
-		}
-
-        Quaternion getRotationTo(const Vector3& dest) const;
-
-		// the coords
-		float x;
-		float y;
-		float z;
-
-		static const Vector3 ZERO;
-        static const Vector3 UNIT_X;
-        static const Vector3 UNIT_Y;
-        static const Vector3 UNIT_Z;
-        static const Vector3 NEGATIVE_UNIT_X;
-        static const Vector3 NEGATIVE_UNIT_Y;
-        static const Vector3 NEGATIVE_UNIT_Z;
-        static const Vector3 UNIT_SCALE;
 	};
 }
 

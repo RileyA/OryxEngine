@@ -34,7 +34,7 @@ namespace Oryx
         virtual void init()=0;
 
 		/** Should update the State 
-		 *		@param delta Teh time since the last frame */
+		 *		@param delta The time since the last frame */
 		virtual void update(Real delta)=0;
 
 		/** Should shut the State down */
