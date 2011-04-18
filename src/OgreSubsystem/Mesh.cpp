@@ -47,7 +47,7 @@ namespace Oryx
 		if(submeshIndex == -1)
 			mEntity->setMaterialName(name);
 		else
-			mEmtity->getSubEntity(submeshIndex)->stMaterialName(name);
+			mEntity->getSubEntity(submeshIndex)->setMaterialName(name);
 	}
 	//-----------------------------------------------------------------------
 
