@@ -17,61 +17,99 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
 
-#ifndef CHAIWRAPPER_H
-#define CHAIWRAPPER_H
+#ifndef LUAWRAPPER_H
+#define LUAWRAPPER_H
 
 #include "Oryx.h"
-#include "Chaidllmain.h"
-#include <chaiscript/chaiscript.hpp>
+#include "Luadllmain.h"
+
+extern "C"
+{
+	#include "lua.h"
+}
+
+#include <luabind/luabind.hpp>
+
+void print(Oryx::String out);
+void println(Oryx::String out);
 
 namespace Oryx
 {
-	/** This class basically hides away the Chaiscript header, so that client apps 
-	 *	don't need to include it and the horrendous compiled times that go with it */
-	class ORYX_CHAI_EXPORT ChaiWrapper
+	class ORYX_LUA_EXPORT LuaWrapper
 	{
 	public:
 
-		ChaiWrapper()
-			:mChai(){}
-
-		~ChaiWrapper(){}
-
-		/** Returns the Chaiscript subsystem */
-		chaiscript::ChaiScript* getChai()
+		LuaWrapper()
 		{
-			return &mChai;
+			mLua = lua_open();
+			luabind::open(mLua);
+			registerFunction(&print,"print");
+			registerFunction(&println,"println");
 		}
 
-		/** Registers a named function with the Chaiscript subsystem 
+		~LuaWrapper()
+		{
+			lua_close(mLua);
+		}
+
+		/** Returns the lua subsystem */
+		lua_State* getLua()
+		{
+			return mLua;
+		}
+
+		/** Registers a named function with the lua subsystem 
 		 *		@param t A pointer to the function 
 		 *		@param name The name to use for it in scripts */
-		template<typename T> void registerFunction(T t,String name)
+		template<typename T> void registerFunction(T t,String name, String nspace = "_default")
 		{
-		    mChai.add(chaiscript::fun(t),name);
+			if(nspace != "_default")
+			{
+				luabind::module(mLua, nspace.c_str())
+				[
+					luabind::def(name.c_str(), t)
+				];
+			}
+			else
+			{
+				luabind::module(mLua)
+				[
+					luabind::def(name.c_str(), t)
+				];
+			}
 		}
 		
 		/** Registers a constructor for a class
 		 *		@tparam T The constructor's signature 
 		 *		@param name The name to use to refer to it */
-		template<typename T> void registerConstructor(String name)
-		{
-		    mChai.add(chaiscript::constructor<T>(),name);
-		}
+		//template<typename T> void registerConstructor(String name)
+		//{
+		//    mChai.add(chaiscript::constructor<T>(),name);
+		//}
 
 		/** Registers a type with Chaiscript
 		 *		@tparam T The type to register
 		 *		@param name The name to use in the scripting system */
-		template<typename T> void registerType(String name)
-		{
-			mChai.add(chaiscript::user_type<T>(), name);
-		}
+		//template<typename T> void registerType(String name)
+		//{
+		//	mChai.add(chaiscript::user_type<T>(), name);
+		//}
 
 	protected:
 
-		chaiscript::ChaiScript mChai;
+		lua_State* mLua;
 
 	};
+}
+
+void print(Oryx::String out)
+{
+	std::cout<<out;
+}
+
+void println(Oryx::String out)
+{
+	std::cout<<out<<std::endl;
 }
 
 #endif

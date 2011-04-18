@@ -1,0 +1,2 @@
+env = Environment(CPPDEFINES=['BUILD_LUA_DLL','LINUX'])
+env.SharedLibrary('LuaSubsystem',['Luadllmain.cpp','LuaSubsystem.cpp'],CPPPATH=['../src'],LIBPATH='../bin',LIBS=['OryxEngine','lua','luabind'])

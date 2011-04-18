@@ -156,6 +156,9 @@ namespace Oryx
 
 	    // The engine object itself
 	    mChai->registerType<Engine>("Engine");
+		mChai->registerConstructor<Engine (void)>("Engine");
+        mChai->registerFunction(&Engine::init, "init");
+        mChai->registerFunction(&Engine::start, "start");
         mChai->registerFunction(&Engine::getPtr, "getEngine");
         mChai->registerFunction(&Engine::getSubsystem, "getSubsystem");
         mChai->registerFunction(&Engine::shutdown, "shutdown");
