@@ -1,8 +1,9 @@
 import os
+source = ['Camera.cpp','Gorilla.cpp','GUI.cpp','GUIElement.cpp','GUIEmpty.cpp','GUIRectangle.cpp','GUIScreen.cpp','GUIButton.cpp','GUIStaticText.cpp','GUIText.cpp','Light.cpp','Mesh.cpp','OgreConversions.cpp','Ogredllmain.cpp','OgreSubsystem.cpp','ParticleSystem.cpp','SceneNode.cpp','Decal.cpp','Spline.cpp','Material.cpp']
 if os.name == 'nt':
 	env = Environment(ENV=os.environ,tools=['mingw','g++'],CXX=['g++'],CPPDEFINES=['BUILD_OGRE_DLL','WIN32'])
-	env.SharedLibrary('OgreSubsystem',['Camera.cpp','Gorilla.cpp','GUI.cpp','GUIElement.cpp','GUIEmpty.cpp','GUIRectangle.cpp','GUIScreen.cpp','GUIButton.cpp','GUIStaticText.cpp','GUIText.cpp','Light.cpp','Mesh.cpp','OgreConversions.cpp','Ogredllmain.cpp','OgreSubsystem.cpp','ParticleSystem.cpp','SceneNode.cpp','Decal.cpp','Spline.cpp'],CPPPATH=['../src','E:\Deps/OgreSDK_mingw_v1-7-2/include/OGRE','C:\Program Files (x86)/boost/boost_1_42'],LIBS=['OgreMain','OryxEngine'],LIBPATH=['../bin','E:\Deps/OgreSDK_mingw_v1-7-2/lib/release'])
+	env.SharedLibrary('OgreSubsystem',source,CPPPATH=['../src','E:\Deps/OgreSDK_mingw_v1-7-2/include/OGRE','C:\Program Files (x86)/boost/boost_1_42'],LIBS=['OgreMain','OryxEngine'],LIBPATH=['../bin','E:\Deps/OgreSDK_mingw_v1-7-2/lib/release'])
 else:
 	env = Environment();
 	env.Append(CCFLAGS = '-g')
-	env.SharedLibrary('OgreSubsystem',['Camera.cpp','Gorilla.cpp','GUI.cpp','GUIElement.cpp','GUIEmpty.cpp','GUIRectangle.cpp','GUIScreen.cpp','GUIButton.cpp','GUIStaticText.cpp','GUIText.cpp','Light.cpp','Mesh.cpp','OgreConversions.cpp','Ogredllmain.cpp','OgreSubsystem.cpp','ParticleSystem.cpp','SceneNode.cpp','Decal.cpp','Spline.cpp'],CPPPATH=['../src','/usr/include/OGRE'],LIBS=['OgreMain','OryxEngine'],LIBPATH=['../bin'])
+	env.SharedLibrary('OgreSubsystem',source,CPPPATH=['../src','/usr/include/OGRE'],LIBS=['OgreMain','OryxEngine'],LIBPATH=['../bin'])
