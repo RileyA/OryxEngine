@@ -32,6 +32,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "ParticleSystem.h"
+#include "Material.h"
 
 namespace Ogre
 {

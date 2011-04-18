@@ -310,4 +310,14 @@ namespace Oryx
 		mEntity->getMesh()->load();
 		mEntity->getMesh()->touch();
 	}
+
+	String Mesh::getMaterialName(size_t submeshIndex)
+	{
+		return mEntity->getSubEntity(submeshIndex)->getMaterialName();
+	}
+
+	Material Mesh::getMaterial(size_t submeshIndex)
+	{
+		return Material(getMaterialName(submeshIndex));
+	}
 }

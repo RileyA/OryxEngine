@@ -21,7 +21,7 @@
 #define ORYX_OGRE_MATERIAL_H
 
 #include "Oryx.h"
-#include "OgreSubsystem.h"
+#include "OryxColour.h"
 
 namespace Ogre
 {

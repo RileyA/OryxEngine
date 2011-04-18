@@ -24,6 +24,7 @@
 #include "SceneNode.h"
 #include "Ogredllmain.h"
 #include "Oryx3DMath.h"
+#include "Material.h"
 
 namespace Ogre
 {
@@ -47,6 +48,9 @@ namespace Oryx
 		// TODO: materials, animation, etc
 		
 		void setMaterialName(String name);
+
+		String getMaterialName(size_t submeshIndex = 0);
+		Material getMaterial(size_t submeshIndex = 0);
 
 		void update(MeshData& d);
 
