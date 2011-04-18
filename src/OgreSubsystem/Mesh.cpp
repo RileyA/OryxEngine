@@ -42,9 +42,24 @@ namespace Oryx
 	}
 	//--------------------------------------------------------------------------
 	
-	void Mesh::setMaterialName(String name)
+	void Mesh::setMaterialName(String name, int submeshIndex)
 	{
-		mEntity->setMaterialName(name);
+		if(submeshIndex == -1)
+			mEntity->setMaterialName(name);
+		else
+			mEmtity->getSubEntity(submeshIndex)->stMaterialName(name);
+	}
+	//-----------------------------------------------------------------------
+
+	String Mesh::getMaterialName(size_t submeshIndex)
+	{
+		return mEntity->getSubEntity(submeshIndex)->getMaterialName();
+	}
+	//-----------------------------------------------------------------------
+
+	Material Mesh::getMaterial(size_t submeshIndex)
+	{
+		return Material(getMaterialName(submeshIndex));
 	}
 	//-----------------------------------------------------------------------
 	
@@ -310,14 +325,5 @@ namespace Oryx
 		mEntity->getMesh()->load();
 		mEntity->getMesh()->touch();
 	}
-
-	String Mesh::getMaterialName(size_t submeshIndex)
-	{
-		return mEntity->getSubEntity(submeshIndex)->getMaterialName();
-	}
-
-	Material Mesh::getMaterial(size_t submeshIndex)
-	{
-		return Material(getMaterialName(submeshIndex));
-	}
+	//-----------------------------------------------------------------------
 }

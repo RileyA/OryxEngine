@@ -45,14 +45,14 @@ namespace Oryx
 		void getMeshData(MeshData& out, bool texcoords = true, bool normals = true,
 			bool indices = true, bool vertices = true);
 
-		// TODO: materials, animation, etc
-		
-		void setMaterialName(String name);
-
 		String getMaterialName(size_t submeshIndex = 0);
 		Material getMaterial(size_t submeshIndex = 0);
+		
+		void setMaterialName(String name, int submeshIndex = -1);
 
 		void update(MeshData& d);
+
+		// TODO: materials, animation, etc
 
 	protected:
 
