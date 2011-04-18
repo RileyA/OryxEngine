@@ -51,6 +51,9 @@ namespace Oryx
 		/** Gets a random character */
 		char genChar();
 
+		/** Gets the static Rand instance */
+		static Rand& get(){return mRand;}
+
 		// Maximum value this can return
 		static const ruint ORYX_RAND_MAX;
 
@@ -58,6 +61,11 @@ namespace Oryx
 
 		// The seed
 		ruint mSeed;
+
+		// a static Rand, for one-off generation, so we don't need to
+		// create a new one every time, saves manually calling rand(), etc
+		static Rand mRand;
+
 
 	};
 }

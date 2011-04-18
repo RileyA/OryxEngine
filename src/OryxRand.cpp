@@ -22,7 +22,8 @@
 namespace Oryx
 {
 	const ruint Rand::ORYX_RAND_MAX = RAND_MAX;
-	
+	Rand Rand::mRand = Rand();
+
 	Rand::Rand(ruint seed)
 	{
 		mSeed = (seed == 0 ? time(0) : seed);
