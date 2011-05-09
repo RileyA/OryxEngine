@@ -95,7 +95,7 @@ namespace Oryx
 
 		while(!mStates.empty()&&!mKill)
 		{
-			mStates[0]->init();
+			mStates.front()->init();
 			mKillState = false;
 
 			while(!mKillState && !mStates.front()->isDone())
@@ -178,9 +178,7 @@ namespace Oryx
 
 	Bucket* Engine::getBucket(String name)
 	{
-		if(mBuckets.find(name)!=mBuckets.end())
-			return mBuckets[name];
-		return 0;
+		return mBuckets.find(name) != mBuckets.end() ? mBuckets[name] : 0;
 	}
 	//-----------------------------------------------------------------------	
 
