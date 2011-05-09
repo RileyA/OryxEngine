@@ -23,5 +23,6 @@
 
 namespace Oryx
 {
-	GameState::GameState(){mEngine=Engine::getPtr();}
+	GameState::GameState()
+		:mEngine(Engine::getPtr()),mDone(0){}
 }
