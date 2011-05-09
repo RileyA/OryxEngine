@@ -67,6 +67,7 @@ namespace Oryx
 	{
 		if(hasSlot(name))
 			return &(mSlots.find(name)->second);
+		return 0;
 	}
 	//-----------------------------------------------------------------------
 	
