@@ -30,6 +30,8 @@ namespace Oryx
     {
     public:
 
+		State():mDone(false){}
+
 		/** Should start the State up */
         virtual void init()=0;
 
