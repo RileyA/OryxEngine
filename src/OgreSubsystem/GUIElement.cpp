@@ -40,8 +40,6 @@ namespace Oryx
 		createSignal("unhovered");
 		createSignal("released");
 
-		mHover = false;
-
 		if(mName==""||mName=="AUTO")
 		{
 			mName = "GUIElementAutoName"+StringUtils::toString(msAutoNameIndex);
@@ -59,7 +57,8 @@ namespace Oryx
 	//-----------------------------------------------------------------------
 	
 	GUIElement::GUIElement(GUIScreen* screen,String name,int layer)
-		:mPosition(0,0),mScale(1,1),mParent(0),mScreen(screen),mLayer(layer),mName(name)
+		:mPosition(0,0),mScale(1,1),mParent(0),mScreen(screen),mLayer(layer),
+			mName(name),mHover(0)
 	{
 		createSignal("clicked");
 		createSignal("hovered");
