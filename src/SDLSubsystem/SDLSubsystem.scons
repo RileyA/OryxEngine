@@ -1,0 +1,2 @@
+env = Environment(CPPDEFINES=['BUILD_SDL_DLL','LINUX'])
+env.SharedLibrary('SDLSubsystem',['SDLdllmain.cpp','SDLSubsystem.cpp'],CPPPATH=['../src'],LIBPATH='../bin',LIBS=['OryxEngine','SDL'])
