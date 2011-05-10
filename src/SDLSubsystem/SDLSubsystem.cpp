@@ -22,7 +22,7 @@
 #include "OryxLogger.h"
 #include "OryxStringUtils.h"
 
-#include "SDL.h"
+#include "SDL/SDL.h"
 
 namespace Oryx
 {
@@ -111,7 +111,13 @@ namespace Oryx
 
     void SDLSubsystem::drawPixel(int x,int y,Colour colour)
     {
-        unsigned int col = SDL_MapRGB(mSurface->format, colour.getR8(), colour.getG8(), colour.getB8());
+		drawPixel(x, y, colour.getR8(), colour.getG8(), colour.getB8());
+    }
+	//-----------------------------------------------------------------------
+	
+    void SDLSubsystem::drawPixel(int x,int y,byte r, byte g, byte b)
+	{
+        unsigned int col = SDL_MapRGB(mSurface->format, r,g,b);
 
         switch (mSurface->format->BytesPerPixel)
         {
@@ -155,7 +161,8 @@ namespace Oryx
             }
             break;
         }
-    }
+	}
+
     //-----------------------------------------------------------------------
 
     void SDLSubsystem::setManual(bool manual)
@@ -181,4 +188,20 @@ namespace Oryx
         return mBackgroundColour;
     }
     //-----------------------------------------------------------------------
+	
+	// TODO cleanup, hacked in for kinect testage
+	void SDLSubsystem::drawRaw(byte* data)
+	{
+        lock();
+		for(int i = 0; i < 640; ++i)
+			for(int j = 0; j < 480; ++j)
+		{
+			byte r = data[3*(i + j*640)];
+			byte g = data[3*(i + j*640)+1];
+			byte b = data[3*(i + j*640)+2];
+			drawPixel(i,j,r,g,b);
+		}
+		unlock();
+		flip();
+	}
 }

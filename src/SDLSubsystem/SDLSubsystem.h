@@ -46,10 +46,13 @@ namespace Oryx
         void unlock();
         void flip();
         void drawPixel(int x,int y,Colour colour);
+        void drawPixel(int x,int y,byte r, byte g, byte b);
         void setManual(bool manual);
         bool getManual();
         void setBackgroundColour(Colour col);
         Colour getBackgroundColour();
+
+		void drawRaw(byte* data);
 
     protected:
 
