@@ -189,17 +189,15 @@ namespace Oryx
     }
     //-----------------------------------------------------------------------
 	
-	// TODO cleanup, hacked in for kinect testage
-	void SDLSubsystem::drawRaw(byte* data)
+	void SDLSubsystem::drawRaw(byte* data,int x,int y)
 	{
         lock();
-		for(int i = 0; i < 640; ++i)
-			for(int j = 0; j < 480; ++j)
+		for(int i = 0; i < 640*480; ++i)
 		{
-			byte r = data[3*(i + j*640)];
-			byte g = data[3*(i + j*640)+1];
-			byte b = data[3*(i + j*640)+2];
-			drawPixel(i,j,r,g,b);
+			byte r = data[i*3+0];
+			byte g = data[i*3+1];
+			byte b = data[i*3+2];
+			drawPixel(i%640+x,i/640+y,r,g,b);
 		}
 		unlock();
 		flip();

@@ -52,7 +52,7 @@ namespace Oryx
         void setBackgroundColour(Colour col);
         Colour getBackgroundColour();
 
-		void drawRaw(byte* data);
+		void drawRaw(byte* data, int x=0, int y=0);
 
     protected:
 
