@@ -23,7 +23,7 @@
 
 namespace Oryx
 {
-    Logger::Logger() : mActive(true)
+	Logger::Logger() : mActive(true)
 	{
 		mLogFile.open("Oryx.log");
 		createSignal("Log");
@@ -37,7 +37,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-    void Logger::logMessage(String message)
+	void Logger::logMessage(String message)
 	{
 		if(mActive)
 		{
@@ -64,10 +64,10 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-    Logger* Logger::getPtr()
-    {
-        static Logger lgr;
-        return &lgr;
-    }
-    //-----------------------------------------------------------------------
+	Logger* Logger::getPtr()
+	{
+		static Logger lgr;
+		return &lgr;
+	}
+	//-----------------------------------------------------------------------
 }

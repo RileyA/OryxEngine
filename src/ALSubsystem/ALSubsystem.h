@@ -30,20 +30,20 @@
 
 namespace Oryx
 {
-    class ORYX_AL_EXPORT ALSubsystem : public EngineSubsystem
-    {
-    public:
+	class ORYX_AL_EXPORT ALSubsystem : public EngineSubsystem
+	{
+	public:
 
-        ALSubsystem();
-        ~ALSubsystem();
+		ALSubsystem();
+		~ALSubsystem();
 
-        virtual void _init();
-        virtual void _deinit();
-        virtual void _update(Real delta);
-        virtual void _endState();
-        virtual String getName();
+		virtual void _init();
+		virtual void _deinit();
+		virtual void _update(Real delta);
+		virtual void _endState();
+		virtual String getName();
 
-        SoundPtr play2D(String filename);
+		SoundPtr play2D(String filename);
 		bool bufferSound(String filename);
 		void update();
 		bool loadSound(String filename);
@@ -53,19 +53,19 @@ namespace Oryx
 
 		ActiveSound* getActiveSound(unsigned int index);
 
-    protected:
+	protected:
 
-        bool mInitialized;
+		bool mInitialized;
 
-        std::map<std::string,BufferedSound*> mBuffers;
+		std::map<std::string,BufferedSound*> mBuffers;
 		std::vector<ActiveSound*> mSounds;
 		unsigned int mMaxSources;
 
 		float mDefaultVolume;
 		float mDefaultVolumeOgg;
-        bool mVolumeDirty;
-        bool mVolumeOggDirty;
-    };
+		bool mVolumeDirty;
+		bool mVolumeOggDirty;
+	};
 }
 
 #endif

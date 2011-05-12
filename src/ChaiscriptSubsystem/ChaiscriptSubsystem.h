@@ -26,50 +26,50 @@
 
 namespace Oryx
 {
-    class ChaiWrapper;
+	class ChaiWrapper;
 
-    class ORYX_CHAI_EXPORT ChaiscriptSubsystem : public EngineSubsystem
-    {
-    public:
+	class ORYX_CHAI_EXPORT ChaiscriptSubsystem : public EngineSubsystem
+	{
+	public:
 
-        ChaiscriptSubsystem();
-        ~ChaiscriptSubsystem();
+		ChaiscriptSubsystem();
+		~ChaiscriptSubsystem();
 
 		/** Starts the scripting system up */
-        virtual void _init();
+		virtual void _init();
 
 		/** Shuts the scripting system down */
-        virtual void _deinit();
+		virtual void _deinit();
 
 		/** Updates the scripting system
 		 *		@param delte The time since the last frame */
-        virtual void _update(Real delta);
+		virtual void _update(Real delta);
 
 		/** Called when the current state ends  */
-        virtual void _endState();
+		virtual void _endState();
 
 		/** Returns the name of this susbsystem */
-        virtual String getName();
+		virtual String getName();
 
-        /** Runs a .chai script
-            @param filename The name of the file to open */
+		/** Runs a .chai script
+			@param filename The name of the file to open */
 		void runScript(String filename);
 
 		/** Runs a line of script
-            @param script The scripting code */
+			@param script The scripting code */
 		void runString(String script);
 
 		/** Gets a pointer to the ChaiWrapper */
 		ChaiWrapper* getWrapper();
 
-    protected:
+	protected:
 
-        void _registerBasicTypes();
+		void _registerBasicTypes();
 
-        bool mInitialized;
-        ChaiWrapper* mChai;
+		bool mInitialized;
+		ChaiWrapper* mChai;
 
-    };
+	};
 }
 
 #endif

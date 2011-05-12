@@ -56,78 +56,78 @@ namespace Oryx
 	}
 	#endif
 
-    ChaiscriptSubsystem::ChaiscriptSubsystem()
-        :EngineSubsystem(),mInitialized(0),mChai(0){}
-    //-----------------------------------------------------------------------
+	ChaiscriptSubsystem::ChaiscriptSubsystem()
+		:EngineSubsystem(),mInitialized(0),mChai(0){}
+	//-----------------------------------------------------------------------
 
-    ChaiscriptSubsystem::~ChaiscriptSubsystem()
-    {
-        if(mChai)
-            delete mChai;
-        mChai = 0;
-    }
-    //-----------------------------------------------------------------------
+	ChaiscriptSubsystem::~ChaiscriptSubsystem()
+	{
+		if(mChai)
+			delete mChai;
+		mChai = 0;
+	}
+	//-----------------------------------------------------------------------
 
-    void ChaiscriptSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
-            mChai = new ChaiWrapper();
-            _registerBasicTypes();
+	void ChaiscriptSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
+			mChai = new ChaiWrapper();
+			_registerBasicTypes();
 
-            mInitialized = true;
-            Logger::getPtr()->logMessage("Chaiscript Subsystem Initialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+			mInitialized = true;
+			Logger::getPtr()->logMessage("Chaiscript Subsystem Initialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void ChaiscriptSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
-            if(mChai)
-                delete mChai;
-            mChai = 0;
-            mInitialized = false;
-            Logger::getPtr()->logMessage("Chaiscript Subsystem Deinitialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+	void ChaiscriptSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
+			if(mChai)
+				delete mChai;
+			mChai = 0;
+			mInitialized = false;
+			Logger::getPtr()->logMessage("Chaiscript Subsystem Deinitialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void ChaiscriptSubsystem::_update(Real delta)
-    {
-        // nothing to do here.
-    }
-    //-----------------------------------------------------------------------
+	void ChaiscriptSubsystem::_update(Real delta)
+	{
+		// nothing to do here.
+	}
+	//-----------------------------------------------------------------------
 
-    void ChaiscriptSubsystem::_endState()
-    {
+	void ChaiscriptSubsystem::_endState()
+	{
 
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String ChaiscriptSubsystem::getName()
-    {
-        return String("ChaiscriptSubsystem");
-    }
-    //-----------------------------------------------------------------------
+	String ChaiscriptSubsystem::getName()
+	{
+		return String("ChaiscriptSubsystem");
+	}
+	//-----------------------------------------------------------------------
 
-    void ChaiscriptSubsystem::runScript(String filename)
-    {
-        try
+	void ChaiscriptSubsystem::runScript(String filename)
+	{
+		try
 		{
 			mChai->getChai()->eval_file(filename);
 		}
 		catch(chaiscript::Eval_Error e)
 		{
-		    Logger::getPtr()->logMessage(String("Script Error: ")+e.what());
+			Logger::getPtr()->logMessage(String("Script Error: ")+e.what());
 		}
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void ChaiscriptSubsystem::runString(String script)
-    {
-        try
+	void ChaiscriptSubsystem::runString(String script)
+	{
+		try
 		{
 			mChai->getChai()->eval(script);
 		}
@@ -135,70 +135,70 @@ namespace Oryx
 		{
 			Logger::getPtr()->logMessage(String("Script Error: ")+e.what());
 		}
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    ChaiWrapper* ChaiscriptSubsystem::getWrapper()
-    {
-        return mChai;
-    }
-    //-----------------------------------------------------------------------
+	ChaiWrapper* ChaiscriptSubsystem::getWrapper()
+	{
+		return mChai;
+	}
+	//-----------------------------------------------------------------------
 
 	void ChaiscriptSubsystem::_registerBasicTypes()
 	{
-        // game state stuff
-	    mChai->registerType<State>("State");
-	    mChai->registerType<GameState>("GameState");
+		// game state stuff
+		mChai->registerType<State>("State");
+		mChai->registerType<GameState>("GameState");
 
-        // subsystem
-	    mChai->registerType<EngineSubsystem>("EngineSubsystem");
-        mChai->registerFunction(&EngineSubsystem::getName, "getName");
+		// subsystem
+		mChai->registerType<EngineSubsystem>("EngineSubsystem");
+		mChai->registerFunction(&EngineSubsystem::getName, "getName");
 
-	    // The engine object itself
-	    mChai->registerType<Engine>("Engine");
+		// The engine object itself
+		mChai->registerType<Engine>("Engine");
 		mChai->registerConstructor<Engine (void)>("Engine");
-        mChai->registerFunction(&Engine::init, "init");
-        mChai->registerFunction(&Engine::start, "start");
-        mChai->registerFunction(&Engine::getPtr, "getEngine");
-        mChai->registerFunction(&Engine::getSubsystem, "getSubsystem");
-        mChai->registerFunction(&Engine::shutdown, "shutdown");
-        mChai->registerFunction(&Engine::endCurrentState, "endCurrentState");
+		mChai->registerFunction(&Engine::init, "init");
+		mChai->registerFunction(&Engine::start, "start");
+		mChai->registerFunction(&Engine::getPtr, "getEngine");
+		mChai->registerFunction(&Engine::getSubsystem, "getSubsystem");
+		mChai->registerFunction(&Engine::shutdown, "shutdown");
+		mChai->registerFunction(&Engine::endCurrentState, "endCurrentState");
 
-        // the logger system
+		// the logger system
 		mChai->registerType<Logger>("Logger");
-        mChai->registerFunction(&Logger::logMessage, "logMessage");
-        mChai->registerFunction(&Logger::getPtr, "getLog");
+		mChai->registerFunction(&Logger::logMessage, "logMessage");
+		mChai->registerFunction(&Logger::getPtr, "getLog");
 
-	    // the time manager
-	    mChai->registerType<TimeManager>("TimeManager");
-        mChai->registerFunction(&TimeManager::getTimeSpeed, "getTimeSpeed");
-        mChai->registerFunction(&TimeManager::setTimeSpeed, "setTimeSpeed");
-        mChai->registerFunction(&TimeManager::getPtr, "getTimer");
+		// the time manager
+		mChai->registerType<TimeManager>("TimeManager");
+		mChai->registerFunction(&TimeManager::getTimeSpeed, "getTimeSpeed");
+		mChai->registerFunction(&TimeManager::setTimeSpeed, "setTimeSpeed");
+		mChai->registerFunction(&TimeManager::getPtr, "getTimer");
 
-        // register the script system (so scripts can run other scripts, etc)
-        mChai->registerType<ChaiscriptSubsystem>("ChaiscriptSubsystem");
-        mChai->registerFunction(&ChaiscriptSubsystem::runString, "runString");
-        mChai->registerFunction(&ChaiscriptSubsystem::runString, "runScript");
+		// register the script system (so scripts can run other scripts, etc)
+		mChai->registerType<ChaiscriptSubsystem>("ChaiscriptSubsystem");
+		mChai->registerFunction(&ChaiscriptSubsystem::runString, "runString");
+		mChai->registerFunction(&ChaiscriptSubsystem::runString, "runScript");
 
-        mChai->registerType<Colour>("Colour");
+		mChai->registerType<Colour>("Colour");
 		mChai->registerFunction(&Colour::r, "r");
 		mChai->registerFunction(&Colour::g, "g");
 		mChai->registerFunction(&Colour::b, "b");
 		mChai->registerFunction(&Colour::a, "a");
 
-        mChai->registerType<Vector3>("Vector3");
+		mChai->registerType<Vector3>("Vector3");
 		mChai->registerFunction(&Vector3::x, "x");
 		mChai->registerFunction(&Vector3::y, "y");
 		mChai->registerFunction(&Vector3::z, "z");
 
-        // fun( static_cast<bool (Vector3::*)(const Vector3)>(&...)
-        //Vector3 (Vector3::*)(const Vector3)
+		// fun( static_cast<bool (Vector3::*)(const Vector3)>(&...)
+		//Vector3 (Vector3::*)(const Vector3)
 
-        // register subsystems
-        #ifdef ORYX_CHAI_REGISTER_OPENAL
+		// register subsystems
+		#ifdef ORYX_CHAI_REGISTER_OPENAL
 		mChai->registerFunction(&getAL,"getAL");
 
-        mChai->registerType<ALSubsystem>("ALSubsystem");
+		mChai->registerType<ALSubsystem>("ALSubsystem");
 		mChai->registerType<SoundPtr>("SoundPtr");
 		mChai->registerType<ActiveSound>("ActiveSound");
 		mChai->registerType<BufferedSound>("BufferedSound");
@@ -208,17 +208,17 @@ namespace Oryx
 		mChai->registerFunction(&ALSubsystem::bufferSound, "bufferSound");
 		mChai->registerFunction(&ALSubsystem::setDefaultVolume, "setVolume");
 		mChai->registerFunction(&ALSubsystem::setDefaultVolumeOgg, "setVolumeOgg");
-        #endif
+		#endif
 		
-        #ifdef ORYX_CHAI_REGISTER_OGRE
+		#ifdef ORYX_CHAI_REGISTER_OGRE
 
 		mChai->registerFunction(&getOgre,"getOgre");
 
-        mChai->registerType<OgreSubsystem>("OgreSubsystem");
-        mChai->registerType<OgreSubsystem>("SceneNode");
-        mChai->registerType<OgreSubsystem>("Mesh");
-        mChai->registerType<OgreSubsystem>("Camera");
-        mChai->registerType<OgreSubsystem>("Light");
+		mChai->registerType<OgreSubsystem>("OgreSubsystem");
+		mChai->registerType<OgreSubsystem>("SceneNode");
+		mChai->registerType<OgreSubsystem>("Mesh");
+		mChai->registerType<OgreSubsystem>("Camera");
+		mChai->registerType<OgreSubsystem>("Light");
 
 		mChai->registerFunction(&OgreSubsystem::createCamera,"createCamera");
 		//mChai->registerFunction(&OgreSubsystem::createMesh,"createMesh");
@@ -289,9 +289,9 @@ namespace Oryx
 
 		
 		#endif
-        #ifdef ORYX_CHAI_REGISTER_OIS
+		#ifdef ORYX_CHAI_REGISTER_OIS
 
-        #endif
+		#endif
 	}
 	//-----------------------------------------------------------------------
 }

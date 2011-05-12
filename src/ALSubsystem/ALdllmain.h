@@ -28,14 +28,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_AL_DLL
-        #define ORYX_AL_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_AL_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_AL_DLL
+		#define ORYX_AL_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_AL_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_AL_EXPORT
+	#define ORYX_AL_EXPORT
 #endif
 
 #endif

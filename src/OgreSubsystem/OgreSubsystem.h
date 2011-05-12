@@ -46,25 +46,25 @@ namespace Ogre
 namespace Oryx
 {
 	/** 3d graphics subsystem that wraps the Ogre3d engine */
-    class ORYX_OGRE_EXPORT OgreSubsystem : public EngineSubsystem
-    {
-    public:
+	class ORYX_OGRE_EXPORT OgreSubsystem : public EngineSubsystem
+	{
+	public:
 
 		OgreSubsystem(unsigned int resX=800,unsigned int resY=600,bool fullscreen=false,
 			std::map<String,String> params=std::map<String,String>());
-        virtual ~OgreSubsystem();
+		virtual ~OgreSubsystem();
 
 		/** INTERNAL: inits the system */
-        virtual void _init();
+		virtual void _init();
 		/** INTERNAL: deinits the system */
-        virtual void _deinit();
+		virtual void _deinit();
 		/** INTERNAL: updates the system */
-        virtual void _update(Real delta);
+		virtual void _update(Real delta);
 		/** INTERNAL: called at the end of a state */
-        virtual void _endState();
+		virtual void _endState();
 		/** Gets the name of the system 
 			@return The name ("OgreSubsystem") */
-        virtual String getName();
+		virtual String getName();
 
 		/** render a single frame */
 		void renderFrame();
@@ -165,9 +165,9 @@ namespace Oryx
 
 		size_t getWindowHandle();
 
-    protected:
+	protected:
 
-        bool mInitialized;
+		bool mInitialized;
 
 		GUI* mGUI;
 
@@ -191,7 +191,7 @@ namespace Oryx
 
 		int mAutoNameIndex;
 
-    };
+	};
 }
 
 #endif

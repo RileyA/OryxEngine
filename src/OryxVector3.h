@@ -36,13 +36,13 @@ namespace Oryx
 		Real z;
 
 		static const Vector3 ZERO;
-        static const Vector3 UNIT_X;
-        static const Vector3 UNIT_Y;
-        static const Vector3 UNIT_Z;
-        static const Vector3 NEGATIVE_UNIT_X;
-        static const Vector3 NEGATIVE_UNIT_Y;
-        static const Vector3 NEGATIVE_UNIT_Z;
-        static const Vector3 UNIT_SCALE;
+		static const Vector3 UNIT_X;
+		static const Vector3 UNIT_Y;
+		static const Vector3 UNIT_Z;
+		static const Vector3 NEGATIVE_UNIT_X;
+		static const Vector3 NEGATIVE_UNIT_Y;
+		static const Vector3 NEGATIVE_UNIT_Z;
+		static const Vector3 UNIT_SCALE;
 
 		Vector3() : x(0), y(0),z(0){}
 		Vector3(Real coords[3]) : x(coords[0]),y(coords[1]),z(coords[2]){}
@@ -64,15 +64,15 @@ namespace Oryx
 		{
 			Real fLength = sqrt( x * x + y * y + z * z );
 
-            if ( fLength > 1e-08 )
-            {
-                Real fInvLength = 1.0f / fLength;
-                x *= fInvLength;
-                y *= fInvLength;
-                z *= fInvLength;
-            }
+			if ( fLength > 1e-08 )
+			{
+				Real fInvLength = 1.0f / fLength;
+				x *= fInvLength;
+				y *= fInvLength;
+				z *= fInvLength;
+			}
 
-            return fLength;
+			return fLength;
 		}
 
 		/** Gets the length of this vector
@@ -106,17 +106,17 @@ namespace Oryx
 		 *		@return The distance 
 		 *		@remarks The */
 		Real distance(const Vector3& vect) const
-        {
-            return (*this - vect).length();
-        }
+		{
+			return (*this - vect).length();
+		}
 
 		/** Gets the squared distance between this vector and another
 		 *		@param vect The vector to get the dist to
 		 *		@return The squared distance */
 		Real squaredDistance(const Vector3& vect) const
-        {
-            return (*this - vect).length();
-        }
+		{
+			return (*this - vect).length();
+		}
 
 		/** Computes the dot (scalar) product of this vector with another 
 		 *		@param vect The vector to dot with 
@@ -150,13 +150,13 @@ namespace Oryx
 		bool isZeroLength()
 		{
 			Real sqlen = (x * x) + (y * y) + (z * z);
-            return (sqlen < (1e-06 * 1e-06));
+			return (sqlen < (1e-06 * 1e-06));
 		}
 
 		/** Gets the Quaternion required to rotate this vector to another
 		 *		@param dest The destination vector 
 		 *		@return The rotation (as a Quaternion) */
-        Quaternion getRotationTo(const Vector3& dest) const;
+		Quaternion getRotationTo(const Vector3& dest) const;
 
 		bool operator==(const Vector3 vect)
 		{
@@ -261,14 +261,14 @@ namespace Oryx
 		}
 
 		Real& operator [] ( const size_t i )
-        {
-            return *(&x+i);
-        }
+		{
+			return *(&x+i);
+		}
 
 		const Real& operator [] ( const size_t i ) const
-        {
-            return *(&x+i);
-        }
+		{
+			return *(&x+i);
+		}
 
 	};
 }

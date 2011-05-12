@@ -33,21 +33,21 @@
 
 namespace Oryx
 {
-    ALSubsystem::ALSubsystem()
-        :EngineSubsystem(),mInitialized(0){}
-    //-----------------------------------------------------------------------
+	ALSubsystem::ALSubsystem()
+		:EngineSubsystem(),mInitialized(0){}
+	//-----------------------------------------------------------------------
 
-    ALSubsystem::~ALSubsystem()
-    {
-        _deinit();
-    }
-    //-----------------------------------------------------------------------
+	ALSubsystem::~ALSubsystem()
+	{
+		_deinit();
+	}
+	//-----------------------------------------------------------------------
 
-    void ALSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
-            Logger::getPtr()->logMessage("AL Subsystem starting up...");
+	void ALSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
+			Logger::getPtr()->logMessage("AL Subsystem starting up...");
 			mDefaultVolume = 1.f;
 			mDefaultVolumeOgg = 1.f;
 
@@ -92,17 +92,17 @@ namespace Oryx
 				mSounds.push_back(new ActiveSound());// empty sound source
 				b++;
 			}
-            Logger::getPtr()->logMessage("AL Subsystem started up.");
-            mInitialized = true;
-        }
-    }
-    //-----------------------------------------------------------------------
+			Logger::getPtr()->logMessage("AL Subsystem started up.");
+			mInitialized = true;
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void ALSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
-            Logger::getPtr()->logMessage("AL Subsystem shutting down...");
+	void ALSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
+			Logger::getPtr()->logMessage("AL Subsystem shutting down...");
 			for(unsigned int i=0;i<mSounds.size();++i)
 			{
 				delete mSounds[i];
@@ -119,14 +119,14 @@ namespace Oryx
 			mBuffers.clear();
 
 			alutExit();
-            Logger::getPtr()->logMessage("AL Subsystem shut down.");
-            mInitialized = false;
-        }
-    }
-    //-----------------------------------------------------------------------
+			Logger::getPtr()->logMessage("AL Subsystem shut down.");
+			mInitialized = false;
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void ALSubsystem::_update(Real delta)
-    {
+	void ALSubsystem::_update(Real delta)
+	{
 		for(unsigned int i=0;i<mSounds.size();++i)
 		{
 			mSounds[i]->update();
@@ -143,24 +143,24 @@ namespace Oryx
 				mSounds[i]->updateData();
 			}
 		}
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void ALSubsystem::_endState()
-    {
+	void ALSubsystem::_endState()
+	{
 
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String ALSubsystem::getName()
-    {
-        return String("ALSubsystem");
-    }
-    //-----------------------------------------------------------------------
+	String ALSubsystem::getName()
+	{
+		return String("ALSubsystem");
+	}
+	//-----------------------------------------------------------------------
 
-    SoundPtr ALSubsystem::play2D(String filename)
-    {
-        if(mBuffers.find(filename)!=mBuffers.end())
+	SoundPtr ALSubsystem::play2D(String filename)
+	{
+		if(mBuffers.find(filename)!=mBuffers.end())
 		{
 			if(!mBuffers[filename]->isLoaded())
 			{
@@ -188,18 +188,18 @@ namespace Oryx
 		}
 
 		return SoundPtr(index,mSounds[index]->getStartTime(),this);
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    bool ALSubsystem::bufferSound(String filename)
-    {
-        return false;
-    }
-    //-----------------------------------------------------------------------
+	bool ALSubsystem::bufferSound(String filename)
+	{
+		return false;
+	}
+	//-----------------------------------------------------------------------
 
-    bool ALSubsystem::loadSound(String filename)
-    {
-        String outName,outExt;
+	bool ALSubsystem::loadSound(String filename)
+	{
+		String outName,outExt;
 		outExt = filename.substr(filename.size()-3);
 		if(outExt=="wav")
 		{
@@ -212,22 +212,22 @@ namespace Oryx
 			return true;
 		}
 		return false;
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void ALSubsystem::setDefaultVolume(float volume)
-    {
-        mDefaultVolume = volume;
-    }
-    //-----------------------------------------------------------------------
+	void ALSubsystem::setDefaultVolume(float volume)
+	{
+		mDefaultVolume = volume;
+	}
+	//-----------------------------------------------------------------------
 
-    void ALSubsystem::setDefaultVolumeOgg(float volume)
-    {
+	void ALSubsystem::setDefaultVolumeOgg(float volume)
+	{
 		mDefaultVolumeOgg = volume;
-    }
+	}
 
-    //-----------------------------------------------------------------------
-    ActiveSound* ALSubsystem::getActiveSound(unsigned int index)
+	//-----------------------------------------------------------------------
+	ActiveSound* ALSubsystem::getActiveSound(unsigned int index)
 	{
 		if(index<mSounds.size())
 		{

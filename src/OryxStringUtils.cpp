@@ -24,55 +24,55 @@ namespace Oryx
 	String StringUtils::toString(long long val)
 	{
 		std::stringstream stream;
-        stream.precision(6);
-        stream.width(0);
-        stream.fill(' ');
-        stream<<val;
-        return stream.str();
+		stream.precision(6);
+		stream.width(0);
+		stream.fill(' ');
+		stream<<val;
+		return stream.str();
 	}
 	//-----------------------------------------------------------------------
 
 	String StringUtils::toString(int val)
 	{
 		std::stringstream stream;
-        stream.precision(6);
-        stream.width(0);
-        stream.fill(' ');
-        stream<<val;
-        return stream.str();
+		stream.precision(6);
+		stream.width(0);
+		stream.fill(' ');
+		stream<<val;
+		return stream.str();
 	}
 	//-----------------------------------------------------------------------
 
 	String StringUtils::toString(unsigned int val)
 	{
 		std::stringstream stream;
-        stream.precision(6);
-        stream.width(0);
-        stream.fill(' ');
-        stream<<val;
-        return stream.str();
+		stream.precision(6);
+		stream.width(0);
+		stream.fill(' ');
+		stream<<val;
+		return stream.str();
 	}
 	//-----------------------------------------------------------------------
 
 	String StringUtils::toString(Real val)
 	{
 		std::stringstream stream;
-        stream.precision(6);
-        stream.width(0);
-        stream.fill(' ');
-        stream<<val;
-        return stream.str();
+		stream.precision(6);
+		stream.width(0);
+		stream.fill(' ');
+		stream<<val;
+		return stream.str();
 	}
 	//-----------------------------------------------------------------------
 
 	String StringUtils::toString(double val)
 	{
 		std::stringstream stream;
-        stream.precision(6);
-        stream.width(0);
-        stream.fill(' ');
-        stream<<val;
-        return stream.str();
+		stream.precision(6);
+		stream.width(0);
+		stream.fill(' ');
+		stream<<val;
+		return stream.str();
 	}
 	//-----------------------------------------------------------------------
 }

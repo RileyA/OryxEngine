@@ -30,43 +30,43 @@ namespace Oryx
 	class Bucket;
 	class Object;
 
-    /** The main Engine class for the whole thing.
-        Everything starts here. */
-    class ORYX_EXPORT Engine : public EventHandler
-    {
-    public:
+	/** The main Engine class for the whole thing.
+		Everything starts here. */
+	class ORYX_EXPORT Engine : public EventHandler
+	{
+	public:
 		
 		/** Constructor */
-        Engine();
+		Engine();
 		/** Destructor */
-        ~Engine();
+		~Engine();
 
-        /** Adds a subsystem to the engine
+		/** Adds a subsystem to the engine
 		 *		@param system The system to be added
 		 *		@remarks Note that the system will not be init-ed until
 		 *			Engine::init() is called*/
-        void addSubsystem(EngineSubsystem* system);
+		void addSubsystem(EngineSubsystem* system);
 
-        /** Adds a game state to the stack
-         *		@param Pointer to the state */
-        void addState(GameState* state);
+		/** Adds a game state to the stack
+		 *		@param Pointer to the state */
+		void addState(GameState* state);
 
-        /** Initializes the engine and all added subsystems
+		/** Initializes the engine and all added subsystems
 		 *		@returns Whether or not all systems init-ed sucessfully */
-        bool init();
+		bool init();
 
-        /** Starts the engine. It will run until it runs out of states
+		/** Starts the engine. It will run until it runs out of states
 		 *		@returns Whether or not the run was sucessful */
-        bool start();
+		bool start();
 
-        /** Forces a shutdown */
-        void shutdown();
+		/** Forces a shutdown */
+		void shutdown();
 
-        /** Forces the current state to end */
-        void endCurrentState();
+		/** Forces the current state to end */
+		void endCurrentState();
 
-        /** Gets an engine subsystem by name */
-        EngineSubsystem* getSubsystem(String name);
+		/** Gets an engine subsystem by name */
+		EngineSubsystem* getSubsystem(String name);
 
 		/** Creates a new Object Bucket
 		 *		@param name What to name the bucket (must be unique)
@@ -97,48 +97,48 @@ namespace Oryx
 
 		virtual void recieveMessage(const Message& message,EventHandler* sender);
 
-        /** INTERNAL: deinitializes all subsystems */
-        void _deinit();
+		/** INTERNAL: deinitializes all subsystems */
+		void _deinit();
 
-        /** Get a pointer to the engine from anywhere
-         *		@remarks The engine must have been created explicitly
-         *			before this will work */
-        static Engine* getPtr()
-        {
-            return msInstance;
-        }
+		/** Get a pointer to the engine from anywhere
+		 *		@remarks The engine must have been created explicitly
+		 *			before this will work */
+		static Engine* getPtr()
+		{
+			return msInstance;
+		}
 
-        /** Get a reference to the engine from anywhere
-         *		@remarks The engine must have been created explicitly
-         *			before this will work */
-        static Engine& getRef()
-        {
-            assert(msInstance);
-            return *msInstance;
-        }
+		/** Get a reference to the engine from anywhere
+		 *		@remarks The engine must have been created explicitly
+		 *			before this will work */
+		static Engine& getRef()
+		{
+			assert(msInstance);
+			return *msInstance;
+		}
 
-    private:
+	private:
 
 		// The states
-        std::deque<GameState*> mStates;
-        std::map<String,EngineSubsystem*> mSubsystems;
+		std::deque<GameState*> mStates;
+		std::map<String,EngineSubsystem*> mSubsystems;
 
 		std::map<String,Bucket*> mBuckets;
 
-        bool mInitialized;
-        bool mKill;
-        bool mKillState;
+		bool mInitialized;
+		bool mKill;
+		bool mKillState;
 
-        Logger* mLogger;
-        TimeManager* mTimeManager;
+		Logger* mLogger;
+		TimeManager* mTimeManager;
 
-        static Engine* msInstance;
+		static Engine* msInstance;
 
-        // don't allow these, 'tis a singleton
-        Engine(const Engine &);
+		// don't allow these, 'tis a singleton
+		Engine(const Engine &);
 		Engine& operator=(const Engine &);
 
-    };
+	};
 }
 
 #endif

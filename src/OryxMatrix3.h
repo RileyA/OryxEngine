@@ -36,12 +36,12 @@ namespace Oryx
 
 		Matrix3 () {};
 
-        explicit Matrix3 (const float arr[3][3])
+		explicit Matrix3 (const float arr[3][3])
 		{
 			memcpy(m,arr,9*sizeof(float));
 		}
 
-        Matrix3 (const Matrix3& rkMatrix)
+		Matrix3 (const Matrix3& rkMatrix)
 		{
 			memcpy(m,rkMatrix.m,9*sizeof(float));
 		}
@@ -74,31 +74,31 @@ namespace Oryx
 			std::swap(m[2][2], other.m[2][2]);
 		}
 
-        float* operator[] (size_t row) const
+		float* operator[] (size_t row) const
 		{
 			return (float*)m[row];
 		}
 
 		void SetColumn(size_t iCol, const Vector3& vec);
 
-        Vector3 operator* (const Vector3& rkVector) const;
+		Vector3 operator* (const Vector3& rkVector) const;
 
-        friend Vector3 operator* (const Vector3& rkVector,
-            const Matrix3& rkMatrix);
+		friend Vector3 operator* (const Vector3& rkVector,
+			const Matrix3& rkMatrix);
 
-        Matrix3 operator* (Real fScalar) const;
+		Matrix3 operator* (Real fScalar) const;
 
-        friend Matrix3 operator* (Real fScalar, const Matrix3& rkMatrix);
+		friend Matrix3 operator* (Real fScalar, const Matrix3& rkMatrix);
 
-        void FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis);
+		void FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis);
 
-        bool Inverse (Matrix3& rkInverse, Real fTolerance = 1e-06) const;
-        Matrix3 Inverse (Real fTolerance = 1e-06) const;
+		bool Inverse (Matrix3& rkInverse, Real fTolerance = 1e-06) const;
+		Matrix3 Inverse (Real fTolerance = 1e-06) const;
 
-        Matrix3 Transpose() const;
+		Matrix3 Transpose() const;
 
 		static const Matrix3 ZERO;
-        static const Matrix3 IDENTITY;
+		static const Matrix3 IDENTITY;
 
 		Real m[3][3];
 	};

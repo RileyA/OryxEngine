@@ -27,32 +27,32 @@ namespace Oryx
 {
 	/** An abstract representation of an Engine Subsystem 
 	 *		The dependency system is really wonky right now... */
-    class ORYX_EXPORT EngineSubsystem : public EventHandler
-    {
-    public:
+	class ORYX_EXPORT EngineSubsystem : public EventHandler
+	{
+	public:
 
 		/** Constructor */
-        EngineSubsystem(){}
+		EngineSubsystem(){}
 
 		// should initialize the subsystem
-        virtual void _init() = 0;
+		virtual void _init() = 0;
 
 		// should deinit and clean up
-        virtual void _deinit() = 0;
+		virtual void _deinit() = 0;
 
 		// callback for when a GameState ends
-        virtual void _endState() = 0;
+		virtual void _endState() = 0;
 
 		/** Should update this state
 		 *		@param delta The time since the last frame */
-        virtual void _update(Real delta) = 0;
+		virtual void _update(Real delta) = 0;
 
 		/** Gets the name of this subsystem */
-        virtual String getName(){return "UnnamedSubsystem";}
+		virtual String getName(){return "UnnamedSubsystem";}
 
 		// Helper for casting to a derived type
-        template<typename T> T* castType(){return dynamic_cast<T*>(this);}
-    };
+		template<typename T> T* castType(){return dynamic_cast<T*>(this);}
+	};
 }
 
 #endif

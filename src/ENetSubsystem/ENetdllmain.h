@@ -34,14 +34,14 @@ typedef fastdelegate::FastDelegate2<unsigned char,std::string> clientAddCallback
 
 	#include <windows.h>
 
-    #ifdef BUILD_ENET_DLL
-        #define ORYX_ENET_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_ENET_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_ENET_DLL
+		#define ORYX_ENET_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_ENET_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_ENET_EXPORT
+	#define ORYX_ENET_EXPORT
 #endif
 
 #endif

@@ -28,14 +28,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_OGRE_DLL
-        #define ORYX_OGRE_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_OGRE_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_OGRE_DLL
+		#define ORYX_OGRE_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_OGRE_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_OGRE_EXPORT
+	#define ORYX_OGRE_EXPORT
 #endif
 
 #endif

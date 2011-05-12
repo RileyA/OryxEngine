@@ -31,24 +31,24 @@ namespace Oryx
 	class OISListener;
 
 	/** Input subsystem using OIS */
-    class ORYX_OIS_EXPORT OISSubsystem : public EngineSubsystem
-    {
-    public:
+	class ORYX_OIS_EXPORT OISSubsystem : public EngineSubsystem
+	{
+	public:
 
 		OISSubsystem();
-        virtual ~OISSubsystem();
+		virtual ~OISSubsystem();
 
 		/** INTERNAL: inits the system */
-        virtual void _init();
+		virtual void _init();
 		/** INTERNAL: deinits the system */
-        virtual void _deinit();
+		virtual void _deinit();
 		/** INTERNAL: updates the system */
-        virtual void _update(Real delta);
+		virtual void _update(Real delta);
 		/** INTERNAL: called at the end of a state */
-        virtual void _endState();
+		virtual void _endState();
 		/** Gets the name of the system 
 			@return The name ("OgreSubsystem") */
-        virtual String getName();
+		virtual String getName();
 
 		/** Gets whether or not a key is down by keycode */
 		bool isKeyDown(uint key);
@@ -90,9 +90,9 @@ namespace Oryx
 		/** Set up string -> keycode conversions */
 		void assignConversions();
 
-    protected:
+	protected:
 
-        bool mInitialized;
+		bool mInitialized;
 		size_t mHandle;
 		OISListener* mListener;
 		std::map<uint,String> mKeys;
@@ -108,7 +108,7 @@ namespace Oryx
 
 		bool mGrabbedMouse;
 
-    };
+	};
 }
 
 #endif

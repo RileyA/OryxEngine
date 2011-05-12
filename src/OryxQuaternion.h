@@ -63,11 +63,11 @@ namespace Oryx
 		/** Dots this Quaternion with another
 		 *		@param rkQ The Quaternion to dot with 
 		 *		@return The dot product */
-        Real dotProduct(const Quaternion& rkQ) const;
+		Real dotProduct(const Quaternion& rkQ) const;
 
 		/** Normalizes the Quaternion
 		 *		@return The original length */
-        Real normalize(void); 
+		Real normalize(void); 
 
 		/** Constructs a quaternion from an angle and an axis
 		 *		@param angle The angle
@@ -84,7 +84,7 @@ namespace Oryx
 
 		/** Computes and returns the inverse of this Quaternion 
 		 *		@returns The inverse Quaternion */
-        Quaternion inverse() const;
+		Quaternion inverse() const;
 
 		Vector3 operator*(Vector3 vect);
 		Quaternion operator-(const Quaternion& rkQ) const;

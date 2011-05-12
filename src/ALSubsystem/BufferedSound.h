@@ -58,7 +58,7 @@ namespace Oryx
 		bool isOgg();
 
 		unsigned int getBuffer();
-        #ifdef ORYX_H
+		#ifdef ORYX_H
 		String getFilename();
 		#endif
 

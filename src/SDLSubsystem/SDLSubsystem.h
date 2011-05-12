@@ -29,44 +29,44 @@ struct SDL_Surface;
 
 namespace Oryx
 {
-    class ORYX_SDL_EXPORT SDLSubsystem : public EngineSubsystem
-    {
-    public:
+	class ORYX_SDL_EXPORT SDLSubsystem : public EngineSubsystem
+	{
+	public:
 
-        SDLSubsystem(int width=640,int height=480);
-        ~SDLSubsystem();
+		SDLSubsystem(int width=640,int height=480);
+		~SDLSubsystem();
 
-        virtual void _init();
-        virtual void _deinit();
-        virtual void _update(Real delta);
-        virtual void _endState();
-        virtual String getName();
+		virtual void _init();
+		virtual void _deinit();
+		virtual void _update(Real delta);
+		virtual void _endState();
+		virtual String getName();
 
-        void lock();
-        void unlock();
-        void flip();
-        void drawPixel(int x,int y,Colour colour);
-        void drawPixel(int x,int y,byte r, byte g, byte b);
-        void setManual(bool manual);
-        bool getManual();
-        void setBackgroundColour(Colour col);
-        Colour getBackgroundColour();
+		void lock();
+		void unlock();
+		void flip();
+		void drawPixel(int x,int y,Colour colour);
+		void drawPixel(int x,int y,byte r, byte g, byte b);
+		void setManual(bool manual);
+		bool getManual();
+		void setBackgroundColour(Colour col);
+		Colour getBackgroundColour();
 
 		void drawRaw(byte* data, int x=0, int y=0);
 
-    protected:
+	protected:
 
-        bool mInitialized;
+		bool mInitialized;
 
-        SDL_Surface* mSurface;
-        Colour mBackgroundColour;
+		SDL_Surface* mSurface;
+		Colour mBackgroundColour;
 
-        int mWidth;
-        int mHeight;
+		int mWidth;
+		int mHeight;
 
-        bool mManual;
+		bool mManual;
 
-    };
+	};
 }
 
 #endif

@@ -29,17 +29,17 @@ namespace Oryx
 	const Colour Colour::Black = Colour(0.f,0.f,0.f);
 	const Colour Colour::White = Colour(1.f,1.f,1.f);
 
-    bool Colour::operator==(const Colour& col) const
-    {
-        return (r == col.r && g == col.g &&
-            b == col.b && a == col.a);
-    }
+	bool Colour::operator==(const Colour& col) const
+	{
+		return (r == col.r && g == col.g &&
+			b == col.b && a == col.a);
+	}
 	//-----------------------------------------------------------------------
 	
 
-    bool Colour::operator!=(const Colour& col) const
-    {
-        return !(*this == col);
-    }
+	bool Colour::operator!=(const Colour& col) const
+	{
+		return !(*this == col);
+	}
 	//-----------------------------------------------------------------------
 }

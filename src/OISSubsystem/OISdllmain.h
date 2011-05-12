@@ -28,14 +28,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_OIS_DLL
-        #define ORYX_OIS_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_OIS_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_OIS_DLL
+		#define ORYX_OIS_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_OIS_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_OIS_EXPORT
+	#define ORYX_OIS_EXPORT
 #endif
 
 #endif

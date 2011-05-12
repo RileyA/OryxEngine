@@ -56,78 +56,78 @@ namespace Oryx
 	}
 	#endif
 
-    LuaSubsystem::LuaSubsystem()
-        :ScriptingSubsystem(),mInitialized(0),mLua(0){}
-    //-----------------------------------------------------------------------
+	LuaSubsystem::LuaSubsystem()
+		:ScriptingSubsystem(),mInitialized(0),mLua(0){}
+	//-----------------------------------------------------------------------
 
-    LuaSubsystem::~LuaSubsystem()
-    {
-        if(mLua)
-            delete mLua;
-        mLua = 0;
-    }
-    //-----------------------------------------------------------------------
+	LuaSubsystem::~LuaSubsystem()
+	{
+		if(mLua)
+			delete mLua;
+		mLua = 0;
+	}
+	//-----------------------------------------------------------------------
 
-    void LuaSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
-            mLua = new LuaWrapper();
-            _registerBasicTypes();
+	void LuaSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
+			mLua = new LuaWrapper();
+			_registerBasicTypes();
 
-            mInitialized = true;
-            Logger::getPtr()->logMessage("Chaiscript Subsystem Initialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+			mInitialized = true;
+			Logger::getPtr()->logMessage("Chaiscript Subsystem Initialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void LuaSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
-            if(mLua)
-                delete mLua;
-            mLua = 0;
-            mInitialized = false;
-            Logger::getPtr()->logMessage("Chaiscript Subsystem Deinitialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+	void LuaSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
+			if(mLua)
+				delete mLua;
+			mLua = 0;
+			mInitialized = false;
+			Logger::getPtr()->logMessage("Chaiscript Subsystem Deinitialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void LuaSubsystem::_update(Real delta)
-    {
-        // nothing to do here.
-    }
-    //-----------------------------------------------------------------------
+	void LuaSubsystem::_update(Real delta)
+	{
+		// nothing to do here.
+	}
+	//-----------------------------------------------------------------------
 
-    void LuaSubsystem::_endState()
-    {
+	void LuaSubsystem::_endState()
+	{
 
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String LuaSubsystem::getName()
-    {
-        return String("LuaSubsystem");
-    }
-    //-----------------------------------------------------------------------
+	String LuaSubsystem::getName()
+	{
+		return String("LuaSubsystem");
+	}
+	//-----------------------------------------------------------------------
 
-    void LuaSubsystem::runScript(String filename)
-    {
-    }
-    //-----------------------------------------------------------------------
+	void LuaSubsystem::runScript(String filename)
+	{
+	}
+	//-----------------------------------------------------------------------
 
-    void LuaSubsystem::runString(String script)
-    {
+	void LuaSubsystem::runString(String script)
+	{
 		luaL_dostring(mLua->getLua(), script.c_str());
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    LuaWrapper* LuaSubsystem::getWrapper()
-    {
-        return mLua;
-    }
-    //-----------------------------------------------------------------------
+	LuaWrapper* LuaSubsystem::getWrapper()
+	{
+		return mLua;
+	}
+	//-----------------------------------------------------------------------
 
 	void LuaSubsystem::_registerBasicTypes()
 	{

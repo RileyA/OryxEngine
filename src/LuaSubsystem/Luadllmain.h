@@ -32,14 +32,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_LUA_DLL
-        #define ORYX_LUA_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_LUA_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_LUA_DLL
+		#define ORYX_LUA_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_LUA_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_LUA_EXPORT
+	#define ORYX_LUA_EXPORT
 #endif
 
 #endif

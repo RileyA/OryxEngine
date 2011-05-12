@@ -28,30 +28,30 @@ namespace Oryx
 	class Client;
 	class Server;
 
-    class ENetSubsystem : public EngineSubsystem
-    {
-    public:
+	class ENetSubsystem : public EngineSubsystem
+	{
+	public:
 
-        ENetSubsystem();
-        virtual ~ENetSubsystem();
+		ENetSubsystem();
+		virtual ~ENetSubsystem();
 
-        virtual void _init();
-        virtual void _deinit();
-        virtual void _update(Real delta);
-        virtual void _endState();
-        virtual String getName();
+		virtual void _init();
+		virtual void _deinit();
+		virtual void _update(Real delta);
+		virtual void _endState();
+		virtual String getName();
 
 		Client* createClient();
 		Server* createServer(int port);
 
-    protected:
+	protected:
 
-        bool mInitialized;
+		bool mInitialized;
 
 		std::vector<Client*> mClients;
 		std::vector<Server*> mServers;
 
-    };
+	};
 }
 
 #endif

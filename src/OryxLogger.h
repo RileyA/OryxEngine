@@ -25,11 +25,11 @@
 namespace Oryx
 {
 	/** Very simple singleton class for logging game events */
-    class ORYX_EXPORT Logger : public EventHandler
-    {
-    public:
+	class ORYX_EXPORT Logger : public EventHandler
+	{
+	public:
 
-        /** Gets a pointer to the Logger */
+		/** Gets a pointer to the Logger */
 		static Logger* getPtr();
 
 		/** Writes a message to the console and log file. 
@@ -42,16 +42,16 @@ namespace Oryx
 		/** Tells the Logger to stop outputting to the Oryx.log file */
 		void suppressFileOutput();
 
-    private:
+	private:
 
-        Logger();
+		Logger();
 		~Logger();
 		Logger(Logger const&);
 		Logger& operator=(Logger const&);
 
 		std::ofstream mLogFile;
 		bool mActive;
-    };
+	};
 }
 
 #endif

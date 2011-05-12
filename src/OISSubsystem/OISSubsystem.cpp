@@ -28,23 +28,23 @@
 namespace Oryx
 {
 	OISSubsystem::OISSubsystem()
-        :EngineSubsystem(),mInitialized(false),
+		:EngineSubsystem(),mInitialized(false),
 		mGrabbedMouse(false),mListener(0),mHandle(0)
 	{
 		EventHandler::registerDestination(getName(),this);
 	}
-    //-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------
 
-    OISSubsystem::~OISSubsystem()
-    {
-    }
-    //-----------------------------------------------------------------------
+	OISSubsystem::~OISSubsystem()
+	{
+	}
+	//-----------------------------------------------------------------------
 
-    void OISSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
-            Logger::getPtr()->logMessage("OIS Subsystem starting up...");
+	void OISSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
+			Logger::getPtr()->logMessage("OIS Subsystem starting up...");
 
 			createSignal("keyPressed");   // passes keycode on press
 			createSignal("keyReleased");  // passes keycode on release
@@ -79,49 +79,49 @@ namespace Oryx
 			mKeyPresses = mKeyStates;
 			mButtonPresses = mButtonStates;
 
-            Logger::getPtr()->logMessage("OIS Subsystem started up.");
-            mInitialized = true;
-        }
-    }
-    //-----------------------------------------------------------------------
+			Logger::getPtr()->logMessage("OIS Subsystem started up.");
+			mInitialized = true;
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void OISSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
-            Logger::getPtr()->logMessage("OIS Subsystem shutting down...");
+	void OISSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
+			Logger::getPtr()->logMessage("OIS Subsystem shutting down...");
 			if(mListener)
 			{
 				delete mListener;
 				mListener = 0;
 			}
-            Logger::getPtr()->logMessage("OIS Subsystem shut down.");
-            mInitialized = false;
-        }
-    }
-    //-----------------------------------------------------------------------
+			Logger::getPtr()->logMessage("OIS Subsystem shut down.");
+			mInitialized = false;
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void OISSubsystem::_update(Real delta)
-    {
+	void OISSubsystem::_update(Real delta)
+	{
 		if(mListener)
 			mListener->update();
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void OISSubsystem::_endState()
-    {
+	void OISSubsystem::_endState()
+	{
 		if(mListener)
 		{
 			delete mListener;
 			mListener = 0;
 		}
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String OISSubsystem::getName()
-    {
-        return String("OISSubsystem");
-    }
+	String OISSubsystem::getName()
+	{
+		return String("OISSubsystem");
+	}
 	//-----------------------------------------------------------------------
 
 	bool OISSubsystem::isKeyDown(uint key)

@@ -38,38 +38,38 @@
 
 namespace Oryx
 {
-    BulletSubsystem::BulletSubsystem()
-        :EngineSubsystem(),mInitialized(0),mStarted(0){}
-    //-----------------------------------------------------------------------
+	BulletSubsystem::BulletSubsystem()
+		:EngineSubsystem(),mInitialized(0),mStarted(0){}
+	//-----------------------------------------------------------------------
 
-    BulletSubsystem::~BulletSubsystem()
-    {
-    }
-    //-----------------------------------------------------------------------
+	BulletSubsystem::~BulletSubsystem()
+	{
+	}
+	//-----------------------------------------------------------------------
 
-    void BulletSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
+	void BulletSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
 			mInitialized = true;
-            Logger::getPtr()->logMessage("Bullet Subsystem Initialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+			Logger::getPtr()->logMessage("Bullet Subsystem Initialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void BulletSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
+	void BulletSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
 			if(mStarted)
 				stopSimulation();
-            mInitialized = false;
-            Logger::getPtr()->logMessage("Bullet Subsystem Deinitialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+			mInitialized = false;
+			Logger::getPtr()->logMessage("Bullet Subsystem Deinitialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void BulletSubsystem::_update(Real delta)
+	void BulletSubsystem::_update(Real delta)
 	{
 		if(mStarted)
 		{
@@ -97,21 +97,21 @@ namespace Oryx
 			for(unsigned int i=0;i<mObjects.size();++i)
 				mObjects[i]->update(false,mInterpolation,mGravity);
 		}
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void BulletSubsystem::_endState()
-    {
+	void BulletSubsystem::_endState()
+	{
 		if(mStarted)
 			stopSimulation();
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String BulletSubsystem::getName()
-    {
-        return String("BulletSubsystem");
-    }
-    //-----------------------------------------------------------------------
+	String BulletSubsystem::getName()
+	{
+		return String("BulletSubsystem");
+	}
+	//-----------------------------------------------------------------------
 
 	Vector3 BulletSubsystem::getGravity()
 	{

@@ -31,20 +31,20 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-    void TimeManager::setTimeSpeed(Real speed)
-    {
-        mTimeSpeed = speed;
-    }
-    //-----------------------------------------------------------------------
+	void TimeManager::setTimeSpeed(Real speed)
+	{
+		mTimeSpeed = speed;
+	}
+	//-----------------------------------------------------------------------
 
-    Real TimeManager::getTimeSpeed()
-    {
-        return mTimeSpeed;
-    }
-    //-----------------------------------------------------------------------
+	Real TimeManager::getTimeSpeed()
+	{
+		return mTimeSpeed;
+	}
+	//-----------------------------------------------------------------------
 
-    Real TimeManager::getTimeDecimal()
-    {
+	Real TimeManager::getTimeDecimal()
+	{
 		#ifdef ORYX_PLATFORM_LINUX 
 			struct timeval now;
 			gettimeofday(&now,0);
@@ -52,47 +52,47 @@ namespace Oryx
 		#elif defined( ORYX_PLATFORM_WINDOWS )
 			return static_cast<Real>(clock())/CLOCKS_PER_SEC;
 		#endif
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    long TimeManager::getTime()
-    {
-        return clock();
-    }
-    //-----------------------------------------------------------------------
+	long TimeManager::getTime()
+	{
+		return clock();
+	}
+	//-----------------------------------------------------------------------
 
-    Real TimeManager::getDeltaTime()
-    {
-        return mDeltaTime;
-    }
-    //-----------------------------------------------------------------------
+	Real TimeManager::getDeltaTime()
+	{
+		return mDeltaTime;
+	}
+	//-----------------------------------------------------------------------
 
-    void TimeManager::update()
-    {
-        Real currentTime = getTimeDecimal();
-        mDeltaTime = currentTime-mLastTime;
-        mLastTime = currentTime;
-    }
-    //-----------------------------------------------------------------------
+	void TimeManager::update()
+	{
+		Real currentTime = getTimeDecimal();
+		mDeltaTime = currentTime-mLastTime;
+		mLastTime = currentTime;
+	}
+	//-----------------------------------------------------------------------
 
-    String TimeManager::getTimestamp()
-    {
-        int currentTime = getTimeDecimal();
-        int hours = currentTime/3600;
-        currentTime %= 3600;
-        int minutes = currentTime/60;
-        currentTime %= 60;
-        int seconds = currentTime;
+	String TimeManager::getTimestamp()
+	{
+		int currentTime = getTimeDecimal();
+		int hours = currentTime/3600;
+		currentTime %= 3600;
+		int minutes = currentTime/60;
+		currentTime %= 60;
+		int seconds = currentTime;
 
-        std::stringstream ss;
-        ss<<String((hours<10)?"0":"")<<hours<<":"<<String((minutes<10)?"0":"")
-            <<minutes<<":"<<String((seconds<10)?"0":"")<<seconds<<":";
+		std::stringstream ss;
+		ss<<String((hours<10)?"0":"")<<hours<<":"<<String((minutes<10)?"0":"")
+			<<minutes<<":"<<String((seconds<10)?"0":"")<<seconds<<":";
 
-        String out = "";
-        ss>>out;
-        return out;
-    }
-    //-----------------------------------------------------------------------
+		String out = "";
+		ss>>out;
+		return out;
+	}
+	//-----------------------------------------------------------------------
 	
 	void TimeManager::start()
 	{
@@ -100,10 +100,10 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-    TimeManager* TimeManager::getPtr()
-    {
-        static TimeManager tmgr;
-        return &tmgr;
-    }
-    //-----------------------------------------------------------------------
+	TimeManager* TimeManager::getPtr()
+	{
+		static TimeManager tmgr;
+		return &tmgr;
+	}
+	//-----------------------------------------------------------------------
 }

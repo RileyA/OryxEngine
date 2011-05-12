@@ -26,50 +26,50 @@
 
 namespace Oryx
 {
-    class LuaWrapper;
+	class LuaWrapper;
 
-    class ORYX_LUA_EXPORT LuaSubsystem : public ScriptingSubsystem
-    {
-    public:
+	class ORYX_LUA_EXPORT LuaSubsystem : public ScriptingSubsystem
+	{
+	public:
 
-        LuaSubsystem();
-        ~LuaSubsystem();
+		LuaSubsystem();
+		~LuaSubsystem();
 
 		/** Starts the scripting system up */
-        virtual void _init();
+		virtual void _init();
 
 		/** Shuts the scripting system down */
-        virtual void _deinit();
+		virtual void _deinit();
 
 		/** Updates the scripting system
 		 *		@param delte The time since the last frame */
-        virtual void _update(Real delta);
+		virtual void _update(Real delta);
 
 		/** Called when the current state ends  */
-        virtual void _endState();
+		virtual void _endState();
 
 		/** Returns the name of this susbsystem */
-        virtual String getName();
+		virtual String getName();
 
-        /** Runs a .chai script
-            @param filename The name of the file to open */
+		/** Runs a .chai script
+			@param filename The name of the file to open */
 		void runScript(String filename);
 
 		/** Runs a line of script
-            @param script The scripting code */
+			@param script The scripting code */
 		void runString(String script);
 
 		/** Gets a pointer to the LuaWrapper */
 		LuaWrapper* getWrapper();
 
-    protected:
+	protected:
 
-        void _registerBasicTypes();
+		void _registerBasicTypes();
 
-        bool mInitialized;
-        LuaWrapper* mLua;
+		bool mInitialized;
+		LuaWrapper* mLua;
 
-    };
+	};
 }
 
 #endif

@@ -27,11 +27,11 @@
 
 // Determine platform
 #if defined( __WIN32__ ) || defined( _WIN32 ) || defined (WIN32)
-    #define ORYX_PLATFORM ORYX_PLATFORM_WIN32
+	#define ORYX_PLATFORM ORYX_PLATFORM_WIN32
 #elif defined( __APPLE_CC__)
-    #define ORYX_PLATFORM ORYX_PLATFORM_APPLE
+	#define ORYX_PLATFORM ORYX_PLATFORM_APPLE
 #else
-    #define ORYX_PLATFORM ORYX_PLATFORM_LINUX
+	#define ORYX_PLATFORM ORYX_PLATFORM_LINUX
 #endif
 
 // Win32 dll stuff
@@ -41,16 +41,16 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_ORYX_DLL
-        #define ORYX_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_ORYX_DLL
+		#define ORYX_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_EXPORT __declspec(dllimport)
+	#endif
 
 	// make msvc shut up about template export-age...
 	#pragma warning(disable:4251)
 #else
-    #define ORYX_EXPORT
+	#define ORYX_EXPORT
 #endif
 
 // If you want to reuse object id numbers, may be useful for an app that runs a 

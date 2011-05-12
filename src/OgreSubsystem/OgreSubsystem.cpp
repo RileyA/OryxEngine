@@ -30,20 +30,20 @@ namespace Oryx
 {
 	OgreSubsystem::OgreSubsystem(unsigned int resX,unsigned int resY,bool fullscreen,
 		std::map<String,String> params)
-        :EngineSubsystem(),mInitialized(0),mResolutionX(resX),mResolutionY(resY),
+		:EngineSubsystem(),mInitialized(0),mResolutionX(resX),mResolutionY(resY),
 		mFullscreen(fullscreen),mParams(params),mAutoNameIndex(0),mNeedsRestart(false){}
-    //-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------
 
-    OgreSubsystem::~OgreSubsystem()
-    {
-    }
-    //-----------------------------------------------------------------------
+	OgreSubsystem::~OgreSubsystem()
+	{
+	}
+	//-----------------------------------------------------------------------
 
-    void OgreSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
-            Logger::getPtr()->logMessage("Ogre Subsystem starting up...");
+	void OgreSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
+			Logger::getPtr()->logMessage("Ogre Subsystem starting up...");
 
 			mRoot = new Ogre::Root("","");
 
@@ -105,17 +105,17 @@ namespace Oryx
 
 			mGUI = new GUI();
 
-            Logger::getPtr()->logMessage("Ogre Subsystem started up.");
-            mInitialized = true;
+			Logger::getPtr()->logMessage("Ogre Subsystem started up.");
+			mInitialized = true;
 		}
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void OgreSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
-            Logger::getPtr()->logMessage("Ogre Subsystem shutting down...");
+	void OgreSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
+			Logger::getPtr()->logMessage("Ogre Subsystem shutting down...");
 			for(uint i=0;i<mSceneNodes.size();++i)
 				delete mSceneNodes[i];
 			mSceneNodes.clear();
@@ -127,31 +127,31 @@ namespace Oryx
 			delete mRoot;
 			mRoot = 0;
 			mGUI = 0;
-            Logger::getPtr()->logMessage("Ogre Subsystem shut down.");
-            mInitialized = false;
-        }
-    }
-    //-----------------------------------------------------------------------
+			Logger::getPtr()->logMessage("Ogre Subsystem shut down.");
+			mInitialized = false;
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void OgreSubsystem::_update(Real delta)
-    {
+	void OgreSubsystem::_update(Real delta)
+	{
 		renderFrame();
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void OgreSubsystem::_endState()
-    {
+	void OgreSubsystem::_endState()
+	{
 		if(mNeedsRestart)
 			restart();
 		delete mGUI;
 		mGUI = new GUI();
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String OgreSubsystem::getName()
-    {
-        return String("OgreSubsystem");
-    }
+	String OgreSubsystem::getName()
+	{
+		return String("OgreSubsystem");
+	}
 	//-----------------------------------------------------------------------
 
 	void OgreSubsystem::renderFrame()
@@ -608,21 +608,21 @@ String nombre = name;
 		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, false);
 /
 
-        float *pFloat = 0;
-        HardwareVertexBufferSharedPtr vbuf;
-        // float* pVertices (x, y, z order x numVertices)
-        vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
-        vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
-            vdecl->getVertexSize(0),
-            numVertices,
+		float *pFloat = 0;
+		HardwareVertexBufferSharedPtr vbuf;
+		// float* pVertices (x, y, z order x numVertices)
+		vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
+		vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
+			vdecl->getVertexSize(0),
+			numVertices,
 			Ogre::HardwareBuffer::HBU_STATIC,
 			false);
-        pFloat = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD));
-        //readFloats(stream, pFloat, dest->vertexCount * 3);
+		pFloat = static_cast<float*>(
+			vbuf->lock(HardwareBuffer::HBL_DISCARD));
+		//readFloats(stream, pFloat, dest->vertexCount * 3);
 		memcpy(pFloat, data.getVertices(), sizeof(float) * data.vertices.size());
-        vbuf->unlock();
-        vbind->setBinding(0, vbuf);
+		vbuf->unlock();
+		vbind->setBinding(0, vbuf);
 
 
 		// Prepare buffer for indices

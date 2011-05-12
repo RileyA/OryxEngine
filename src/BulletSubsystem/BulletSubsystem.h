@@ -50,37 +50,37 @@ class btSequentialImpulseConstraintSolver;
 namespace Oryx
 {
 	/** Bullet physics subsystem, does 3d physics simulation */
-    class ORYX_BULLET_EXPORT BulletSubsystem : public EngineSubsystem
-    {
-    public:
+	class ORYX_BULLET_EXPORT BulletSubsystem : public EngineSubsystem
+	{
+	public:
 
 		/** Constructor */
-        BulletSubsystem();
+		BulletSubsystem();
 
 		/** Destructor */
-        ~BulletSubsystem();
+		~BulletSubsystem();
 
 		/** Starts the subsystem up 
 		 *		@remarks Note that this doesn't start the physics simulation 
 		 *			but rather just preps it, individual states must tell the
 		 *			actual simulation to begin with startSimulation() */
-        virtual void _init();
+		virtual void _init();
 
 		/** Shuts the physics system down */
-        virtual void _deinit();
+		virtual void _deinit();
 
 		/** Updates the physics
 		 *		@remarks This is based on a fixed timestep, using an accumulator,
 		 *			so any goven frame might not actually advance the simulation.
 		 *			interpolation with the previous frame is used to keep things 
 		 *			smooth between timesteps */
-        virtual void _update(Real delta);
+		virtual void _update(Real delta);
 
 		/** Called upon ending the state, this shuts the simulation down entirely */
-        virtual void _endState();
+		virtual void _endState();
 
 		/** Returns the name of this subsystem */
-        virtual String getName();
+		virtual String getName();
 
 		/** Starts the physics simulation */
 		void startSimulation();
@@ -210,9 +210,9 @@ namespace Oryx
 		/** Gets a pointer to the bullet world itself */
 		btDynamicsWorld* getWorld(){return mDynamicsWorld;}
 
-    protected:
+	protected:
 
-        bool mInitialized;
+		bool mInitialized;
 		float mAccumulation;
 		float mInterpolation;
 		float mTimeStep;
@@ -228,7 +228,7 @@ namespace Oryx
 		std::map<std::string,PhysicsShape*> mShapes;
 
 		Vector3 mGravity;
-    };
+	};
 
 	#define BIT(x) (1<<(x))
 	/** Collision group defines (bt uses 16-bit bitmasks for this) */

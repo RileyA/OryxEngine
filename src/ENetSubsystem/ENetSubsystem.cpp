@@ -26,36 +26,36 @@
 namespace Oryx
 {
 	ENetSubsystem::ENetSubsystem()
-        :EngineSubsystem(),mInitialized(0){}
-    //-----------------------------------------------------------------------
+		:EngineSubsystem(),mInitialized(0){}
+	//-----------------------------------------------------------------------
 
-    ENetSubsystem::~ENetSubsystem()
-    {
-    }
-    //-----------------------------------------------------------------------
+	ENetSubsystem::~ENetSubsystem()
+	{
+	}
+	//-----------------------------------------------------------------------
 
-    void ENetSubsystem::_init()
-    {
-        if(!mInitialized)
-        {
-            mInitialized = true;
-            Logger::getPtr()->logMessage("ENet Subsystem Initialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+	void ENetSubsystem::_init()
+	{
+		if(!mInitialized)
+		{
+			mInitialized = true;
+			Logger::getPtr()->logMessage("ENet Subsystem Initialized.");
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void ENetSubsystem::_deinit()
-    {
-        if(mInitialized)
-        {
-            mInitialized = false;
+	void ENetSubsystem::_deinit()
+	{
+		if(mInitialized)
+		{
+			mInitialized = false;
 			for(int i=0;i<mClients.size();++i)
 			{
 				delete mClients[i];
 				mClients[i] = 0;
 			}
 
-   			for(int i=0;i<mServers.size();++i)
+			for(int i=0;i<mServers.size();++i)
 			{
 				delete mServers[i];
 				mServers[i] = 0;
@@ -65,31 +65,31 @@ namespace Oryx
 			mServers.clear();
 
 			Logger::getPtr()->logMessage("ENet Subsystem Deinitialized.");
-        }
-    }
-    //-----------------------------------------------------------------------
+		}
+	}
+	//-----------------------------------------------------------------------
 
-    void ENetSubsystem::_update(Real delta)
-    {
-        for(int i=0;i<mServers.size();++i)
+	void ENetSubsystem::_update(Real delta)
+	{
+		for(int i=0;i<mServers.size();++i)
 			mServers[i]->pollEvents();
 
-        for(int i=0;i<mClients.size();++i)
+		for(int i=0;i<mClients.size();++i)
 			mClients[i]->pollEvents();
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    void ENetSubsystem::_endState()
-    {
+	void ENetSubsystem::_endState()
+	{
 		
-    }
-    //-----------------------------------------------------------------------
+	}
+	//-----------------------------------------------------------------------
 
-    String ENetSubsystem::getName()
-    {
-        return String("ENetSubsystem");
-    }
-    //-----------------------------------------------------------------------
+	String ENetSubsystem::getName()
+	{
+		return String("ENetSubsystem");
+	}
+	//-----------------------------------------------------------------------
 	
 	Client* ENetSubsystem::createClient()
 	{

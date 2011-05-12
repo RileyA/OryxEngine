@@ -33,11 +33,11 @@ namespace Oryx
 
 		// Some preset constant values
 		static const Colour ZERO;
-        static const Colour Red;
-        static const Colour Green;
-        static const Colour Blue;
+		static const Colour Red;
+		static const Colour Green;
+		static const Colour Blue;
 		static const Colour Black;
-        static const Colour White;
+		static const Colour White;
 
 		Real r;
 		Real g;
@@ -45,12 +45,12 @@ namespace Oryx
 		Real a;
 
 		/** Constructor */
-	    explicit Colour( float red = 1.0f,float green = 1.0f,float blue = 1.0f,float alpha = 1.0f )
+		explicit Colour( float red = 1.0f,float green = 1.0f,float blue = 1.0f,float alpha = 1.0f )
 			: r(red), g(green), b(blue), a(alpha)
-        {}
+		{}
 
 		bool operator==(const Colour& col) const;
-	    bool operator!=(const Colour& col) const;
+		bool operator!=(const Colour& col) const;
 
 		/** Clamps this color to [0,1] range in all channels */
 		void saturate()
@@ -79,12 +79,12 @@ namespace Oryx
 		/** Returns a saturated copy of this Colour
 		 *		@return A saturated copy*/
 		Colour saturateCopy() const
-        {
-            Colour copy = *this;
-            copy.saturate();
+		{
+			Colour copy = *this;
+			copy.saturate();
 
-            return copy;
-        }
+			return copy;
+		}
 
 		Colour operator + (const Colour& col) const
 		{
@@ -177,25 +177,25 @@ namespace Oryx
 		/** Returns 8-bit 0-255 value of the R channel */
 		byte getR8()
 		{
-		    return static_cast<byte>(floor(r*255.f));
+			return static_cast<byte>(floor(r*255.f));
 		}
 
 		/** Returns 8-bit 0-255 value of the G channel */
-        byte getG8()
+		byte getG8()
 		{
-		    return static_cast<byte>(floor(g*255.f));
+			return static_cast<byte>(floor(g*255.f));
 		}
 
 		/** Returns 8-bit 0-255 value of the B channel */
-        byte getB8()
+		byte getB8()
 		{
-		    return static_cast<byte>(floor(b*255.f));
+			return static_cast<byte>(floor(b*255.f));
 		}
 
 		/** Returns 8-bit 0-255 value of the A channel */
-        byte getA8()
+		byte getA8()
 		{
-		    return static_cast<byte>(floor(a*255.f));
+			return static_cast<byte>(floor(a*255.f));
 		}
 	};
 }

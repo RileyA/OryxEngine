@@ -48,7 +48,7 @@ namespace Oryx
 		 *		@param name The name to use for it in scripts */
 		template<typename T> void registerFunction(T t,String name)
 		{
-		    mChai.add(chaiscript::fun(t),name);
+			mChai.add(chaiscript::fun(t),name);
 		}
 		
 		/** Registers a constructor for a class
@@ -56,7 +56,7 @@ namespace Oryx
 		 *		@param name The name to use to refer to it */
 		template<typename T> void registerConstructor(String name)
 		{
-		    mChai.add(chaiscript::constructor<T>(),name);
+			mChai.add(chaiscript::constructor<T>(),name);
 		}
 
 		/** Registers a type with Chaiscript

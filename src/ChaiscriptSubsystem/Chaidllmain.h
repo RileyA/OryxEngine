@@ -32,14 +32,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_CHAI_DLL
-        #define ORYX_CHAI_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_CHAI_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_CHAI_DLL
+		#define ORYX_CHAI_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_CHAI_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_CHAI_EXPORT
+	#define ORYX_CHAI_EXPORT
 #endif
 
 #endif

@@ -29,14 +29,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_BULLET_DLL
-        #define ORYX_BULLET_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_BULLET_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_BULLET_DLL
+		#define ORYX_BULLET_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_BULLET_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_BULLET_EXPORT
+	#define ORYX_BULLET_EXPORT
 #endif
 
 #endif

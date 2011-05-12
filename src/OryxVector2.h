@@ -42,14 +42,14 @@ namespace Oryx
 		{
 			float fLength = sqrt( x * x + y * y );
 
-            if ( fLength > 1e-08 )
-            {
-                float fInvLength = 1.0f / fLength;
-                x *= fInvLength;
-                y *= fInvLength;
-            }
+			if ( fLength > 1e-08 )
+			{
+				float fInvLength = 1.0f / fLength;
+				x *= fInvLength;
+				y *= fInvLength;
+			}
 
-            return fLength;
+			return fLength;
 		}
 
 		/** Gets the length of the vector
@@ -71,9 +71,9 @@ namespace Oryx
 		 *		@param vect The vector to test against 
 		 *		@return The distance */
 		float distance(const Vector2& vect) const
-        {
-            return (*this - vect).length();
-        }
+		{
+			return (*this - vect).length();
+		}
 		
 		bool operator==(const Vector2 vect)
 		{
@@ -168,14 +168,14 @@ namespace Oryx
 		}
 
 		float& operator [] ( const size_t i )
-        {
-            return *(&x+i);
-        }
+		{
+			return *(&x+i);
+		}
 
 		const float& operator [] ( const size_t i ) const
-        {
-            return *(&x+i);
-        }
+		{
+			return *(&x+i);
+		}
 	};
 }
 

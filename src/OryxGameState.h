@@ -25,21 +25,21 @@
 
 namespace Oryx
 {
-    class Engine;
+	class Engine;
 
 	/** A game state almost identical to State, except it 
 	 *		automagically gets a pointer to the Engine */
-    class ORYX_EXPORT GameState : public State
-    {
-    public:
+	class ORYX_EXPORT GameState : public State
+	{
+	public:
 
 		GameState();
 
-    protected:
+	protected:
 
-        Engine* mEngine;
+		Engine* mEngine;
 
-    };
+	};
 }
 
 #endif

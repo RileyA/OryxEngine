@@ -64,7 +64,7 @@ namespace Oryx
 			throw String("Could not open Ogg file.");
 		#pragma warning (pop)
 
- 		ov_callbacks sCallbacks;
+		ov_callbacks sCallbacks;
 
 		sCallbacks.read_func = ov_read_func;
 		sCallbacks.seek_func = ov_seek_func;

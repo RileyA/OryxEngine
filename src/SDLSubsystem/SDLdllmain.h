@@ -28,14 +28,14 @@
 
 	#include <windows.h>
 
-    #ifdef BUILD_SDL_DLL
-        #define ORYX_SDL_EXPORT __declspec(dllexport)
-    #else
-        #define ORYX_SDL_EXPORT __declspec(dllimport)
-    #endif
+	#ifdef BUILD_SDL_DLL
+		#define ORYX_SDL_EXPORT __declspec(dllexport)
+	#else
+		#define ORYX_SDL_EXPORT __declspec(dllimport)
+	#endif
 
 #else
-    #define ORYX_SDL_EXPORT
+	#define ORYX_SDL_EXPORT
 #endif
 
 #endif
