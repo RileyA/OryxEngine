@@ -200,6 +200,5 @@ namespace Oryx
 			drawPixel(i%640+x,i/640+y,r,g,b);
 		}
 		unlock();
-		flip();
 	}
 }

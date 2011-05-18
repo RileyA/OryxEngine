@@ -306,19 +306,23 @@ namespace Oryx
 			texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
 		}
 
-		// Prepare buffer for indices
-		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
-			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+		// check for a lack of indices (for point clouds, etc)
+		if(!data.indices.empty())
+		{
+			// Prepare buffer for indices
+			indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+				HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
 
-		//unsigned short *faceVertexIndices = (unsigned short*)
-		//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
+			//unsigned short *faceVertexIndices = (unsigned short*)
+			//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
 
-		// Set index buffer for this submesh
-		sm->indexData->indexBuffer = indexBuffer;
-		sm->indexData->indexStart = 0;
-		sm->indexData->indexCount = 3*numFaces;
+			// Set index buffer for this submesh
+			sm->indexData->indexBuffer = indexBuffer;
+			sm->indexData->indexStart = 0;
+			sm->indexData->indexCount = 3*numFaces;
 
-		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+			indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+		}
 
 		//vdecl->sort();
 

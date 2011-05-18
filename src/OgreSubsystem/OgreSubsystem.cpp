@@ -343,19 +343,22 @@ namespace Oryx
 			texcoordsVertexBuffer[i]->writeData(0,sizeof(float)*data.texcoords[i].size(),&data.texcoords[i][0], false);
 		}
 
-		// Prepare buffer for indices
-		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
-		HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+		if(!data.indices.empty())
+		{
+			// Prepare buffer for indices
+			indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
+			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
 
-		//unsigned short *faceVertexIndices = (unsigned short*)
-		//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
+			//unsigned short *faceVertexIndices = (unsigned short*)
+			//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);
 
-		// Set index buffer for this submesh
-		sm->indexData->indexBuffer = indexBuffer;
-		sm->indexData->indexStart = 0;
-		sm->indexData->indexCount = 3*numFaces;
+			// Set index buffer for this submesh
+			sm->indexData->indexBuffer = indexBuffer;
+			sm->indexData->indexStart = 0;
+			sm->indexData->indexCount = 3*numFaces;
 
-		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+			indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),indices,true);
+		}
 
 		//vdecl->sort();
 
@@ -561,94 +564,3 @@ namespace Oryx
 		return handle;
 	}
 }
-
-
-/*
-String nombre = name;
-		if(name=="AUTO_NAME_ME")
-		{
-			nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
-			++mAutoNameIndex;
-		}
-
-		using namespace Ogre;
-
-		int numFaces = data.indices.size()/3;
-		std::cout<<"ONDEX COUNT!!!! "<<data.indices.size()<<"\n\n\n";
-		int numVertices = data.vertices.size()/3;
-		
-		//HardwareVertexBufferSharedPtr posVertexBuffer;
-		HardwareIndexBufferSharedPtr indexBuffer;
-
-		Ogre::Mesh* m = Ogre::MeshManager::getSingletonPtr()->createManual(
-			nombre,ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME).get();
-		
-		Ogre::SubMesh* sm = m->createSubMesh(nombre);
-		sm->useSharedVertices = false;
-		sm->vertexData = new VertexData();
-		sm->vertexData->vertexStart = 0;
-		sm->vertexData->vertexCount = numVertices;
-
-		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
-		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
-
-/		vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
-
-		// Positions
-		posVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-			3*sizeof(float),numVertices,Ogre::HardwareBuffer::HBU_STATIC);
-
-		vbind->setBinding(0, posVertexBuffer);
-
-		float* vertices = data.getVertices(); 
-		float* normals = data.getNormals();
-		float* diffuse = data.getDiffuse();
-		unsigned short* indices = data.getIndices();
-
-		posVertexBuffer->writeData(0,posVertexBuffer->getSizeInBytes(),vertices, false);
-/
-
-		float *pFloat = 0;
-		HardwareVertexBufferSharedPtr vbuf;
-		// float* pVertices (x, y, z order x numVertices)
-		vdecl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
-		vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
-			vdecl->getVertexSize(0),
-			numVertices,
-			Ogre::HardwareBuffer::HBU_STATIC,
-			false);
-		pFloat = static_cast<float*>(
-			vbuf->lock(HardwareBuffer::HBL_DISCARD));
-		//readFloats(stream, pFloat, dest->vertexCount * 3);
-		memcpy(pFloat, data.getVertices(), sizeof(float) * data.vertices.size());
-		vbuf->unlock();
-		vbind->setBinding(0, vbuf);
-
-
-		// Prepare buffer for indices
-		indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
-			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, false);
-
-		// Set index buffer for this submesh
-		sm->indexData->indexBuffer = indexBuffer;
-		sm->indexData->indexStart = 0;
-		sm->indexData->indexCount = 3*numFaces;
-
-		indexBuffer->writeData(0,indexBuffer->getSizeInBytes(),data.getIndices(),false);
-
-		m->load();
-		m->touch();
-
-		int dims = 16;
-		m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
-		m->_setBoundingSphereRadius(sqrt(dims*64*2)/2);//11.313f);
-
-		sm->setMaterialName("MeinKraft");
-
-		Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
-		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
-		node->attachObject(ent);
-		Mesh* mm = new Mesh(nombre,node,ent);
-		mSceneNodes.push_back(mm);
-		return mm;
-*/
