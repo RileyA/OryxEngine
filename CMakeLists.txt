@@ -32,20 +32,52 @@ set(SDL_LIB_DIR "/usr/lib" CACHE STRING "Where to look for sdl libs.")
 set(OIS_INCLUDE_DIR "/usr/include/OIS" CACHE STRING "Where to look for ois includes.")
 set(OIS_LIB_DIR "/usr/lib" CACHE STRING "Where to look for ois libs.")
 
+# Bullet
+set(BT_INCLUDE_DIR "/usr/include/bullet" CACHE STRING "Where to look for bullet includes.")
+set(BT_LIB_DIR "/usr/lib" CACHE STRING "Where to look for bullet libs.")
+
+# lua/luabind
+set(LUA_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for lua includes.")
+set(LUA_LIB_DIR "/usr/lib" CACHE STRING "Where to look for lua libs.")
+set(LUABIND_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for luabind includes.")
+set(LUABIND_LIB_DIR "/usr/lib" CACHE STRING "Where to look for luabind libs.")
+
+# Chaiscript
+
+# AL
+set(AL_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for AL includes.")
+set(AL_LIB_DIR "/usr/lib" CACHE STRING "Where to look for AL libs.")
+set(ALUT_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for ALUT includes.")
+set(ALUT_LIB_DIR "/usr/lib" CACHE STRING "Where to look for ALUT libs.")
+set(OGG_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for Ogg includes.")
+set(OGG_LIB_DIR "/usr/lib" CACHE STRING "Where to look for Ogg libs.")
+set(VORBIS_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for Vorbis includes.")
+set(VORBIS_LIB_DIR "/usr/lib" CACHE STRING "Where to look for Vorbis libs.")
+
+# ENet
+
 # boost
-#set(BOOST_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for boost includes.")
-#set(BOOST_LIB_DIR "/usr/lib" CACHE STRING "Where to look for boost libs.")
+set(BOOST_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for boost includes.")
+set(BOOST_LIB_DIR "/usr/lib" CACHE STRING "Where to look for boost libs.")
 
 # common includes
 include_directories("src")
 
 # lib stuff, ugly, but gets the job done for now...
 set(ORYX_LIB ${PROJECT_BINARY_DIR}/lib/${LIB_PREFIX}OryxEngine${LIB_POSTFIX})
-# freenect and boost
 set(OGRE_LIB ${OGRE_LIB_DIR}/${LIB_PREFIX}OgreMain${LIB_POSTFIX})
 set(SDL_LIB ${SDL_LIB_DIR}/${LIB_PREFIX}SDL${LIB_POSTFIX})
 set(OIS_LIB ${SDL_LIB_DIR}/${LIB_PREFIX}OIS${LIB_POSTFIX})
-#set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread-mt${LIB_POSTFIX})
+set(BT_C_LIB ${BT_LIB_DIR}/${LIB_PREFIX}BulletCollision${LIB_POSTFIX})
+set(BT_D_LIB ${BT_LIB_DIR}/${LIB_PREFIX}BulletDynamics${LIB_POSTFIX})
+set(BT_MATH_LIB ${BT_LIB_DIR}/${LIB_PREFIX}LinearMath${LIB_POSTFIX})
+set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread-mt${LIB_POSTFIX})
+set(AL_LIB ${AL_LIB_DIR}/${LIB_PREFIX}openal${LIB_POSTFIX})
+set(ALUT_LIB ${ALUT_LIB_DIR}/${LIB_PREFIX}alut${LIB_POSTFIX})
+set(OGG_LIB ${OGG_LIB_DIR}/${LIB_PREFIX}ogg${LIB_POSTFIX})
+set(VORBIS_LIB ${VORBIS_LIB_DIR}/${LIB_PREFIX}vorbis${LIB_POSTFIX})
+set(VORBISENC_LIB ${VORBIS_LIB_DIR}/${LIB_PREFIX}vorbisenc${LIB_POSTFIX})
+set(VORBISFILE_LIB ${VORBIS_LIB_DIR}/${LIB_PREFIX}vorbisfile${LIB_POSTFIX})
 
 # build the plain engine
 add_subdirectory(src)
@@ -54,4 +86,7 @@ add_subdirectory(src)
 add_subdirectory(src/SDLSubsystem)
 add_subdirectory(src/OISSubsystem)
 add_subdirectory(src/OgreSubsystem)
+add_subdirectory(src/BulletSubsystem)
+add_subdirectory(src/ALSubsystem)
+add_subdirectory(src/LuaSubsystem)
 
