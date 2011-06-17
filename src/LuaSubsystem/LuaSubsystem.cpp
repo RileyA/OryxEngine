@@ -30,6 +30,9 @@
 
 #include "OryxColour.h"
 #include "Oryx3DMath.h"
+#include "OryxBucket.h"
+#include "OryxObject.h"
+#include "OryxEventHandler.h"
 
 #ifdef ORYX_LUA_REGISTER_OPENAL
 	#include "ALSubsystem/ALSubsystem.h"
@@ -40,6 +43,9 @@
 #ifdef ORYX_LUA_REGISTER_OIS
 
 #endif
+
+Oryx::Engine* getEngine();
+Oryx::Logger* getLogger();
 
 namespace Oryx
 {
@@ -76,7 +82,7 @@ namespace Oryx
 			_registerBasicTypes();
 
 			mInitialized = true;
-			Logger::getPtr()->logMessage("Chaiscript Subsystem Initialized.");
+			Logger::getPtr()->logMessage("Lua Subsystem Initialized.");
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -89,7 +95,7 @@ namespace Oryx
 				delete mLua;
 			mLua = 0;
 			mInitialized = false;
-			Logger::getPtr()->logMessage("Chaiscript Subsystem Deinitialized.");
+			Logger::getPtr()->logMessage("Lua Subsystem Deinitialized.");
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -114,12 +120,13 @@ namespace Oryx
 
 	void LuaSubsystem::runScript(String filename)
 	{
+		luaL_dofile(mLua->getLua(), filename.c_str());
 	}
 	//-----------------------------------------------------------------------
 
 	void LuaSubsystem::runString(String script)
 	{
-		luaL_dostring(mLua->getLua(), script.c_str());
+		luaL_dostring(mLua->getLua(), (script+"\n").c_str());
 	}
 	//-----------------------------------------------------------------------
 
@@ -131,7 +138,61 @@ namespace Oryx
 
 	void LuaSubsystem::_registerBasicTypes()
 	{
-		
+		luabind::module(mLua->getLua()) 
+		[
+			// Signals
+			luabind::class_<Signal>("Signal")
+				.def("addListener", &Signal::addListener)
+				.def("removeListener", &Signal::removeListener)
+				.def("removeAllListeners", &Signal::removeAllListeners),
+			// Slots
+			luabind::class_<Slot>("Slot")
+				.def("listenTo", &Slot::listenTo)
+				.def("stopListeningTo", &Slot::stopListeningTo)
+				.def("stopAllListening", &Slot::stopAllListening),
+			// EventHandler
+			luabind::class_<EventHandler>("EventHandler")
+				.def("createSignal", &EventHandler::createSignal)
+				.def("hasSignal", &EventHandler::hasSignal)
+				.def("getSignal", &EventHandler::getSignal)
+				.def("hasSlot", &EventHandler::hasSlot)
+				.def("getSlot", &EventHandler::getSlot),
+			// State (abstract)
+			luabind::class_<State, EventHandler>("State")
+				.def("init", &State::init)
+				.def("deinit", &State::deinit)
+				.def("isDone", &State::isDone)
+				.def("update", &State::update),
+			// GameState
+			luabind::class_<GameState, State>("GameState"),
+			// Buckets
+			luabind::class_<Bucket>("Bucket")
+				.def("update", &Bucket::update)
+				.def("addObject", &Bucket::addObject)
+				.def("isTemporary", &Bucket::isTemporary)
+				.def("setTemporary", &Bucket::setTemporary)
+				.def("getObject", (Object* (Bucket::*)(String))&Bucket::getObject)
+				.def("getObject", (Object* (Bucket::*)(OryxID))&Bucket::getObject)
+				.def("hasObject", (bool (Bucket::*)(String) const)&Bucket::hasObject)
+				.def("hasObject", (bool (Bucket::*)(OryxID) const)&Bucket::hasObject),
+			// Objects
+			luabind::class_<Object>("Object"),
+			// The Engine itself
+			luabind::class_<Engine>("Engine"),
+			// The TimeManager
+			luabind::class_<TimeManager>("TimeManager"),
+			// The Logger
+			luabind::class_<Logger>("Logger")
+				.def("logMessage", &Logger::logMessage)
+				.def("suppressOutput", &Logger::suppressOutput)
+				.def("suppressFileOutput", &Logger::suppressFileOutput)
+		];
+
+		mLua->registerFunction(&EventHandler::registerDestination,"registerDestination");
+		mLua->registerFunction(&EventHandler::getDestination,"getDestination");
+
+		mLua->registerFunction(&Logger::getPtr,"getLogger");
+		mLua->registerFunction(&Engine::getPtr,"getEngine");
 	}
 	//-----------------------------------------------------------------------
 }

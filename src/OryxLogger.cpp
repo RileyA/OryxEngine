@@ -51,7 +51,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Logger::supressOutput()
+	void Logger::suppressOutput()
 	{
 		mActive = false;
 	}

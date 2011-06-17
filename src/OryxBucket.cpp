@@ -75,6 +75,24 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	bool Bucket::hasObject(String name) const
+	{
+		std::map<OryxID,Object*>::const_iterator it = mObjects.begin();
+		for(it;it!=mObjects.end();++it)
+		{
+			if(it->second->getName()==name)
+				return true;
+		}
+		return false;
+	}
+	//-----------------------------------------------------------------------
+	
+	bool Bucket::hasObject(OryxID id) const
+	{
+		return mObjects.find(id)!=mObjects.end() ? true : false;
+	}
+	//-----------------------------------------------------------------------
+
 	bool Bucket::isTemporary() const
 	{
 		return mTemporary;

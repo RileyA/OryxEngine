@@ -37,7 +37,7 @@ namespace Oryx
 		void logMessage(String message);
 
 		/** Tells the Logger to stop outputting all messages */
-		void supressOutput();
+		void suppressOutput();
 
 		/** Tells the Logger to stop outputting to the Oryx.log file */
 		void suppressFileOutput();

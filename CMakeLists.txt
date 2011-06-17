@@ -13,8 +13,11 @@ else ()
 endif ()
 
 # Some options:
-option(BUILD_OIS_SUBSYSTEM "Build OIS Subsystem." TRUE)
+option(BUILD_AL_SUBSYSTEM "Build AL Subsystem." TRUE)
+option(BUILD_BULLET_SUBSYSTEM "Build bullet Subsystem." TRUE)
+option(BUILD_LUA_SUBSYSTEM "Build lua Subsystem." TRUE)
 option(BUILD_OGRE_SUBSYSTEM "Build OGRE Subsystem." TRUE)
+option(BUILD_OIS_SUBSYSTEM "Build OIS Subsystem." TRUE)
 option(BUILD_SDL_SUBSYSTEM "Build SDL Subsystem." TRUE)
 
 set(INSTALL_RUNTIMES_TO "/usr/bin" CACHE STRING "Where install executables.")
@@ -65,28 +68,49 @@ include_directories("src")
 
 # lib stuff, ugly, but gets the job done for now...
 set(ORYX_LIB ${PROJECT_BINARY_DIR}/lib/${LIB_PREFIX}OryxEngine${LIB_POSTFIX})
+# Ogre
 set(OGRE_LIB ${OGRE_LIB_DIR}/${LIB_PREFIX}OgreMain${LIB_POSTFIX})
+# SDL
 set(SDL_LIB ${SDL_LIB_DIR}/${LIB_PREFIX}SDL${LIB_POSTFIX})
+# OIS
 set(OIS_LIB ${SDL_LIB_DIR}/${LIB_PREFIX}OIS${LIB_POSTFIX})
+# bullet
 set(BT_C_LIB ${BT_LIB_DIR}/${LIB_PREFIX}BulletCollision${LIB_POSTFIX})
 set(BT_D_LIB ${BT_LIB_DIR}/${LIB_PREFIX}BulletDynamics${LIB_POSTFIX})
 set(BT_MATH_LIB ${BT_LIB_DIR}/${LIB_PREFIX}LinearMath${LIB_POSTFIX})
+# boost
 set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread-mt${LIB_POSTFIX})
+# OpenAl Stuff
 set(AL_LIB ${AL_LIB_DIR}/${LIB_PREFIX}openal${LIB_POSTFIX})
 set(ALUT_LIB ${ALUT_LIB_DIR}/${LIB_PREFIX}alut${LIB_POSTFIX})
 set(OGG_LIB ${OGG_LIB_DIR}/${LIB_PREFIX}ogg${LIB_POSTFIX})
 set(VORBIS_LIB ${VORBIS_LIB_DIR}/${LIB_PREFIX}vorbis${LIB_POSTFIX})
 set(VORBISENC_LIB ${VORBIS_LIB_DIR}/${LIB_PREFIX}vorbisenc${LIB_POSTFIX})
 set(VORBISFILE_LIB ${VORBIS_LIB_DIR}/${LIB_PREFIX}vorbisfile${LIB_POSTFIX})
+# lua stuff
+set(LUA_LIB ${LUA_LIB_DIR}/${LIB_PREFIX}lua${LIB_POSTFIX})
+set(LUABIND_LIB ${LUABIND_LIB_DIR}/${LIB_PREFIX}luabind${LIB_POSTFIX})
 
 # build the plain engine
 add_subdirectory(src)
 
 # subsystems
-add_subdirectory(src/SDLSubsystem)
-add_subdirectory(src/OISSubsystem)
-add_subdirectory(src/OgreSubsystem)
-add_subdirectory(src/BulletSubsystem)
-add_subdirectory(src/ALSubsystem)
-add_subdirectory(src/LuaSubsystem)
+if (BUILD_SDL_SUBSYSTEM)
+	add_subdirectory(src/SDLSubsystem)
+endif ()
+if (BUILD_OIS_SUBSYSTEM)
+	add_subdirectory(src/OISSubsystem)
+endif ()
+if (BUILD_OGRE_SUBSYSTEM)
+	add_subdirectory(src/OgreSubsystem)
+endif ()
+if (BUILD_BULLET_SUBSYSTEM)
+	add_subdirectory(src/BulletSubsystem)
+endif ()
+if (BUILD_AL_SUBSYSTEM)
+	add_subdirectory(src/ALSubsystem)
+endif ()
+if (BUILD_LUA_SUBSYSTEM)
+	add_subdirectory(src/LuaSubsystem)
+endif ()
 
