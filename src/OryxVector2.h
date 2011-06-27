@@ -75,6 +75,12 @@ namespace Oryx
 			return (*this - vect).length();
 		}
 		
+		/** dot (scalar) product */
+		float dotProduct(const Vector2& vect)
+		{
+			return x * vect.x + y * vect.y;
+		}
+
 		bool operator==(const Vector2 vect)
 		{
 			return(x==vect.x&&y==vect.y);

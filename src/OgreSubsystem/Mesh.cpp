@@ -330,4 +330,41 @@ namespace Oryx
 		mEntity->getMesh()->touch();
 	}
 	//-----------------------------------------------------------------------
+	
+	void Mesh::updatePositions(MeshData& d)
+	{
+		// updates only posititions
+		Ogre::SubMesh* sm = mEntity->getMesh()->getSubMesh(0);
+		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+		const Ogre::VertexElement* pos = vdecl->findElementBySemantic(Ogre::VES_POSITION);
+		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(pos->getSource());
+		if(pos && !buffer.isNull())
+		{
+			buffer->writeData(0,buffer->getSizeInBytes(),&(d.vertices[0]), true);
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("ERROR: Could not find vertex position buffer.");
+		}
+	}
+	//-----------------------------------------------------------------------
+
+	void Mesh::updateNormals(MeshData& d)
+	{
+		// updates only posititions
+		Ogre::SubMesh* sm = mEntity->getMesh()->getSubMesh(0);
+		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+		const Ogre::VertexElement* pos = vdecl->findElementBySemantic(Ogre::VES_NORMAL);
+		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(pos->getSource());
+		if(pos && !buffer.isNull())
+		{
+			buffer->writeData(0,buffer->getSizeInBytes(),&(d.normals[0]), true);
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("ERROR: Could not find vertex normal buffer.");
+		}
+	}
 }

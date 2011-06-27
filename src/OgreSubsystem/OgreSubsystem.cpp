@@ -48,6 +48,7 @@ namespace Oryx
 			mRoot = new Ogre::Root("","");
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
+			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
 
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");
@@ -58,7 +59,7 @@ namespace Oryx
 			Ogre::NameValuePairList miscP;
 
 			miscP["vsync"] = "true";
-			miscP["FSAA"] = "0";
+			miscP["FSAA"] = "8";
 			miscP["gamma"] = "false";
 			miscP["border"] = "fixed";
 			miscP["colourDepth"] = "32";
@@ -325,7 +326,7 @@ namespace Oryx
 		if(hasVertexColor)
 		{
 			diffuseVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer(
-			4*sizeof(float),numVertices,HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
+			4*sizeof(float),numVertices,HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 			vbind->setBinding(++bufferCount, diffuseVertexBuffer);
 
@@ -347,7 +348,7 @@ namespace Oryx
 		{
 			// Prepare buffer for indices
 			indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer(
-			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC, true);
+			HardwareIndexBuffer::IT_16BIT,3*numFaces,HardwareBuffer::HBU_STATIC_WRITE_ONLY, true);
 
 			//unsigned short *faceVertexIndices = (unsigned short*)
 			//indexBuffer->lock(0, numFaces*3*2, HardwareBuffer::HBL_DISCARD);

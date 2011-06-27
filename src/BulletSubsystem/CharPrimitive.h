@@ -37,10 +37,7 @@ namespace Oryx
 	{
 	public:
 
-		static const Real SKIN_WIDTH = 0.075f;
-		static const Real RADIUS     = 0.375f;
-
-		CharPrimitive(BulletSubsystem* bull, Vector3 pos = Vector3::ZERO);
+		CharPrimitive(BulletSubsystem* bull, Vector3 pos = Vector3::ZERO, Real radius=0.375f, Real skinWidth=0.75f);
 
 		/** Moves this sphere by set distance in a given direction
 		 *		@param direction The desired direction
@@ -54,6 +51,8 @@ namespace Oryx
 
 	private:
 
+		Real mSkinWidth;
+		Real mRadius;
 		BulletSubsystem* mBullet;
 		PhysicsShape* mSphere;
 		Vector3 mPosition;

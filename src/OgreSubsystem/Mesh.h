@@ -51,6 +51,8 @@ namespace Oryx
 		void setMaterialName(String name, int submeshIndex = -1);
 
 		void update(MeshData& d);
+		void updatePositions(MeshData& d);
+		void updateNormals(MeshData& d);
 
 		// TODO: materials, animation, etc
 

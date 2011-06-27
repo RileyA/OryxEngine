@@ -25,10 +25,10 @@
 namespace Oryx
 {
 
-	CharPrimitive::CharPrimitive(BulletSubsystem* bull,Vector3 pos)
-		:mBullet(bull),mPosition(pos)
+	CharPrimitive::CharPrimitive(BulletSubsystem* bull,Vector3 pos, Real radius, Real skinWidth)
+		:mBullet(bull),mPosition(pos),mRadius(radius),mSkinWidth(skinWidth)
 	{
-		mSphere = mBullet->createSphereShape(RADIUS);
+		mSphere = mBullet->createSphereShape(mRadius);
 	}
 	//-----------------------------------------------------------------------
 	
@@ -37,7 +37,7 @@ namespace Oryx
 		if(maxDepth <= 0)
 			return Vector3::ZERO;
 		
-		Real castLength = distance + SKIN_WIDTH;
+		Real castLength = distance + mSkinWidth;
 		SweepReport s = mBullet->sweep(mSphere, mPosition, direction, castLength,
 			COLLISION_GROUP_3,COLLISION_GROUP_3);
 		
