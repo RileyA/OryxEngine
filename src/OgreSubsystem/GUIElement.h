@@ -89,10 +89,10 @@ namespace Oryx
 		GUIScreen* getScreen();
 
 		void addChild(GUIElement* elem);
-		void click(Vector2 coords,bool up);	
-		void hover(Vector2 coords);	
-		void unhover();	
-		void release();	
+		virtual void click(Vector2 coords,bool up);	
+		virtual void hover(Vector2 coords);	
+		virtual void unhover();	
+		virtual void release();	
 
 	protected:
 

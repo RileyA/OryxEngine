@@ -22,6 +22,8 @@ set(SOURCE_FILES
 	ParticleSystem.cpp
 	SceneNode.cpp
 	Spline.cpp
+	CustomMesh.cpp
+	ScreenMesh.cpp
 	)
 
 set(HEADER_FILES
@@ -46,11 +48,13 @@ set(HEADER_FILES
 	ParticleSystem.h
 	SceneNode.h
 	Spline.h
+	CustomMesh.h
+	ScreenMesh.h
 	)
 
 add_library(OgreSubsystem SHARED ${SOURCE_FILES} ${HEADER_FILES} )
 set_target_properties(OgreSubsystem PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries (OgreSubsystem ${ORYX_LIB} ${OGRE_LIB})
+target_link_libraries (OgreSubsystem ${ORYX_LIB} ${BOOST_LIB} ${OGRE_LIB})
 
 
 install(TARGETS OgreSubsystem

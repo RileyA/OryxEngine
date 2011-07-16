@@ -45,8 +45,14 @@ namespace Oryx
 		/** Gets a random number within a range */
 		ruint gen(int min, int max);
 
+		/** Gets a random number within a range */
+		ruint gen(int minmax);
+
 		/** Gets a random float */
 		float genFloat(float min, float max);
+
+		/** Gets a random float */
+		float genFloat(float minmax);
 	
 		/** Gets a random character */
 		char genChar();

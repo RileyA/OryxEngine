@@ -43,13 +43,23 @@ namespace Oryx
 			min + gen() % (max - min + 1);
 	}
 
+	ruint Rand::gen(int minmax)
+	{
+		gen(-minmax, minmax);
+	}
+
 	float Rand::genFloat(float min, float max)
 	{
 		return (min < max) ?
 			gen()/(1.f + ORYX_RAND_MAX) * (max - min) + min:
 			gen()/(1.f + ORYX_RAND_MAX) * (min - max) + max;
 	}
-	
+
+	float Rand::genFloat(float minmax)
+	{
+		return genFloat(-minmax, minmax);
+	}
+
 	char Rand::genChar()
 	{
 		return static_cast<char>(gen(0,127));

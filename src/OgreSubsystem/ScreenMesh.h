@@ -1,3 +1,4 @@
+
 //---------------------------------------------------------------------------
 //(C) Copyright Riley Adams 2011
 
@@ -17,43 +18,45 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
+#ifndef ORYX_SCREENMESH_H
+#define ORYX_SCREENMESH_H
+
 #include "Oryx.h"
-#include "GUIElement.h"
-#include "GUIRectangle.h"
+#include "Ogredllmain.h"
+#include "Oryx3DMath.h"
 
 namespace Oryx
-{
-	// A simple button, based on the gui rectangle
-	class ORYX_OGRE_EXPORT GUIButton : public GUIRectangle
+{	
+	class CustomMesh;
+
+	/** Basically just wraps custommesh.. */
+	class ScreenMesh
 	{
 	public:
+		
+		ScreenMesh(String material);
+		virtual ~ScreenMesh();
 
-		GUIButton(GUIElement* parent,int layer,String sprite);
-		virtual ~GUIButton();
+		/** Builds the whole thing */
+		void buildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices);
 
-		void setUpSprite(String sprite);
-		void setDownSprite(String sprite);
-		void setHoverSprite(String sprite);
+		/** rebuilds the whole thing */
+		void rebuildMesh(size_t vertexCount, float* pos, float* tex, float* colors, unsigned short* indices);
 
-		String getUpSprite();
-		String getDownSprite();
-		String getHoverSprite();
+		/** Updates vertex positions */
+		void updatePositions(float* pos);
 
-		void click(Vector2 coords,bool up);	
-		void hover(Vector2 coords);	
-		void unhover();	
-		void release();	
+		/** Updates texcoords */
+		void updateTexcoords(float* tex);
+
+		/** Updates vertex colors */
+		void updateColors(float* colors);
 
 	protected:
 
-		virtual void _clicked();
-		void _hovered(bool on);
+		CustomMesh* mMesh;
 
-	private:
-
-		String mUp;
-		String mDown;
-		String mHover;
-		bool mClicked;// if the mouse was clicked over this (and not yet released)
 	};
 }
+
+#endif

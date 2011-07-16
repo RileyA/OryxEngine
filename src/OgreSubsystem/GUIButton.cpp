@@ -38,6 +38,7 @@ namespace Oryx
 	void GUIButton::_clicked()
 	{
 		mClicked = true;
+		setSprite(mHover);
 		std::cout<<"clicked a button!\n";
 	}
 	//-----------------------------------------------------------------------
@@ -77,4 +78,47 @@ namespace Oryx
 		return mHover;
 	}
 	//-----------------------------------------------------------------------
+
+	void GUIButton::click(Vector2 coords,bool up)
+	{
+		GUIElement::click(coords,up);
+		//if(up)
+		//{
+		//	setSprite(mHover);
+		//}
+		//else
+		//{
+		//}
+	}
+	//-----------------------------------------------------------------------
+	
+	void GUIButton::hover(Vector2 coords)
+	{
+		GUIElement::hover(coords);
+		//setSprite(mHover);
+	}
+	//-----------------------------------------------------------------------
+	
+	void GUIButton::unhover()
+	{
+		//setSprite(mUp);
+		GUIElement::unhover();
+	}
+	//-----------------------------------------------------------------------
+	
+	void GUIButton::release()
+	{
+		//setSprite(mUp);
+		GUIElement::release();
+	}
+	//-----------------------------------------------------------------------
+
+	void GUIButton::_hovered(bool on)
+	{
+		GUIElement::_hovered(on);
+		if(on)
+			setSprite(mHover);
+		else
+			setSprite(mUp);
+	}
 }

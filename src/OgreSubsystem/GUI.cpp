@@ -20,34 +20,43 @@
 #include "Oryx.h"
 #include "Gorilla.h"
 #include "Ogre.h"
+#include "OgreTextAreaOverlayElement.h"
+#include "OgreConversions.h"
 #include "GUI.h"
 #include "OryxLogger.h"
+#include "OgreFontManager.h"
 
 namespace Oryx
 {
 	GUI::GUI()
 	{
-		mGUI = new Gorilla::Silverback();
+		mGUI = 0;
 	}
 	//-----------------------------------------------------------------------
 
 	GUI::~GUI()
 	{
-		std::map<String,GUIScreen*>::iterator i = mScreens.begin();
-		for(i;i!=mScreens.end();++i)
+		if(mGUI)
 		{
-			Gorilla::Screen* temp = i->second->getScreen();
-			delete i->second;
-			mGUI->destroyScreen(temp);
+			std::map<String,GUIScreen*>::iterator i = mScreens.begin();
+			for(i;i!=mScreens.end();++i)
+			{
+				Gorilla::Screen* temp = i->second->getScreen();
+				delete i->second;
+				mGUI->destroyScreen(temp);
+			}
+			mScreens.clear();
+			//delete mGUI;
 		}
-		mScreens.clear();
-		delete mGUI;
 	}
 	//-----------------------------------------------------------------------
 
 	GUIScreen* GUI::createScreen(Ogre::Viewport* vp,String atlas,String name)
 	{
-		mGUI->loadAtlas(atlas);
+		//if(!mGUI)
+		//	mGUI = new Gorilla::Silverback();
+		if(mGUI->mAtlases.find(atlas) == mGUI->mAtlases.end())
+			mGUI->loadAtlas(atlas); 
 		mScreens[name] = new GUIScreen(mGUI->createScreen(vp,atlas),name);
 		return mScreens[name];
 	}
@@ -93,4 +102,41 @@ namespace Oryx
 		while(it!=mScreens.end())
 			it->second->update(delta);
 	}
+	//-----------------------------------------------------------------------
+
+	void GUI::setOverlayEnabled(String name, bool enabled)
+	{
+		if(enabled)
+			Ogre::OverlayManager::getSingletonPtr()->getByName(name)->show();
+		else
+			Ogre::OverlayManager::getSingletonPtr()->getByName(name)->hide();
+	}
+	//-----------------------------------------------------------------------
+
+	void GUI::setOverlayText(String element, String text)
+	{
+		Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element)->setCaption(text);
+	}
+	//-----------------------------------------------------------------------
+
+	void GUI::setOverlayTextColour(String element, Colour color)
+	{
+		Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element)->setColour(convertOgre(color));
+	}
+	//-----------------------------------------------------------------------
+
+	void GUI::setOverlayTextColour(String element, Colour color, Colour color2)
+	{
+		Ogre::TextAreaOverlayElement* elem = static_cast<Ogre::TextAreaOverlayElement*>(
+			Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element));
+		elem->setColourBottom(convertOgre(color));
+		elem->setColourTop(convertOgre(color2));
+	}
+	//-----------------------------------------------------------------------
+
+	void GUI::loadFont(String name)
+	{
+		Ogre::FontManager::getSingletonPtr()->load(name, "General");
+	}
+	//-----------------------------------------------------------------------
 }

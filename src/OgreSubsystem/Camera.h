@@ -48,6 +48,12 @@ namespace Oryx
 		void setNearClip(Real clip);
 		void setFOV(Real fov);
 
+		Real getFOV();
+		Real getNearClip();
+		Real getFarClip();
+
+		Real getAspectRatio();
+
 		Vector3 getAbsoluteDirection();
 		Vector3 getDirection();
 

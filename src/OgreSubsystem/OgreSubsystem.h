@@ -33,6 +33,7 @@
 #include "Light.h"
 #include "ParticleSystem.h"
 #include "Material.h"
+#include "ScreenMesh.h"
 
 namespace Ogre
 {
@@ -163,9 +164,15 @@ namespace Oryx
 					the system is restarted */
 		void setGfxParameter(String param,String value);
 
+		void add3dOverlay(String overlay, SceneNode* node);
+
 		size_t getWindowHandle();
 
+		ScreenMesh* createScreenMesh(String material);
+
 	protected:
+
+		Gorilla::Silverback* mGUISys;
 
 		bool mInitialized;
 
@@ -181,6 +188,9 @@ namespace Oryx
 
 		SceneNode* mRootSceneNode;
 		std::vector<SceneNode*> mSceneNodes;
+
+		// sorta hacky, but it'll do for the time being
+		std::vector<ScreenMesh*> mScreenMeshes;
 
 		unsigned int mResolutionX;
 		unsigned int mResolutionY;

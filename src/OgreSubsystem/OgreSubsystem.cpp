@@ -25,6 +25,7 @@
 
 #include "OryxStringUtils.h"
 #include "OgreConversions.h"
+#include "Gorilla.h"
 
 namespace Oryx
 {
@@ -59,7 +60,7 @@ namespace Oryx
 			Ogre::NameValuePairList miscP;
 
 			miscP["vsync"] = "true";
-			miscP["FSAA"] = "8";
+			miscP["FSAA"] = "0";
 			miscP["gamma"] = "false";
 			miscP["border"] = "fixed";
 			miscP["colourDepth"] = "32";
@@ -80,7 +81,6 @@ namespace Oryx
 			mDefaultCamera->setFarClip(50);
 			mDefaultCamera->setNearClip(0.1f);
 			mDefaultCamera->setFOV(60.f);
-			mDefaultCamera->getCamera()->setPolygonMode(Ogre::PM_WIREFRAME);
 
 			mViewport = mWindow->addViewport(mDefaultCamera->getCamera());
 			mViewport->setBackgroundColour(Ogre::ColourValue(1.0f,0.5f,0.2f));
@@ -102,9 +102,9 @@ namespace Oryx
 			mRootSceneNode = new SceneNode(mSceneManager->getRootSceneNode()->getName(),
 				mSceneManager->getRootSceneNode());
 
-			//mSceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
-
+			mGUISys = new Gorilla::Silverback();
 			mGUI = new GUI();
+			mGUI->mGUI = mGUISys;
 
 			Logger::getPtr()->logMessage("Ogre Subsystem started up.");
 			mInitialized = true;
@@ -121,8 +121,13 @@ namespace Oryx
 				delete mSceneNodes[i];
 			mSceneNodes.clear();
 
+			for(int i = 0; i < mScreenMeshes.size(); ++i)
+				delete mScreenMeshes[i];
+			mScreenMeshes.clear();
+
 			Logger::getPtr()->logMessage("deleting GUI...");
 			delete mGUI;
+			delete mGUISys;
 
 			Logger::getPtr()->logMessage("deleting Root...");
 			delete mRoot;
@@ -146,6 +151,11 @@ namespace Oryx
 			restart();
 		delete mGUI;
 		mGUI = new GUI();
+		mGUI->mGUI = mGUISys;
+
+		for(int i = 0; i < mScreenMeshes.size(); ++i)
+			delete mScreenMeshes[i];
+		mScreenMeshes.clear();
 	}
 	//-----------------------------------------------------------------------
 
@@ -242,7 +252,7 @@ namespace Oryx
 		Ogre::Entity* ent = mSceneManager->createEntity(nombre,mesh);
 		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
 		node->attachObject(ent);
-		ent->setCastShadows(true);
+		ent->setCastShadows(false);
 		Mesh* m = new Mesh(nombre,node,ent);
 		mSceneNodes.push_back(m);
 		return m;
@@ -557,11 +567,24 @@ namespace Oryx
 		}
 	}
 	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::add3dOverlay(String overlay, SceneNode* node)
+	{
+		Ogre::OverlayManager::getSingletonPtr()->getByName(overlay)->add3D(node->getNode());
+	}
+	//-----------------------------------------------------------------------
 	
 	size_t OgreSubsystem::getWindowHandle()
 	{
 		size_t handle = 0;
 		mWindow->getCustomAttribute("WINDOW", &handle);
 		return handle;
+	}
+	//-----------------------------------------------------------------------
+
+	ScreenMesh* OgreSubsystem::createScreenMesh(String material)
+	{
+		mScreenMeshes.push_back(new ScreenMesh(material));
+		return mScreenMeshes.back();
 	}
 }

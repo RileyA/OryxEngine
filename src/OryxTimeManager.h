@@ -57,8 +57,12 @@ namespace Oryx
 		/** Pretty much just updates the delta time. */
 		void update();
 
-		/** returns a nicely formatted timestamp string hh::mm::ss */
+		/** returns a nicely formatted timestamp string hh::mm::ss: */
 		String getTimestamp();
+
+		/** returns a nicely formatted timestamp string mm::ss::ms 
+		 *		@param offset An offset in seconds */
+		String getTimestampMilli(Real offset = 0.f);
 
 		/** Starts up the clock */
 		void start();

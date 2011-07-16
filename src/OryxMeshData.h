@@ -103,6 +103,56 @@ namespace Oryx
 			texcoords.push_back(std::vector<float>());
 		}
 
+		void loadObj(String filename)
+		{
+			addTexcoordSet();
+			std::ifstream file(filename.c_str());
+			if(file.is_open())
+			{
+				String line = "";
+				std::getline(file,line);
+				while(file.good())
+				{
+					std::stringstream ss;
+					ss<<line;
+					String type;
+					ss>>type;
+					if(type == "v")
+					{
+						float x, y, z;
+						ss>>x;
+						ss>>y;
+						ss>>z;
+						vertices.push_back(x);
+						vertices.push_back(y);
+						vertices.push_back(z);
+					}
+					else if(type == "vt")
+					{
+						float u,v;
+						ss>>u;
+						ss>>v;
+						texcoords[0].push_back(u);
+						texcoords[0].push_back(v);
+					}
+					else if(type == "f")
+					{
+						String v1, v2, v3;
+						ss>>v1;
+						ss>>v2;
+						ss>>v3;
+						indices.push_back(static_cast<short>(atoi(v1.c_str()))-1);
+						indices.push_back(static_cast<short>(atoi(v2.c_str()))-1);
+						indices.push_back(static_cast<short>(atoi(v3.c_str()))-1);
+					}
+					// else - we don't care
+
+					std::getline(file,line);;
+				}
+				file.close();
+			}
+		}
+
 		std::vector<float> vertices;
 		std::vector<float> normals;
 		std::vector<std::vector<float> > texcoords;

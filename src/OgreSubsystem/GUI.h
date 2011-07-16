@@ -51,9 +51,17 @@ namespace Oryx
 		void destroyScreen(GUIScreen* screen);
 		void update(Real delta);
 
-	private:
+		// hacky overlay stuffs
+		void setOverlayEnabled(String name, bool enabled);
+		void setOverlayText(String element, String text);
+		void setOverlayTextColour(String element, Colour color);
+		void setOverlayTextColour(String element, Colour color, Colour color2);
+		void loadFont(String name);
 
 		Gorilla::Silverback* mGUI;
+
+	private:
+
 		std::map<String,GUIScreen*> mScreens;
 
 	};

@@ -93,7 +93,27 @@ namespace Oryx
 		return out;
 	}
 	//-----------------------------------------------------------------------
-	
+
+	String TimeManager::getTimestampMilli(Real offset)
+	{
+		int currentTime = (getTimeDecimal() - offset)*100;
+		int minutes = currentTime/6000;
+		currentTime %= 6000;
+		int seconds = currentTime/100;
+		currentTime %= 100;
+		int milliseconds = currentTime;
+		if(milliseconds>=100)
+			milliseconds = 99;
+
+		std::stringstream ss;
+		ss<<String((minutes<10)?"0":"")<<minutes<<":"<<String((seconds<10)?"0":"")
+			<<seconds<<":"<<String((milliseconds<10)?"0":"")<<milliseconds;
+
+		String out = "";
+		ss>>out;
+		return out;
+	}
+	//-----------------------------------------------------------------------
 	void TimeManager::start()
 	{
 		gettimeofday(&mStart,0);

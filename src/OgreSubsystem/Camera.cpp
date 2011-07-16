@@ -26,7 +26,7 @@
 namespace Oryx
 {
 	Camera::Camera(String name,Ogre::SceneNode* node,Ogre::Camera* cam)
-		:SceneNode(name,node),mCamera(cam){}
+		:SceneNode(name,node),mCamera(cam){mCamera->setPolygonMode(Ogre::PM_SOLID);}
 	//-----------------------------------------------------------------------
 
 	Camera::~Camera()
@@ -66,7 +66,31 @@ namespace Oryx
 		mCamera->setFOVy(Ogre::Degree(fov));
 	}
 	//-----------------------------------------------------------------------
+
+	Real Camera::getFOV()
+	{
+		return mCamera->getFOVy().valueRadians();
+	}
+	//-----------------------------------------------------------------------
 	
+	Real Camera::getNearClip()
+	{
+		return mCamera->getNearClipDistance();
+	}
+	//-----------------------------------------------------------------------
+
+	Real Camera::getFarClip()
+	{
+		return mCamera->getFarClipDistance();
+	}
+	//-----------------------------------------------------------------------
+	
+	Real Camera::getAspectRatio()
+	{
+		return mCamera->getAspectRatio();
+	}
+	//-----------------------------------------------------------------------
+
 	Vector3 Camera::getAbsoluteDirection()
 	{
 		return convertOgre(mCamera->getDerivedDirection());	
