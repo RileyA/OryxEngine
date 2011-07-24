@@ -25,6 +25,7 @@ namespace Oryx
 	ScreenMesh::ScreenMesh(String material)
 	{
 		mMesh = new CustomMesh(material);
+		createSlot("update", this, &ScreenMesh::updateSlot);
 	}
 	//-----------------------------------------------------------------------
 
@@ -35,37 +36,61 @@ namespace Oryx
 	//-----------------------------------------------------------------------
 
 	/** Builds the whole thing */
-	void ScreenMesh::buildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices)
+	void ScreenMesh::buildMesh(size_t vertexCount, size_t faceCount, float* pos, 
+		float* tex, float* colors, unsigned short* indices)
 	{
 		mMesh->buildMesh(vertexCount,faceCount,pos,tex,colors,indices);
 	}
 	//-----------------------------------------------------------------------
 
 	/** rebuilds the whole thing */
-	void ScreenMesh::rebuildMesh(size_t vertexCount, float* pos, float* tex, float* colors, unsigned short* indices)
+	void ScreenMesh::rebuildMesh(size_t vertexCount, size_t faceCount, float* pos,
+		float* tex, float* colors, unsigned short* indices)
 	{
-
+		mMesh->rebuildMesh(vertexCount,faceCount,pos,tex,colors,indices);
 	}
 	//-----------------------------------------------------------------------
 
 	/** Updates vertex positions */
 	void ScreenMesh::updatePositions(float* pos)
 	{
-
+		mMesh->updatePositions(pos);
 	}
 	//-----------------------------------------------------------------------
 
 	/** Updates texcoords */
 	void ScreenMesh::updateTexcoords(float* tex)
 	{
-
+		mMesh->updateTexcoords(tex);
 	}
 	//-----------------------------------------------------------------------
 
 	/** Updates vertex colors */
 	void ScreenMesh::updateColors(float* colors)
 	{
+		mMesh->updateColors(colors);
+	}
+	//-----------------------------------------------------------------------
 
+	void ScreenMesh::updateSlot(const Message& m)
+	{
+		// no RTTI, just assume it's getting passed the right thing...
+		MeshUpdate* mu = &((static_cast<const MessageAny<MeshUpdate&>*>(&m))->data);
+
+		if(mu->flags & 1<<3)
+		{
+			rebuildMesh(mu->vertexCount, mu->faceCount, mu->vertices, mu->texcoords,
+				mu->diffuse, mu->indices);
+		}
+		else
+		{
+			if(mu->flags & 1)
+				updatePositions(mu->vertices);
+			if(mu->flags & 1 << 1)
+				updateTexcoords(mu->texcoords);
+			if(mu->flags & 1 << 2)
+				updateColors(mu->diffuse);
+		}
 	}
 	//-----------------------------------------------------------------------
 }

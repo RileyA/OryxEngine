@@ -97,6 +97,34 @@ namespace Oryx
 	typedef signed char int8;
 	typedef unsigned long long uint64;
 	typedef unsigned long OryxID;// used to uniquely identify game objects
+
+	// basic alignment enums, so we aren't redefining these everywhere
+	enum HorizontalAlign
+	{
+		HA_CENTER = 1,
+		HA_LEFT = 2,
+		HA_RIGHT = 4
+	};
+
+	enum VerticalAlign
+	{
+		VA_CENTER = 8,
+		VA_TOP = 16,
+		VA_BOTTOM = 32
+	};
+
+	enum Align
+	{
+		A_LEFT_TOP = HA_LEFT | VA_TOP,
+		A_LEFT_CENTER = HA_LEFT | VA_CENTER,
+		A_LEFT_BOTTOM = HA_LEFT | VA_BOTTOM,
+		A_CENTER_TOP = HA_CENTER | VA_TOP,
+		A_CENTER = HA_CENTER | VA_CENTER,
+		A_CENTER_BOTTOM = HA_CENTER | VA_BOTTOM,
+		A_RIGHT_TOP = HA_RIGHT | VA_TOP,
+		A_RIGHT_CENTER = HA_RIGHT | VA_CENTER,
+		A_RIGHT_BOTTOM = HA_RIGHT | VA_BOTTOM,
+	};
 }
 
 // Some basic stuff that should be accessible from just about anywhere:

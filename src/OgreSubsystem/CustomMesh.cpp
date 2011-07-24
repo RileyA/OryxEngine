@@ -93,26 +93,65 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void CustomMesh::rebuildMesh(size_t vertexCount, float* pos, float* tex, float* colors, unsigned short* indices)
+	void CustomMesh::rebuildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices)
 	{
-
+		// TODO do an actual update rather than a full delete and rebuild!
+		delete mRenderOp.vertexData;
+		delete mRenderOp.indexData;
+		mRenderOp.vertexData = 0;
+		mRenderOp.indexData = 0;
+		buildMesh(vertexCount, faceCount, pos, tex, colors, indices);
 	}
 	//-----------------------------------------------------------------------
 
 	void CustomMesh::updatePositions(float* pos)
 	{
-
+		Ogre::VertexDeclaration* vdecl = mRenderOp.vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = mRenderOp.vertexData->vertexBufferBinding;
+		const Ogre::VertexElement* buf = vdecl->findElementBySemantic(Ogre::VES_POSITION);
+		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(buf->getSource());
+		if(buf && !buffer.isNull())
+		{
+			buffer->writeData(0,buffer->getSizeInBytes(), pos, true);
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("ERROR: Could not find vertex position buffer.");
+		}
 	}
 	//-----------------------------------------------------------------------
 
 	void CustomMesh::updateTexcoords(float* tex)
 	{
-
+		Ogre::VertexDeclaration* vdecl = mRenderOp.vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = mRenderOp.vertexData->vertexBufferBinding;
+		const Ogre::VertexElement* pos = vdecl->findElementBySemantic(Ogre::VES_TEXTURE_COORDINATES);
+		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(pos->getSource());
+		if(pos && !buffer.isNull())
+		{
+			buffer->writeData(0,buffer->getSizeInBytes(),tex, true);
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("ERROR: Could not find texcoord buffer.");
+		}
 	}
 	//-----------------------------------------------------------------------
 	
 	void CustomMesh::updateColors(float* colors)
 	{
+		Ogre::VertexDeclaration* vdecl = mRenderOp.vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = mRenderOp.vertexData->vertexBufferBinding;
+		const Ogre::VertexElement* pos = vdecl->findElementBySemantic(Ogre::VES_DIFFUSE);
+		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(pos->getSource());
+		if(pos && !buffer.isNull())
+		{
+			buffer->writeData(0,buffer->getSizeInBytes(),colors, true);
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("ERROR: Could not find vertex color buffer.");
+		}
 	}
 	//-----------------------------------------------------------------------
 
@@ -133,6 +172,6 @@ namespace Oryx
 		// actually render the thing
 		Ogre::Root::getSingletonPtr()->getRenderSystem()->_render(mRenderOp);
 	}
-
+	//-----------------------------------------------------------------------
 }
 

@@ -22,6 +22,8 @@
 #include "OryxLogger.h"
 
 #include "Ogre.h"
+#include "OgreTextAreaOverlayElement.h"
+#include "OgreFontManager.h"
 
 #include "OryxStringUtils.h"
 #include "OgreConversions.h"
@@ -59,7 +61,7 @@ namespace Oryx
 
 			Ogre::NameValuePairList miscP;
 
-			miscP["vsync"] = "true";
+			miscP["vsync"] = "false";
 			miscP["FSAA"] = "0";
 			miscP["gamma"] = "false";
 			miscP["border"] = "fixed";
@@ -102,9 +104,9 @@ namespace Oryx
 			mRootSceneNode = new SceneNode(mSceneManager->getRootSceneNode()->getName(),
 				mSceneManager->getRootSceneNode());
 
-			mGUISys = new Gorilla::Silverback();
-			mGUI = new GUI();
-			mGUI->mGUI = mGUISys;
+			//mGUISys = new Gorilla::Silverback();
+			//mGUI = new GUI();
+			//mGUI->mGUI = mGUISys;
 
 			Logger::getPtr()->logMessage("Ogre Subsystem started up.");
 			mInitialized = true;
@@ -125,14 +127,14 @@ namespace Oryx
 				delete mScreenMeshes[i];
 			mScreenMeshes.clear();
 
-			Logger::getPtr()->logMessage("deleting GUI...");
-			delete mGUI;
-			delete mGUISys;
+			//Logger::getPtr()->logMessage("deleting GUI...");
+			//delete mGUI;
+			//delete mGUISys;
 
 			Logger::getPtr()->logMessage("deleting Root...");
 			delete mRoot;
 			mRoot = 0;
-			mGUI = 0;
+			//mGUI = 0;
 			Logger::getPtr()->logMessage("Ogre Subsystem shut down.");
 			mInitialized = false;
 		}
@@ -149,9 +151,9 @@ namespace Oryx
 	{
 		if(mNeedsRestart)
 			restart();
-		delete mGUI;
-		mGUI = new GUI();
-		mGUI->mGUI = mGUISys;
+		//delete mGUI;
+		//mGUI = new GUI();
+		//mGUI->mGUI = mGUISys;
 
 		for(int i = 0; i < mScreenMeshes.size(); ++i)
 			delete mScreenMeshes[i];
@@ -216,10 +218,10 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	GUI* OgreSubsystem::getGUI()
-	{
-		return mGUI;
-	}
+	//GUI* OgreSubsystem::getGUI()
+	//{
+	//	return mGUI;
+	//}
 	//-----------------------------------------------------------------------
 
 	Ogre::Viewport* OgreSubsystem::getMainViewport()
@@ -587,4 +589,41 @@ namespace Oryx
 		mScreenMeshes.push_back(new ScreenMesh(material));
 		return mScreenMeshes.back();
 	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::setOverlayEnabled(String name, bool enabled)
+	{
+		if(enabled)
+			Ogre::OverlayManager::getSingletonPtr()->getByName(name)->show();
+		else
+			Ogre::OverlayManager::getSingletonPtr()->getByName(name)->hide();
+	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::setOverlayText(String element, String text)
+	{
+		Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element)->setCaption(text);
+	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::setOverlayTextColour(String element, Colour color)
+	{
+		Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element)->setColour(convertOgre(color));
+	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::setOverlayTextColour(String element, Colour color, Colour color2)
+	{
+		Ogre::TextAreaOverlayElement* elem = static_cast<Ogre::TextAreaOverlayElement*>(
+			Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element));
+		elem->setColourBottom(convertOgre(color));
+		elem->setColourTop(convertOgre(color2));
+	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::loadFont(String name)
+	{
+		Ogre::FontManager::getSingletonPtr()->load(name, "General");
+	}
+	//-----------------------------------------------------------------------
 }

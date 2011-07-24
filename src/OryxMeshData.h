@@ -26,6 +26,19 @@
 
 namespace Oryx
 {
+	/** Small struct with info about a mesh update, doesn't hold any actual mesh data (see below for that) */
+	struct ORYX_EXPORT MeshUpdate
+	{
+		unsigned char flags;
+		uint16_t* indices;
+		float* vertices;
+		float* diffuse;
+		float* texcoords;
+		float* normals;
+		unsigned int vertexCount;
+		unsigned int faceCount;
+	};
+
 	/** Simple struct representing a 3d mesh (meant for interchange between subsystems etc..) */
 	struct ORYX_EXPORT MeshData
 	{

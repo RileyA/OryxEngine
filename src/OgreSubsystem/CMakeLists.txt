@@ -4,15 +4,15 @@ include_directories("${OGRE_INCLUDE_DIR}")
 set(SOURCE_FILES
 	Camera.cpp
 	Decal.cpp
-	Gorilla.cpp
-	GUIButton.cpp
-	GUI.cpp
-	GUIElement.cpp
-	GUIEmpty.cpp
-	GUIRectangle.cpp
-	GUIScreen.cpp
-	GUIStaticText.cpp
-	GUIText.cpp
+	#Gorilla.cpp
+	#GUIButton.cpp
+	#GUI.cpp
+	#GUIElement.cpp
+	#GUIEmpty.cpp
+	#GUIRectangle.cpp
+	#GUIScreen.cpp
+	#GUIStaticText.cpp
+	#GUIText.cpp
 	Light.cpp
 	Material.cpp
 	Mesh.cpp
@@ -29,15 +29,15 @@ set(SOURCE_FILES
 set(HEADER_FILES
 	Camera.h
 	Decal.h
-	Gorilla.h
-	GUIButton.h
-	GUIElement.h
-	GUIEmpty.h
-	GUI.h
-	GUIRectangle.h
-	GUIScreen.h
-	GUIStaticText.h
-	GUIText.h
+	#Gorilla.h
+	#GUIButton.h
+	#GUIElement.h
+	#GUIEmpty.h
+	#GUI.h
+	#GUIRectangle.h
+	#GUIScreen.h
+	#GUIStaticText.h
+	#GUIText.h
 	Light.h
 	ManualObjectData.h
 	Material.h

@@ -43,6 +43,8 @@ namespace Oryx
 			mMaterial = static_cast<Ogre::MaterialPtr>(Ogre::MaterialManager::getSingletonPtr()->
 				getByName(material)).getPointer();
 			Ogre::Root::getSingletonPtr()->getSceneManager("mSceneManager")->addRenderQueueListener(this);
+			mRenderOp.vertexData = 0;
+			mRenderOp.indexData = 0;
 		}
 
 		virtual ~CustomMesh();
@@ -51,7 +53,7 @@ namespace Oryx
 		void buildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices);
 
 		/** rebuilds the whole thing */
-		void rebuildMesh(size_t vertexCount, float* pos, float* tex, float* colors, unsigned short* indices);
+		void rebuildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices);
 
 		/** Updates vertex positions */
 		void updatePositions(float* pos);

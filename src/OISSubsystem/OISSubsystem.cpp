@@ -49,8 +49,9 @@ namespace Oryx
 			createSignal("keyPressed");   // passes keycode on press
 			createSignal("keyReleased");  // passes keycode on release
 			createSignal("charPressed");  // passes char value on press
+			createSignal("charReleased");  // passes char value on release
 			createSignal("mousePressed"); // passes mouse button code on click
-			createSignal("mousePressed"); // passes mouse button code on release
+			createSignal("mouseReleased"); // passes mouse button code on release
 			createSignal("mouseMoved");   // passes mouse pos on move
 			createSignal("mouseMovedAbs");// passes absolute mouse pos when moved
 
@@ -215,7 +216,7 @@ namespace Oryx
 
 		if(up)
 		{
-			getSignal("charPressed")->fire(MessageAny<uint>(val));
+			getSignal("charPressed")->fire(MessageAny<char>(val));
 			getSignal("keyPressed")->fire(MessageAny<uint>(key));
 			getSignal(String("pressed_")+String(mKeys[key]))->fire(0);
 		}
@@ -224,6 +225,7 @@ namespace Oryx
 			mKeyPresses[key] = true;
 			getSignal(String("released_")+String(mKeys[key]))->fire(0);
 			getSignal("keyReleased")->fire(MessageAny<uint>(key));
+			getSignal("charReleased")->fire(MessageAny<char>(val));
 		}
 	}
 	//-----------------------------------------------------------------------	
@@ -231,9 +233,10 @@ namespace Oryx
 	void OISSubsystem::_mouseButton(uint button, bool up)
 	{
 		mButtonStates[button] = up;
-		if(up)
+		if(!up)
 		{
 			getSignal(String("released_")+String(mButtons[button]))->fire(0);
+			getSignal("mouseReleased")->fire(MessageAny<uint>(button));
 		}
 		else
 		{

@@ -19,6 +19,7 @@ option(BUILD_LUA_SUBSYSTEM "Build lua Subsystem." TRUE)
 option(BUILD_OGRE_SUBSYSTEM "Build OGRE Subsystem." TRUE)
 option(BUILD_OIS_SUBSYSTEM "Build OIS Subsystem." TRUE)
 option(BUILD_SDL_SUBSYSTEM "Build SDL Subsystem." TRUE)
+option(BUILD_GUI_SUBSYSTEM "Build SDL Subsystem." TRUE)
 
 set(INSTALL_RUNTIMES_TO "/usr/bin" CACHE STRING "Where install executables.")
 set(INSTALL_LIBS_TO "/usr/lib" CACHE STRING "Where to install libs.")
@@ -38,6 +39,9 @@ set(OIS_LIB_DIR "/usr/lib" CACHE STRING "Where to look for ois libs.")
 # Bullet
 set(BT_INCLUDE_DIR "/usr/include/bullet" CACHE STRING "Where to look for bullet includes.")
 set(BT_LIB_DIR "/usr/lib" CACHE STRING "Where to look for bullet libs.")
+
+# Oyster
+set(OYSTER_INCLUDE_DIR "/home/riley/Desktop/Projects/Oyster/include" CACHE STRING "Where to look for oyster includes.")
 
 # lua/luabind
 set(LUA_INCLUDE_DIR "/usr/include" CACHE STRING "Where to look for lua includes.")
@@ -107,6 +111,9 @@ if (BUILD_OGRE_SUBSYSTEM)
 endif ()
 if (BUILD_BULLET_SUBSYSTEM)
 	add_subdirectory(src/BulletSubsystem)
+endif ()
+if (BUILD_GUI_SUBSYSTEM)
+	add_subdirectory(src/GUISubsystem)
 endif ()
 if (BUILD_AL_SUBSYSTEM)
 	add_subdirectory(src/ALSubsystem)

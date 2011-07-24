@@ -24,13 +24,14 @@
 #include "Oryx.h"
 #include "Ogredllmain.h"
 #include "Oryx3DMath.h"
+#include "OryxEventHandler.h"
 
 namespace Oryx
 {	
 	class CustomMesh;
 
 	/** Basically just wraps custommesh.. */
-	class ScreenMesh
+	class ScreenMesh : public EventHandler
 	{
 	public:
 		
@@ -41,7 +42,7 @@ namespace Oryx
 		void buildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices);
 
 		/** rebuilds the whole thing */
-		void rebuildMesh(size_t vertexCount, float* pos, float* tex, float* colors, unsigned short* indices);
+		void rebuildMesh(size_t vertexCount, size_t faceCount, float* pos, float* tex, float* colors, unsigned short* indices);
 
 		/** Updates vertex positions */
 		void updatePositions(float* pos);
@@ -51,6 +52,8 @@ namespace Oryx
 
 		/** Updates vertex colors */
 		void updateColors(float* colors);
+
+		void updateSlot(const Message& m);
 
 	protected:
 

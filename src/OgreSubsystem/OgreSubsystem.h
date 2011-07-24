@@ -24,7 +24,6 @@
 #include "OgreSubsystem/Ogredllmain.h"
 #include "OryxEngineSubsystem.h"
 #include "OryxColour.h"
-#include "GUI.h"
 #include "OryxTimeManager.h"
 
 #include "SceneNode.h"
@@ -80,7 +79,7 @@ namespace Oryx
 
 		/** Returns a pointer to the GUI system 
 			@return A pointer to the GUI system */
-		GUI* getGUI();
+		//GUI* getGUI();
 		/** Returns a pointer to the main window's viewport
 			@return The main window's viewport*/
 		Ogre::Viewport* getMainViewport();
@@ -170,13 +169,19 @@ namespace Oryx
 
 		ScreenMesh* createScreenMesh(String material);
 
+		void setOverlayEnabled(String name, bool enabled);
+		void setOverlayText(String element, String text);
+		void setOverlayTextColour(String element, Colour color);
+		void setOverlayTextColour(String element, Colour color, Colour color2);
+		void loadFont(String name);
+
 	protected:
 
-		Gorilla::Silverback* mGUISys;
+		//Gorilla::Silverback* mGUISys;
 
 		bool mInitialized;
 
-		GUI* mGUI;
+		//GUI* mGUI;
 
 		Ogre::Root* mRoot;
 		Ogre::SceneManager* mSceneManager;
