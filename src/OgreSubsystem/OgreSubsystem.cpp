@@ -27,7 +27,6 @@
 
 #include "OryxStringUtils.h"
 #include "OgreConversions.h"
-#include "Gorilla.h"
 
 namespace Oryx
 {
@@ -104,10 +103,6 @@ namespace Oryx
 			mRootSceneNode = new SceneNode(mSceneManager->getRootSceneNode()->getName(),
 				mSceneManager->getRootSceneNode());
 
-			//mGUISys = new Gorilla::Silverback();
-			//mGUI = new GUI();
-			//mGUI->mGUI = mGUISys;
-
 			Logger::getPtr()->logMessage("Ogre Subsystem started up.");
 			mInitialized = true;
 		}
@@ -127,14 +122,9 @@ namespace Oryx
 				delete mScreenMeshes[i];
 			mScreenMeshes.clear();
 
-			//Logger::getPtr()->logMessage("deleting GUI...");
-			//delete mGUI;
-			//delete mGUISys;
-
 			Logger::getPtr()->logMessage("deleting Root...");
 			delete mRoot;
 			mRoot = 0;
-			//mGUI = 0;
 			Logger::getPtr()->logMessage("Ogre Subsystem shut down.");
 			mInitialized = false;
 		}
@@ -151,10 +141,6 @@ namespace Oryx
 	{
 		if(mNeedsRestart)
 			restart();
-		//delete mGUI;
-		//mGUI = new GUI();
-		//mGUI->mGUI = mGUISys;
-
 		for(int i = 0; i < mScreenMeshes.size(); ++i)
 			delete mScreenMeshes[i];
 		mScreenMeshes.clear();
@@ -216,12 +202,6 @@ namespace Oryx
 	{
 		return convertOgre(mViewport->getBackgroundColour());
 	}
-	//-----------------------------------------------------------------------
-
-	//GUI* OgreSubsystem::getGUI()
-	//{
-	//	return mGUI;
-	//}
 	//-----------------------------------------------------------------------
 
 	Ogre::Viewport* OgreSubsystem::getMainViewport()
