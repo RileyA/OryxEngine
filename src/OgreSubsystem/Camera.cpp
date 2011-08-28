@@ -26,7 +26,10 @@
 namespace Oryx
 {
 	Camera::Camera(String name,Ogre::SceneNode* node,Ogre::Camera* cam)
-		:SceneNode(name,node),mCamera(cam){mCamera->setPolygonMode(Ogre::PM_SOLID);}
+		:SceneNode(name,node),mCamera(cam)
+	{
+		mCamera->setPolygonMode(Ogre::PM_SOLID);
+	}
 	//-----------------------------------------------------------------------
 
 	Camera::~Camera()

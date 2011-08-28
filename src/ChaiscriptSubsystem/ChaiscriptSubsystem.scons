@@ -1,2 +1,0 @@
-env = Environment(CPPDEFINES=['BUILD_CHAI_DLL','LINUX'])
-env.SharedLibrary('ChaiscriptSubsystem',['Chaidllmain.cpp','ChaiscriptSubsystem.cpp'],CPPPATH=['../src','../../ChaiScript/include'],LIBPATH='../bin',LIBS='OryxEngine')
