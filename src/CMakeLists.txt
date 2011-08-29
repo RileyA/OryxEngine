@@ -70,6 +70,7 @@ set(HEADER_FILES
 	OryxScriptingSubsystem.h
 	OryxSignal.h
 	OryxSlot.h
+	OryxSharedPtr.h
 	OryxSphere.h
 	OryxState.h
 	OryxStringUtils.h

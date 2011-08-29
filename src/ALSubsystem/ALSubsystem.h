@@ -47,9 +47,6 @@ namespace Oryx
 		bool bufferSound(String filename);
 		void update();
 		bool loadSound(String filename);
-		// hacky, to be fixed:
-		void setDefaultVolume(float volume);
-		void setDefaultVolumeOgg(float volume);
 
 		ActiveSound* getActiveSound(unsigned int index);
 
