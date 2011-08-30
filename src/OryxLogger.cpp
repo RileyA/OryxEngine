@@ -37,15 +37,24 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Logger::logMessage(String message)
+	void Logger::logMessage(String message, bool newline, bool timestamp)
 	{
 		if(mActive)
 		{
-			String timeStampStr = TimeManager::getPtr()->getTimestamp();
-			std::cout<<timeStampStr<<" "<<message<<"\n";
+			String out;
+			if(timestamp)
+				out += TimeManager::getPtr()->getTimestamp() + " ";
+
+			out += message;
+
+			if(newline)
+				out += "\n";
+
+			std::cout<<out;
 			if(mLogFile.is_open())
-				mLogFile<<timeStampStr<<" "<<message<<"\n";
+				mLogFile<<out;
 			mLogFile.flush();
+
 			getSignal("Log")->send(message);
 		}
 	}

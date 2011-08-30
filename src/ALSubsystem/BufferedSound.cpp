@@ -23,74 +23,23 @@
 
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
 
 namespace Oryx
 {
-	BufferedSound::BufferedSound(const String& filename,bool isOgg,bool delayLoad)
+	BufferedSound::BufferedSound(ALuint source, ALuint buffer)
+		:Sound(source),mBuffer(buffer)
 	{
-		mFilename = filename;
-		mOgg = isOgg;
-		mLoaded = false;
-		if(!delayLoad)
-		{
-			load();
-		}
+		// set buffer up, don't play automatically though
+		alSourcei(mSource, AL_BUFFER, mBuffer);
 	}
 
 	BufferedSound::~BufferedSound()
 	{
-		unload();
+		// ... nothin' to see here ...
 	}
 
-	bool BufferedSound::load()
+	void BufferedSound::update()
 	{
-		if(!mLoaded&&!mOgg)
-		{
-			alGetError();
-			mBuffer = alutCreateBufferFromFile(mFilename.c_str());
-			// Check for errors
-			if(alGetError() == AL_NO_ERROR)
-			{
-				Logger::getPtr()->logMessage("Sound Loaded: "+mFilename);
-				mLoaded = true;
-			}
-			else
-			{
-				mLoaded = false;
-			}
-		}
-		return mLoaded;
+		// ... nothin' to see here ...
 	}
-
-	void BufferedSound::unload()
-	{
-		if(mLoaded)
-		{
-			alDeleteBuffers(1,&mBuffer);
-			mLoaded = false;
-			mBuffer = 0;
-		}
-	}
-
-	bool BufferedSound::isLoaded()
-	{
-		return mLoaded;
-	}
-
-	bool BufferedSound::isOgg()
-	{
-		return mOgg;
-	}
-
-	unsigned int BufferedSound::getBuffer()
-	{
-		return mBuffer;
-	}
-
-	String BufferedSound::getFilename()
-	{
-		return mFilename;
-	}
-
 }

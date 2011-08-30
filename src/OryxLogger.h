@@ -34,7 +34,7 @@ namespace Oryx
 
 		/** Writes a message to the console and log file. 
 		 *		@param message The message to write (no need for a newline) */
-		void logMessage(String message);
+		void logMessage(String message, bool newline = true, bool timestamp = true);
 
 		/** Tells the Logger to stop outputting all messages */
 		void suppressOutput();

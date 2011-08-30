@@ -21,12 +21,19 @@
 #define ORYX_OAL_SUBSYSTEM_H
 
 #include "Oryx.h"
-#include "ALSubsystem/ALdllmain.h"
+#include "ALdllmain.h"
 #include "OryxEngineSubsystem.h"
-
-#include "SoundPtr.h"
+#include "Sound.h"
+#include "AudioLoader.h"
+#include "WavLoader.h"
+#include "OggLoader.h"
 #include "BufferedSound.h"
-#include "ActiveSound.h"
+
+typedef unsigned int ALuint;
+struct ALCdevice_struct;
+typedef struct ALCdevice_struct ALCdevice;
+struct ALCcontext_struct;
+typedef struct ALCcontext_struct ALCcontext;
 
 namespace Oryx
 {
@@ -43,25 +50,33 @@ namespace Oryx
 		virtual void _endState();
 		virtual String getName();
 
-		SoundPtr play2D(String filename);
-		bool bufferSound(String filename);
-		void update();
-		bool loadSound(String filename);
+		SoundPtr play2D(String name, bool startPaused = false);
+		SoundPtr stream2D(String filename);
 
-		ActiveSound* getActiveSound(unsigned int index);
+		void loadSound(String filename, String name = "AUTO");
+		void unloadSound(String name);
+
+		void registerAudioLoader(AudioLoader* loader, String filetype);
 
 	protected:
 
+		ALuint getSource();
+		bool hasSources();
+
 		bool mInitialized;
 
-		std::map<std::string,BufferedSound*> mBuffers;
-		std::vector<ActiveSound*> mSounds;
-		unsigned int mMaxSources;
+		ALCdevice* mDevice;
+		ALCcontext* mContext;
 
-		float mDefaultVolume;
-		float mDefaultVolumeOgg;
-		bool mVolumeDirty;
-		bool mVolumeOggDirty;
+		std::list<SoundPtr> mActiveSounds;
+		std::vector<ALuint> mSources;
+		std::map<ALuint, bool> mSourceAvailability;
+		std::map<String, ALuint> mAudioBuffers;
+		std::map<String, AudioLoader*> mAudioLoaders; 
+
+		// Built-in loaders
+		WavLoader mWavLoader;
+		OggLoader mOggLoader;
 	};
 }
 
