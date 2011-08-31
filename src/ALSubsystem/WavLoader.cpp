@@ -77,7 +77,7 @@ namespace Oryx
 		int format;
 		int dataSize;
 		std::ifstream* file = loadWav(filename, format, sampleRate, dataSize);
-		return new WavStream(file, sampleRate, format, dataSize);
+		return new WavStream(file, format, sampleRate, dataSize);
 	}
 	//---------------------------------------------------------------------------
 
@@ -180,12 +180,6 @@ namespace Oryx
 			blockAlign == 4 ? AL_FORMAT_STEREO16 : AL_FORMAT_STEREO8;
 		rate = sampleRate;
 		outSize = dataSize;
-
-		std::cout<<"Wav Info"<<"\n";
-		std::cout<<"format:    "<<format<<"\n";
-		std::cout<<"rate:      "<<rate<<"\n";
-		std::cout<<"channels:   "<<numChannels<<"\n";
-		std::cout<<"align:   "<<blockAlign<<"\n";
 
 		return file;
 	}

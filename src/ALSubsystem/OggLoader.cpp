@@ -17,12 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------------
+
 #include "OggLoader.h"
+#include "OggStream.h"
 
 #include <AL/alc.h>
 #include <AL/al.h>
 
-#include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
 namespace Oryx
@@ -30,16 +31,16 @@ namespace Oryx
 	void OggLoader::loadSound(String filename, ALuint& out)
 	{
 		// do basic opening stuff
-		OggVorbis_File oggFile = openOgg(filename);
+		OggVorbis_File* oggFile = loadOgg(filename);
 		
 		// grab info
-		vorbis_info* info = ov_info(&oggFile, -1);
+		vorbis_info* info = ov_info(oggFile, -1);
 
 		// determine format based on channels (always 16 bit)
 		int format = info->channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 
 		// determine uncompressed PCM size (assuming stream formats within the file are consistent..)
-		int size = ov_pcm_total(&oggFile, -1) * info->channels * 2;
+		int size = ov_pcm_total(oggFile, -1) * info->channels * 2;
 
 		// allocate buffer
 		char* data = new char[size];
@@ -50,7 +51,7 @@ namespace Oryx
 		// read it all into the buffer
 		while(pos < size)
 		{
-			int result = ov_read(&oggFile, data + pos, size - pos, 0, 2, 1, &section);
+			int result = ov_read(oggFile, data + pos, size - pos, 0, 2, 1, &section);
 
 			if(result > 0)
 				pos += result;
@@ -66,13 +67,25 @@ namespace Oryx
 		
 		// cleanup
 		delete[] data;
-		ov_clear(&oggFile);
+		ov_clear(oggFile);
+		free(oggFile);
 	}
 	//---------------------------------------------------------------------------
 
 	AudioStream* OggLoader::streamSound(String filename)
 	{
-		return 0;
+		// open and init
+		OggVorbis_File* file = loadOgg(filename);
+
+		// grab info struct
+		vorbis_info* info = ov_info(file, -1);
+
+		// sort out format stuff
+		int format = info->channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+		int sampleRate = info->rate;
+
+		// return stream object
+		return new OggStream(file, format, sampleRate);
 	}
 	//---------------------------------------------------------------------------
 
@@ -100,10 +113,10 @@ namespace Oryx
 	}
 	//---------------------------------------------------------------------------
 
-	OggVorbis_File OggLoader::openOgg(String filename)
+	OggVorbis_File* OggLoader::loadOgg(String filename)
 	{
 		FILE* file;
-		OggVorbis_File oggFile;
+		OggVorbis_File* oggFile = static_cast<OggVorbis_File*>(malloc(sizeof(OggVorbis_File)));
 
 		// open the file up
 		file = fopen(filename.c_str(), "rb");
@@ -118,7 +131,7 @@ namespace Oryx
 		callbacks.tell_func = ov_tell_func;
 
 		// open the stream, with custom callbacks
-		if(ov_open_callbacks(file, &oggFile, 0, 0, callbacks) < 0)
+		if(ov_open_callbacks(file, oggFile, 0, 0, callbacks) < 0)
 		{
 			fclose(file);
 			throw Oryx::Exception("Could not open Ogg stream.");

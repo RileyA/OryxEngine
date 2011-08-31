@@ -47,6 +47,7 @@ set(SOURCE_FILES
 	WavLoader.cpp
 	WavStream.cpp
 	OggLoader.cpp
+	OggStream.cpp
 	)
 
 set(HEADER_FILES
@@ -60,6 +61,7 @@ set(HEADER_FILES
 	WavLoader.h
 	WavStream.h
 	OggLoader.h
+	OggStream.h
 	)
 
 add_library(ALSubsystem SHARED ${SOURCE_FILES} ${HEADER_FILES} )

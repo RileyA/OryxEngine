@@ -18,46 +18,48 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------------
 
-#include "WavStream.h"
+#include "OggStream.h"
+#include <vorbis/vorbisfile.h>
 
 namespace Oryx
 {
-	WavStream::WavStream(std::ifstream* file, int format, int rate, int dataSize)
-		:AudioStream(format, rate), mFile(file), mSize(dataSize), mPosition(0)
+	OggStream::OggStream(OggVorbis_File* file, int format, int rate)
+		:AudioStream(format, rate), mFile(file)
 	{}
 	//---------------------------------------------------------------------------
 
-	WavStream::~WavStream()
+	OggStream::~OggStream()
 	{
 		close();
 	}
 	//---------------------------------------------------------------------------
 
-	int WavStream::stream(char* buffer, int length)
+	int OggStream::stream(char* buffer, int length)
 	{
-		if(mSize == mPosition)
+		int bytesWritten = 0;
+		int section;
+
+		while(bytesWritten < length)
 		{
-			return 0;
+			int wrote = ov_read(mFile, buffer + bytesWritten, 
+				length - bytesWritten, 0, 2, 1, &section);
+			if(wrote > 0)
+				bytesWritten += wrote;
+			else if(wrote < 0)
+				return 0;
+			else
+				break;
 		}
-		else if(mSize - mPosition <= length)
-		{
-			mFile->read(buffer, mSize - mPosition);
-			int wrote = mSize - mPosition;
-			mPosition = mSize;
-			return wrote;
-		}
-		else
-		{
-			mFile->read(buffer, length);
-			mPosition += length;
-			return length;
-		}
+
+		return bytesWritten;
 	}
 	//---------------------------------------------------------------------------
 
-	void WavStream::close()
+	void OggStream::close()
 	{	
-		delete mFile;
+		if(mFile)
+			ov_clear(mFile);
+		free(mFile);
 		mFile = 0;
 	}
 	//---------------------------------------------------------------------------
