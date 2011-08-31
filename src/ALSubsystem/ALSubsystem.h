@@ -28,6 +28,7 @@
 #include "WavLoader.h"
 #include "OggLoader.h"
 #include "BufferedSound.h"
+#include "StreamedSound.h"
 
 typedef unsigned int ALuint;
 struct ALCdevice_struct;
@@ -51,7 +52,7 @@ namespace Oryx
 		virtual String getName();
 
 		SoundPtr play2D(String name, bool startPaused = false);
-		SoundPtr stream2D(String filename);
+		SoundPtr stream2D(String filename, bool startPaused = false);
 
 		void loadSound(String filename, String name = "AUTO");
 		void unloadSound(String name);

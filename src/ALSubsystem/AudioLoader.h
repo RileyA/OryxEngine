@@ -21,6 +21,7 @@
 #define ORYX_AUDIO_LOADER_H
 
 #include "Oryx.h"
+#include "AudioStream.h"
 
 typedef unsigned int ALuint;
 class StreamedSound;
@@ -36,7 +37,7 @@ namespace Oryx
 		virtual ~AudioLoader(){};
 	
 		virtual void loadSound(String filename, ALuint& out) = 0;
-		virtual StreamedSound* streamSound(String filename) = 0;
+		virtual AudioStream* streamSound(String filename) = 0;
 	};
 }
 

@@ -1,4 +1,3 @@
-
 //---------------------------------------------------------------------------
 //
 //(C) Copyright Riley Adams 2010
@@ -19,35 +18,28 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------------
 
-#ifndef ORYX_OGG_LOADER_H
-#define ORYX_OGG_LOADER_H
+#ifndef ORYX_WAV_STREAM
+#define ORYX_WAV_STREAM
 
-#include "AudioLoader.h"
-
-struct OggVorbis_File;
-typedef int64_t ogg_int64_t;
+#include "AudioStream.h"
 
 namespace Oryx
 {
-	/** Loads and decodes Ogg Vorbis files */
-	class OggLoader : public AudioLoader
+	class WavStream : public AudioStream
 	{
-	public: 
+	public:
 
-		OggLoader(){}
-		virtual ~OggLoader(){}
+		WavStream(std::ifstream* file, int format, int rate, int dataSize);
+		virtual ~WavStream();
 
-		virtual void loadSound(String filename, ALuint& out);
-		virtual AudioStream* streamSound(String filename);
-
-		static size_t ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource);
-		static int ov_seek_func(void *datasource, ogg_int64_t offset, int whence);
-		static int ov_close_func(void *datasource);
-		static long ov_tell_func(void *datasource);
+		virtual int stream(char* buffer, int length);
+		virtual void close();
 
 	private:
-			
-		OggVorbis_File openOgg(String filename);
+
+		std::ifstream* mFile;
+		int mSize;
+		int mPosition;
 
 	};
 }

@@ -49,8 +49,11 @@ namespace Oryx
 		virtual ~WavLoader(){}
 
 		virtual void loadSound(String filename, ALuint& out);
+		virtual AudioStream* streamSound(String filename);
 
-		virtual StreamedSound* streamSound(String filename){return 0;};
+	private:
+
+		std::ifstream* loadWav(String filename, int& format, int& rate, int& dataSize);
 
 	};
 }

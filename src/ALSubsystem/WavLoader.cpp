@@ -19,39 +19,73 @@
 //--------------------------------------------------------------------------
 
 #include "WavLoader.h"
+#include "WavStream.h"
 
 #include <AL/alc.h>
 #include <AL/al.h>
 
 namespace Oryx
 {
-	void getChunkId(std::ifstream& stream, char* out)
+	void getChunkId(std::ifstream* stream, char* out)
 	{
-		stream.read(out, 4);
+		stream->read(out, 4);
 	}
 	//---------------------------------------------------------------------------
 
-	uint32_t getChunkUInt32(std::ifstream& stream)
+	uint32_t getChunkUInt32(std::ifstream* stream)
 	{
 		char bytes[4];
-		stream.read(bytes, 4);
+		stream->read(bytes, 4);
 		return *reinterpret_cast<uint32_t*>(bytes);
 	}
 	//---------------------------------------------------------------------------
 
-	uint16_t getChunkUInt16(std::ifstream& stream)
+	uint16_t getChunkUInt16(std::ifstream* stream)
 	{
 		char bytes[2];
-		stream.read(bytes, 2);
+		stream->read(bytes, 2);
 		return *reinterpret_cast<uint16_t*>(bytes);
 	}
 	//---------------------------------------------------------------------------
 
 	void WavLoader::loadSound(String filename, ALuint& out)
 	{
-		std::ifstream file(filename.c_str(), std::ios::in | std::ios::binary);
+		int sampleRate;
+		int format;
+		int dataSize;
 
-		if(!file.is_open())
+		std::ifstream* file = loadWav(filename, format, sampleRate, dataSize);
+
+		// read in the entire contents of the data chunk
+		char* data = new char[dataSize];
+		file->read(data, dataSize);
+
+		// create and write to output buffer
+		alGenBuffers(1, &out);
+		alBufferData(out, format, static_cast<void*>(data), dataSize, sampleRate);
+
+		// cleanup
+		delete file;
+		delete[] data;
+		file->close();
+	}
+	//---------------------------------------------------------------------------
+
+	AudioStream* WavLoader::streamSound(String filename)
+	{
+		int sampleRate;
+		int format;
+		int dataSize;
+		std::ifstream* file = loadWav(filename, format, sampleRate, dataSize);
+		return new WavStream(file, sampleRate, format, dataSize);
+	}
+	//---------------------------------------------------------------------------
+
+	std::ifstream* WavLoader::loadWav(String filename, int& format, int& rate, int& outSize)
+	{
+		std::ifstream* file = new std::ifstream(filename.c_str(), std::ios::in | std::ios::binary);
+
+		if(!file->is_open())
 			throw Oryx::Exception("Could not open file.");
 
 		// process the header
@@ -83,7 +117,7 @@ namespace Oryx
 		uint16_t significantBitsPerSample;
 
 		// process chunks
-		while(file.good() && processed < size)
+		while(file->good() && processed < size)
 		{
 			char chunkId[4];
 			uint32_t chunkSize;
@@ -116,41 +150,44 @@ namespace Oryx
 				processed += 2;
 
 				// skip any extra formating bytes
-				file.ignore(chunkSize - 16);
+				file->ignore(chunkSize - 16);
 			}
 			else if(String(chunkId,4) == "data")
 			{
 				data = new byte[chunkSize];
 				dataSize = chunkSize;
 				processed += chunkSize;
-				file.read(reinterpret_cast<char*>(data), chunkSize);
+				// break right at the start of the data...
+				break;
 			}
 			else // some other chunk type, ignore for now
 			{
-				file.ignore(chunkSize);
+				file->ignore(chunkSize);
 				processed += chunkSize;
 			}
 
 			// skip padding byte if chunk data isn't 2 byte aligned
 			if(chunkSize & 1)
 			{
-				file.ignore(1);
+				file->ignore(1);
 				processed += 1;
 			}
 		}
 
 		// determine format (this won't handle stuff with >2 channels..)
-		ALenum format = numChannels == 1 ? 
+		format = numChannels == 1 ? 
 			blockAlign == 2 ? AL_FORMAT_MONO16   : AL_FORMAT_MONO8:
-			blockAlign == 2 ? AL_FORMAT_STEREO16 : AL_FORMAT_STEREO8;
+			blockAlign == 4 ? AL_FORMAT_STEREO16 : AL_FORMAT_STEREO8;
+		rate = sampleRate;
+		outSize = dataSize;
 
-		// create and write to output buffer
-		alGenBuffers(1, &out);
-		alBufferData(out, format, static_cast<void*>(data), dataSize, sampleRate);
+		std::cout<<"Wav Info"<<"\n";
+		std::cout<<"format:    "<<format<<"\n";
+		std::cout<<"rate:      "<<rate<<"\n";
+		std::cout<<"channels:   "<<numChannels<<"\n";
+		std::cout<<"align:   "<<blockAlign<<"\n";
 
-		// cleanup
-		delete[] data;
-		file.close();
+		return file;
 	}
 	//---------------------------------------------------------------------------
 }

@@ -1,4 +1,3 @@
-
 //---------------------------------------------------------------------------
 //
 //(C) Copyright Riley Adams 2010
@@ -19,35 +18,31 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------------
 
-#ifndef ORYX_OGG_LOADER_H
-#define ORYX_OGG_LOADER_H
+#ifndef ORYX_STREAMED_SOUND
+#define ORYX_STREAMED_SOUND
 
-#include "AudioLoader.h"
-
-struct OggVorbis_File;
-typedef int64_t ogg_int64_t;
+#include "Oryx.h"
+#include "Sound.h"
+#include "AudioStream.h"
 
 namespace Oryx
 {
-	/** Loads and decodes Ogg Vorbis files */
-	class OggLoader : public AudioLoader
+	class StreamedSound : public Sound
 	{
-	public: 
+	public:
+	
+		StreamedSound(AudioStream* stream, ALuint source);
+		virtual ~StreamedSound();
 
-		OggLoader(){}
-		virtual ~OggLoader(){}
+		void update();
+		bool updateBuffer(ALuint buffer);
 
-		virtual void loadSound(String filename, ALuint& out);
-		virtual AudioStream* streamSound(String filename);
+	protected:
 
-		static size_t ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource);
-		static int ov_seek_func(void *datasource, ogg_int64_t offset, int whence);
-		static int ov_close_func(void *datasource);
-		static long ov_tell_func(void *datasource);
-
-	private:
-			
-		OggVorbis_File openOgg(String filename);
+		ALuint mBuffers[2];
+		AudioStream* mStream;
+		bool mDone;
+		const static int BUFFER_SIZE = 4096 * 4;
 
 	};
 }

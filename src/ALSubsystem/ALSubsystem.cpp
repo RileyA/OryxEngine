@@ -200,9 +200,32 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	SoundPtr ALSubsystem::stream2D(String filename)
+	SoundPtr ALSubsystem::stream2D(String filename, bool startPaused)
 	{
 		SoundPtr out;
+
+		String ext = filename.substr(filename.find_last_of(".") + 1);
+
+		if(mAudioLoaders.find(ext) != mAudioLoaders.end())
+		{	
+			try
+			{
+				AudioStream* stream = mAudioLoaders[ext]->streamSound(filename);
+				out.bind(new StreamedSound(stream, getSource()));
+				mActiveSounds.push_back(out);
+				if(!startPaused)
+					out->play();
+			}
+			catch(Oryx::Exception e)
+			{
+				Logger::getPtr()->logMessage("Could not stream sound.");
+			}
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("Could not stream sound, no loader found.");
+		}	
+
 		return out;
 	}
 	//-----------------------------------------------------------------------

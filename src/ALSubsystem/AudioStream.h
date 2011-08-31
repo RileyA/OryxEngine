@@ -1,4 +1,3 @@
-
 //---------------------------------------------------------------------------
 //
 //(C) Copyright Riley Adams 2010
@@ -19,35 +18,38 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------------
 
-#ifndef ORYX_OGG_LOADER_H
-#define ORYX_OGG_LOADER_H
+#ifndef ORYX_AUDIO_STREAM_H
+#define ORYX_AUDIO_STREAM_H
 
-#include "AudioLoader.h"
+#include "Oryx.h"
 
-struct OggVorbis_File;
-typedef int64_t ogg_int64_t;
+typedef unsigned int ALuint;
 
 namespace Oryx
 {
-	/** Loads and decodes Ogg Vorbis files */
-	class OggLoader : public AudioLoader
+	/** An abstract streaming audio source */
+	class AudioStream
 	{
-	public: 
+	public:
 
-		OggLoader(){}
-		virtual ~OggLoader(){}
+		AudioStream(int format, int rate)
+			:mRate(rate),mFormat(format){}
 
-		virtual void loadSound(String filename, ALuint& out);
-		virtual AudioStream* streamSound(String filename);
+		virtual ~AudioStream(){}
 
-		static size_t ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource);
-		static int ov_seek_func(void *datasource, ogg_int64_t offset, int whence);
-		static int ov_close_func(void *datasource);
-		static long ov_tell_func(void *datasource);
+		/** Stream into the provided buffer */ 
+		virtual int stream(char* buffer, int length) = 0;
 
-	private:
-			
-		OggVorbis_File openOgg(String filename);
+		/** Close and free up the source */
+		virtual void close() = 0;
+
+		int getRate(){return mRate;}
+		int getFormat(){return mFormat;}
+	
+	protected:
+
+		int mRate;
+		int mFormat;
 
 	};
 }

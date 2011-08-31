@@ -43,7 +43,9 @@ set(SOURCE_FILES
 	ALSubsystem.cpp
 	Sound.cpp
 	BufferedSound.cpp
+	StreamedSound.cpp
 	WavLoader.cpp
+	WavStream.cpp
 	OggLoader.cpp
 	)
 
@@ -52,8 +54,11 @@ set(HEADER_FILES
 	ALSubsystem.h
 	Sound.h
 	BufferedSound.h
+	StreamedSound.h
 	AudioLoader.h
+	AudioStream.h
 	WavLoader.h
+	WavStream.h
 	OggLoader.h
 	)
 

@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------------
-
 #include "OggLoader.h"
 
 #include <AL/alc.h>
@@ -28,40 +27,15 @@
 
 namespace Oryx
 {
-	size_t ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource);
-	int ov_seek_func(void *datasource, ogg_int64_t offset, int whence);
-	int ov_close_func(void *datasource);
-	long ov_tell_func(void *datasource);
-
 	void OggLoader::loadSound(String filename, ALuint& out)
 	{
-		FILE* file;
-		OggVorbis_File oggFile;
-
-		// open the file up
-		file = fopen(filename.c_str(), "rb");
-
-		if(!file)
-			throw Oryx::Exception("Could not open Ogg file.");
-	
-		ov_callbacks callbacks;
-		callbacks.read_func = ov_read_func;
-		callbacks.seek_func = ov_seek_func;
-		callbacks.close_func = ov_close_func;
-		callbacks.tell_func = ov_tell_func;
-
-		// open the stream, with custom callbacks
-		if(ov_open_callbacks(file, &oggFile, 0, 0, callbacks) < 0)
-		{
-			fclose(file);
-			throw Oryx::Exception("Could not open Ogg stream.");
-		}
-
-		// grab info and comment
+		// do basic opening stuff
+		OggVorbis_File oggFile = openOgg(filename);
+		
+		// grab info
 		vorbis_info* info = ov_info(&oggFile, -1);
-		vorbis_comment* comment = ov_comment(&oggFile, -1);
 
-		// determine format (always 16 bit)
+		// determine format based on channels (always 16 bit)
 		int format = info->channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 
 		// determine uncompressed PCM size (assuming stream formats within the file are consistent..)
@@ -71,7 +45,7 @@ namespace Oryx
 		char* data = new char[size];
 
 		int pos = 0;
-		int section;
+		int section; // not used atm...
 	
 		// read it all into the buffer
 		while(pos < size)
@@ -96,27 +70,61 @@ namespace Oryx
 	}
 	//---------------------------------------------------------------------------
 
-	size_t ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource)
+	AudioStream* OggLoader::streamSound(String filename)
+	{
+		return 0;
+	}
+	//---------------------------------------------------------------------------
+
+	size_t OggLoader::ov_read_func(void *ptr, size_t size, size_t nmemb, void *datasource)
 	{
 		return fread(ptr, size, nmemb, (FILE*)datasource);
 	}
 	//---------------------------------------------------------------------------
 
-	int ov_seek_func(void *datasource, ogg_int64_t offset, int whence)
+	int OggLoader::ov_seek_func(void *datasource, ogg_int64_t offset, int whence)
 	{
 		return fseek((FILE*)datasource, (long)offset, whence);
 	}
 	//---------------------------------------------------------------------------
 
-	int ov_close_func(void *datasource)
+	int OggLoader::ov_close_func(void *datasource)
 	{
 	   return fclose((FILE*)datasource);
 	}
 	//---------------------------------------------------------------------------
 
-	long ov_tell_func(void *datasource)
+	long OggLoader::ov_tell_func(void *datasource)
 	{
 		return ftell((FILE*)datasource);
+	}
+	//---------------------------------------------------------------------------
+
+	OggVorbis_File OggLoader::openOgg(String filename)
+	{
+		FILE* file;
+		OggVorbis_File oggFile;
+
+		// open the file up
+		file = fopen(filename.c_str(), "rb");
+
+		if(!file)
+			throw Oryx::Exception("Could not open Ogg file.");
+	
+		ov_callbacks callbacks;
+		callbacks.read_func = ov_read_func;
+		callbacks.seek_func = ov_seek_func;
+		callbacks.close_func = ov_close_func;
+		callbacks.tell_func = ov_tell_func;
+
+		// open the stream, with custom callbacks
+		if(ov_open_callbacks(file, &oggFile, 0, 0, callbacks) < 0)
+		{
+			fclose(file);
+			throw Oryx::Exception("Could not open Ogg stream.");
+		}
+
+		return oggFile;
 	}
 	//---------------------------------------------------------------------------
 }
