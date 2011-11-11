@@ -93,4 +93,9 @@ namespace Oryx
 		}
 	}
 	//-----------------------------------------------------------------------
+
+	void ScreenMesh::setHidden(bool h)
+	{
+		mMesh->mHide = h;
+	}
 }

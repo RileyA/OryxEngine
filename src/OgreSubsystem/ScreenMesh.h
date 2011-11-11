@@ -55,6 +55,8 @@ namespace Oryx
 
 		void updateSlot(const Message& m);
 
+		void setHidden(bool h);
+
 	protected:
 
 		CustomMesh* mMesh;

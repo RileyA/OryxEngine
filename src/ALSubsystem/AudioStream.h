@@ -22,13 +22,14 @@
 #define ORYX_AUDIO_STREAM_H
 
 #include "Oryx.h"
+#include "ALdllmain.h"
 
 typedef unsigned int ALuint;
 
 namespace Oryx
 {
 	/** An abstract streaming audio source */
-	class AudioStream
+	class ORYX_AL_EXPORT AudioStream
 	{
 	public:
 

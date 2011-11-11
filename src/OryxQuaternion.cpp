@@ -81,6 +81,25 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	void Quaternion::fromAxes(const Vector3& xA, const Vector3& yA, const Vector3& zA)
+	{
+        Matrix3 kRot;
+
+        kRot[0][0] = xA.x;
+        kRot[1][0] = xA.y;
+        kRot[2][0] = xA.z;
+
+        kRot[0][1] = yA.x;
+        kRot[1][1] = yA.y;
+        kRot[2][1] = yA.z;
+
+        kRot[0][2] = zA.x;
+        kRot[1][2] = zA.y;
+        kRot[2][2] = zA.z;
+
+        FromRotationMatrix(kRot);
+	}
+
 	void Quaternion::ToRotationMatrix (Matrix3& kRot) const
 	{
 		Real fTx  = x+x;
@@ -240,3 +259,5 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 }
+
+

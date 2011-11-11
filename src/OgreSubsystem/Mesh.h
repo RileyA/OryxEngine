@@ -53,6 +53,9 @@ namespace Oryx
 		void update(MeshData& d);
 		void updatePositions(MeshData& d);
 		void updateNormals(MeshData& d);
+		void updateDiffuse(MeshData& d);
+
+		void setRenderQueueGroup(unsigned char group);
 
 		// TODO: materials, animation, etc
 

@@ -45,6 +45,8 @@ namespace Ogre
 
 namespace Oryx
 {
+	class StencilListener;
+	
 	/** 3d graphics subsystem that wraps the Ogre3d engine */
 	class ORYX_OGRE_EXPORT OgreSubsystem : public EngineSubsystem
 	{
@@ -128,7 +130,7 @@ namespace Oryx
 		void setLinearFog(float start, float end, Colour color);
 
 		/** Takes a screenshot */
-		void takeScreenshot();
+		void takeScreenshot(String name = "OryxShot", String target="NULL");
 
 		/** Returns the width of the rendering window
 			@return Width of the current rendering window */
@@ -162,6 +164,12 @@ namespace Oryx
 			@remarks Depending on the param, this may not take effect until
 					the system is restarted */
 		void setGfxParameter(String param,String value);
+
+		int getBatchCount();
+
+		void enablePortalHack(int depth);
+		bool mPortalHack;
+		int mPortalDepth;
 
 		void add3dOverlay(String overlay, SceneNode* node);
 
@@ -205,6 +213,8 @@ namespace Oryx
 		bool mNeedsRestart;// does it have options to set during the next reset?
 
 		int mAutoNameIndex;
+
+		StencilListener* mListener;
 
 	};
 }

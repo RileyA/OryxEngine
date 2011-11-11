@@ -23,6 +23,7 @@
 #define ORYX_OGG_LOADER_H
 
 #include "AudioLoader.h"
+#include "ALdllmain.h"
 
 struct OggVorbis_File;
 typedef int64_t ogg_int64_t;
@@ -30,7 +31,7 @@ typedef int64_t ogg_int64_t;
 namespace Oryx
 {
 	/** Loads and decodes Ogg Vorbis files */
-	class OggLoader : public AudioLoader
+	class ORYX_AL_EXPORT OggLoader : public AudioLoader
 	{
 	public: 
 

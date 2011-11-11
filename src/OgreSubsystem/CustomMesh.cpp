@@ -26,6 +26,7 @@ namespace Oryx
 		using namespace Ogre;
 		
 		mVisible = true;
+		mHide = false;
 
 		mRenderOp.vertexData = new Ogre::VertexData;
 		mRenderOp.vertexData->vertexStart = 0;
@@ -157,8 +158,11 @@ namespace Oryx
 
 	void CustomMesh::renderQueueEnded(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat)
 	{
-		if (!mVisible || id != Ogre::RENDER_QUEUE_OVERLAY)
+		if (!mVisible || id != Ogre::RENDER_QUEUE_OVERLAY || !mHide)
 			return;
+
+		Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
+		rendersys->setStencilCheckEnabled(false); 
 
 		// setup uniform matrices
 		Ogre::Root::getSingletonPtr()->getRenderSystem()->_setWorldMatrix( Ogre::Matrix4::IDENTITY );

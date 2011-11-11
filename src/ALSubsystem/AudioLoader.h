@@ -22,6 +22,7 @@
 
 #include "Oryx.h"
 #include "AudioStream.h"
+#include "ALdllmain.h"
 
 typedef unsigned int ALuint;
 class StreamedSound;
@@ -29,7 +30,7 @@ class StreamedSound;
 namespace Oryx
 {
 	/** Abstract audio loading class (to be extended for each loadable filetype) */
-	class AudioLoader
+	class ORYX_AL_EXPORT AudioLoader
 	{
 	public:
 		

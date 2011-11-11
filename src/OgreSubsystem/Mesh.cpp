@@ -367,4 +367,28 @@ namespace Oryx
 			Logger::getPtr()->logMessage("ERROR: Could not find vertex normal buffer.");
 		}
 	}
+	//-----------------------------------------------------------------------
+
+	void Mesh::updateDiffuse(MeshData& d)
+	{
+		// updates only posititions
+		Ogre::SubMesh* sm = mEntity->getMesh()->getSubMesh(0);
+		Ogre::VertexDeclaration* vdecl = sm->vertexData->vertexDeclaration;
+		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
+		const Ogre::VertexElement* pos = vdecl->findElementBySemantic(Ogre::VES_DIFFUSE);
+		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(pos->getSource());
+		if(pos && !buffer.isNull())
+		{
+			buffer->writeData(0,buffer->getSizeInBytes(),&(d.diffuse[0]), true);
+		}
+		else
+		{
+			Logger::getPtr()->logMessage("ERROR: Could not find vertex diffuse color buffer.");
+		}
+	}
+
+	void Mesh::setRenderQueueGroup(unsigned char group)
+	{
+		mEntity->setRenderQueueGroup(group);
+	}
 }

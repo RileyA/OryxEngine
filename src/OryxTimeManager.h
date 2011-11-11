@@ -73,7 +73,11 @@ namespace Oryx
 		Real mDeltaTime;
 		Real mTimeSpeed;
 
-		struct timeval mStart;
+		#if ORYX_PLATFORM == PLATFORM_WIN32
+			LARGE_INTEGER mStart;
+		#else
+			struct timeval mStart;
+		#endif
 
 		TimeManager()
 			:mLastTime(static_cast<Real>(clock())/CLOCKS_PER_SEC),

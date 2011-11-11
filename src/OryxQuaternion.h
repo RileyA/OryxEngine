@@ -82,6 +82,8 @@ namespace Oryx
 		 *		@param kRot The matrix to output to */
 		void ToRotationMatrix(Matrix3& kRot) const;
 
+		void fromAxes(const Vector3& xA, const Vector3& yA, const Vector3& zA);
+
 		/** Computes and returns the inverse of this Quaternion 
 		 *		@returns The inverse Quaternion */
 		Quaternion inverse() const;

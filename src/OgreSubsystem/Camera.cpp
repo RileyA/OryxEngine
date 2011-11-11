@@ -23,6 +23,9 @@
 #include "Ogre.h"
 #include "OgreConversions.h"
 
+#include "OgreSubsystem.h"
+#include "OryxEngine.h"
+
 namespace Oryx
 {
 	Camera::Camera(String name,Ogre::SceneNode* node,Ogre::Camera* cam)
@@ -58,21 +61,15 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Camera::setNearClip(Real clip)
+	Real Camera::getFarClip()
 	{
-		mCamera->setNearClipDistance(clip);
-	}
-	//-----------------------------------------------------------------------
-	
-	void Camera::setFOV(Real fov)
-	{
-		mCamera->setFOVy(Ogre::Degree(fov));
+		return mCamera->getFarClipDistance();
 	}
 	//-----------------------------------------------------------------------
 
-	Real Camera::getFOV()
+	void Camera::setNearClip(Real clip)
 	{
-		return mCamera->getFOVy().valueRadians();
+		mCamera->setNearClipDistance(clip);
 	}
 	//-----------------------------------------------------------------------
 	
@@ -82,9 +79,27 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	Real Camera::getFarClip()
+	void Camera::setCustomNearClipPlane(Plane p)
 	{
-		return mCamera->getFarClipDistance();
+		mCamera->enableCustomNearClipPlane(Ogre::Plane(convertOgre(p.n), p.d));
+	}
+	//-----------------------------------------------------------------------
+
+	void Camera::setFOV(Real fov)
+	{
+		mCamera->setFOVy(Ogre::Degree(fov));
+	}
+	//-----------------------------------------------------------------------
+
+	Real Camera::getFOV()
+	{
+		return mCamera->getFOVy().valueDegrees();
+	}
+	//-----------------------------------------------------------------------
+
+	void Camera::setAspectRatio(Real ratio)
+	{
+		mCamera->setAspectRatio(ratio);
 	}
 	//-----------------------------------------------------------------------
 	
@@ -153,10 +168,41 @@ namespace Oryx
 		return getUp()*-1.f;
 	}
 	//-----------------------------------------------------------------------	
-	
+
 	void Camera::setDirection(Vector3 dir)
 	{
 		mCamera->setDirection(convertOgre(dir));
 	}
 	//-----------------------------------------------------------------------
+	
+	Quaternion Camera::getCameraAbsoluteOrientation()
+	{
+		return convertOgre(mCamera->getDerivedOrientation());
+	}
+	//-----------------------------------------------------------------------	
+	
+	Quaternion Camera::getCameraOrientation()
+	{
+		return convertOgre(mCamera->getOrientation());
+	}
+	//-----------------------------------------------------------------------	
+
+	/*void Camera::setCamOrientation(Quaternion q)
+	{
+		mCamera->setOrientation(convertOgre(q));
+	}
+	//-----------------------------------------------------------------------	
+
+	Vector3 Camera::getCamPosition()
+	{
+		return convertOgre(mCamera->getPosition());
+	}
+	//-----------------------------------------------------------------------	
+
+	void Camera::setCamPosition(Vector3 p)
+	{
+		mCamera->setPosition(convertOgre(p));
+	}
+	//-----------------------------------------------------------------------	
+*/
 }

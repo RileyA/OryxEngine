@@ -55,8 +55,8 @@ namespace Oryx
 		mKeyboard->setEventCallback(this);
 		mMouse->setEventCallback(this);
 		const OIS::MouseState &ms = mMouse->getMouseState();
-		ms.width = 1024;
-		ms.height = 768;
+		ms.width = 800;
+		ms.height = 600;
 		setMousePosition(ms.width/2,ms.height/2);
 	}
 	//-----------------------------------------------------------------------

@@ -45,13 +45,20 @@ namespace Oryx
 
 	Real TimeManager::getTimeDecimal()
 	{
-		#ifdef ORYX_PLATFORM_LINUX 
-			struct timeval now;
-			gettimeofday(&now,0);
-			return tDifference(mStart,now);
-		#elif defined( ORYX_PLATFORM_WINDOWS )
-			return static_cast<Real>(clock())/CLOCKS_PER_SEC;
-		#endif
+#if ORYX_PLATFORM == PLATFORM_WIN32
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		long long tm = now.QuadPart - mStart.QuadPart;
+		LARGE_INTEGER freq;
+		QueryPerformanceFrequency(&freq);
+		return static_cast<Real>(tm)/freq.QuadPart;
+#else
+		struct timeval now;
+		gettimeofday(&now, 0);
+		long seconds  = now.tv_sec  - mStart.tv_sec;
+		long useconds = now.tv_usec - mStart.tv_usec;
+		return (seconds*1000.f+useconds/1000.f)/1000.f;
+#endif
 	}
 	//-----------------------------------------------------------------------
 
@@ -116,7 +123,11 @@ namespace Oryx
 	//-----------------------------------------------------------------------
 	void TimeManager::start()
 	{
-		gettimeofday(&mStart,0);
+#if ORYX_PLATFORM == PLATFORM_WIN32
+		QueryPerformanceCounter(&mStart);
+#else
+		gettimeofday(&mStart, 0);
+#endif
 	}
 	//-----------------------------------------------------------------------
 

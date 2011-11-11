@@ -33,10 +33,10 @@ namespace Oryx
 	const Vector3 Vector3::UNIT_SCALE(1, 1, 1);
 	//-----------------------------------------------------------------------
 
-	Quaternion Vector3::getRotationTo(const Vector3& dest) const
+	Quaternion Vector3::getRotationTo(const Vector3& dest, const Vector3& fallback) const
 	{
 		// Based on Stan Melax's article in Game Programming Gems
-		Vector3 fallbackAxis = Vector3::ZERO;
+		Vector3 fallbackAxis = fallback;
 		Quaternion q;
 		Vector3 v0 = *this;
 		Vector3 v1 = dest;

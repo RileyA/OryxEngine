@@ -22,10 +22,11 @@
 #define ORYX_WAV_STREAM
 
 #include "AudioStream.h"
+#include "ALdllmain.h"
 
 namespace Oryx
 {
-	class WavStream : public AudioStream
+	class ORYX_AL_EXPORT WavStream : public AudioStream
 	{
 	public:
 

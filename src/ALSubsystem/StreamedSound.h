@@ -24,10 +24,11 @@
 #include "Oryx.h"
 #include "Sound.h"
 #include "AudioStream.h"
+#include "ALdllmain.h"
 
 namespace Oryx
 {
-	class StreamedSound : public Sound
+	class ORYX_AL_EXPORT StreamedSound : public Sound
 	{
 	public:
 	

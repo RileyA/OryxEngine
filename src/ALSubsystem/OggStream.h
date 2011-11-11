@@ -27,7 +27,7 @@ struct OggVorbis_File;
 
 namespace Oryx
 {
-	class OggStream : public AudioStream
+	class ORYX_AL_EXPORT OggStream : public AudioStream
 	{
 	public:
 

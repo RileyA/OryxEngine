@@ -45,13 +45,17 @@ namespace Oryx
 		Vector2 getScreenCoords(Vector3 worldPos);
 
 		void setFarClip(Real clip);
-		void setNearClip(Real clip);
-		void setFOV(Real fov);
-
-		Real getFOV();
-		Real getNearClip();
 		Real getFarClip();
 
+		void setNearClip(Real clip);
+		Real getNearClip();
+
+		void setCustomNearClipPlane(Plane p);
+
+		void setFOV(Real fov);
+		Real getFOV();
+
+		void setAspectRatio(Real ratio);
 		Real getAspectRatio();
 
 		Vector3 getAbsoluteDirection();
@@ -70,6 +74,9 @@ namespace Oryx
 		Vector3 getDown();
 
 		void setDirection(Vector3 dir);
+
+		Quaternion getCameraAbsoluteOrientation();
+		Quaternion getCameraOrientation();
 
 		// TODO: lots...
 

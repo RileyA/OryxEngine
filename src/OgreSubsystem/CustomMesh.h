@@ -72,6 +72,8 @@ namespace Oryx
 		/** Manually render it here. */
 		void renderQueueEnded(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat);
 
+		bool mHide;
+
 	protected:
 
 		Ogre::Material* mMaterial;

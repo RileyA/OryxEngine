@@ -64,7 +64,7 @@ namespace Oryx
 				diffuse.push_back(d.y);
 				diffuse.push_back(d.z);
 			}
-			indices.push_back(indices.size());// in order for now...
+			//indices.push_back(indices.size());// in order for now...
 		}
 		
 		void vertex(Vector3 v,Vector2 t)
@@ -74,7 +74,15 @@ namespace Oryx
 			vertices.push_back(v.z);
 			texcoords[0].push_back(t.x);
 			texcoords[0].push_back(t.y);
-			indices.push_back(indices.size());// in order for now...
+			//indices.push_back(indices.size());// in order for now...
+		}
+
+		void vertex(Vector3 v)
+		{
+			vertices.push_back(v.x);
+			vertices.push_back(v.y);
+			vertices.push_back(v.z);
+			//indices.push_back(indices.size());// in order for now...
 		}
 
 		/** Returns the array of vertices */

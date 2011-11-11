@@ -30,6 +30,69 @@
 
 namespace Oryx
 {
+	#define MASQUE_FULL 0xFFFFFFFF
+	class StencilListener : public Ogre::RenderQueueListener
+	{
+	public:
+
+		virtual void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation) 
+		{ 
+			if(queueGroupId == 75)
+			{
+				Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
+
+				if(pass.first == 0)
+				{
+					rendersys->setStencilCheckEnabled(true); 
+					rendersys->setStencilBufferParams(Ogre::CMPF_ALWAYS_PASS,
+						1, MASQUE_FULL, 
+						Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_REPLACE,false);       
+				}
+				else if(pass.first == 1)
+				{
+					rendersys->setStencilCheckEnabled(true); 
+					rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
+						pass.second + 1, MASQUE_FULL, 
+						Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_INCREMENT,false);       
+				}
+				/*else
+				{
+					rendersys->setStencilCheckEnabled(false); 
+				}*/
+			}
+			else if(queueGroupId == 76)
+			{
+				Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
+
+				if(pass.first == 0)
+				{
+					rendersys->setStencilCheckEnabled(true); 
+					rendersys->setStencilBufferParams(Ogre::CMPF_ALWAYS_PASS,
+						51, MASQUE_FULL, 
+						Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_REPLACE,false);       
+				}
+				else if(pass.first == 2)
+				{
+					rendersys->setStencilCheckEnabled(true); 
+					rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
+						51 + pass.second, MASQUE_FULL, 
+						Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_INCREMENT,false);       
+				}
+				/*else
+				{
+					rendersys->setStencilCheckEnabled(false); 
+				}*/
+			}
+		} 
+
+		virtual void renderQueueEnded(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& repeatThisInvocation) 
+		{ 
+		} 
+
+		std::pair<int,int> pass;
+		int numRecursions;
+	};
+
 	OgreSubsystem::OgreSubsystem(unsigned int resX,unsigned int resY,bool fullscreen,
 		std::map<String,String> params)
 		:EngineSubsystem(),mInitialized(0),mResolutionX(resX),mResolutionY(resY),
@@ -45,12 +108,15 @@ namespace Oryx
 	{
 		if(!mInitialized)
 		{
+			mPortalHack = false;
+			mPortalDepth = 1;
 			Logger::getPtr()->logMessage("Ogre Subsystem starting up...");
 
 			mRoot = new Ogre::Root("","");
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
 			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
+			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
 
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");
@@ -79,7 +145,7 @@ namespace Oryx
 			defaultCamNode->attachObject(mDefaultCamera->getCamera());
 			mDefaultCamera->setPosition(Vector3(0,0,0));
 			mDefaultCamera->getCamera()->setDirection(0,0,-1);
-			mDefaultCamera->setFarClip(50);
+			mDefaultCamera->setFarClip(60);
 			mDefaultCamera->setNearClip(0.1f);
 			mDefaultCamera->setFOV(60.f);
 
@@ -156,7 +222,88 @@ namespace Oryx
 	void OgreSubsystem::renderFrame()
 	{
 		Ogre::WindowEventUtilities::messagePump();
-		mRoot->renderOneFrame();
+		//mRoot->renderOneFrame();
+		Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
+
+		if(mPortalHack)
+		{
+
+			// manually clear framebuffer
+			rendersys->clearFrameBuffer(Ogre::FBT_STENCIL | Ogre::FBT_COLOUR | Ogre::FBT_DEPTH,
+				mViewport->getBackgroundColour()); 
+
+			// enable stencil, but always pass
+			rendersys->setStencilCheckEnabled(true); 
+			rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
+				0, MASQUE_FULL, Ogre::SOP_ZERO,Ogre::SOP_ZERO,Ogre::SOP_ZERO,false);
+
+			// to keep track of what we're rendering: (portal index, recursion count)
+			std::pair<int, int> passInfo = std::make_pair(0, 0);
+
+			mListener->pass = passInfo;
+
+			// render once normally (inc. portals with stencil)
+			//mViewport->setMaterialScheme("test");
+			getActiveCamera()->getCamera()->_notifyMoved();
+
+			getActiveCamera()->getCamera()->_renderScene(mViewport, true);
+
+			// from here on out we'll always need stenciling
+			rendersys->setStencilCheckEnabled(true); 
+
+			// the first portal
+			passInfo.first = 1;
+			passInfo.second = 0;
+
+			for(passInfo.second = 0; passInfo.second < mPortalDepth; ++passInfo.second)
+			{
+				// notify
+				getSignal("updateCam")->send(passInfo);
+				mListener->pass = passInfo;
+				getActiveCamera()->getCamera()->_notifyMoved();
+
+				rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
+				rendersys->setStencilCheckEnabled(true); 
+				rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
+					passInfo.second + 1, MASQUE_FULL, Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_KEEP,false);
+
+				//mViewport->setMaterialScheme("regular");
+				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
+			}
+
+			// and the second
+			passInfo.first = 2;
+			passInfo.second = 0;
+
+			for(passInfo.second = 0; passInfo.second < mPortalDepth; ++passInfo.second)
+			{
+				// notify
+				getSignal("updateCam")->send(passInfo);
+				mListener->pass = passInfo;
+				getActiveCamera()->getCamera()->_notifyMoved();
+				//getActiveCamera()->getCamera()->updateFrustum();
+
+				rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
+				rendersys->setStencilCheckEnabled(true); 
+				rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
+					51 + passInfo.second, MASQUE_FULL, Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_KEEP,false);
+
+				//mViewport->setMaterialScheme("alternativo");
+				//mViewport->setMaterialScheme("regular");
+				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
+			}
+
+			// finally swap the buffers
+			mWindow->swapBuffers();
+
+			passInfo.first = 100;
+			getSignal("updateCam")->send(passInfo);
+		}
+		else
+		{
+			mRoot->renderOneFrame();
+			//mWindow->update(true);
+		}
 	}
 	//-----------------------------------------------------------------------
 
@@ -360,8 +507,8 @@ namespace Oryx
 
 		//int dims = 16;
 		//m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
-		m->_setBounds(AxisAlignedBox(-60.f,-60.f,-60.f,60.f,60.f,60.f));
-		m->_setBoundingSphereRadius(sqrt(60*60*2)/2);//11.313f);
+		m->_setBounds(AxisAlignedBox(-8.f,-64.f,-8.f,8.f,64.f,8.f));
+		m->_setBoundingSphereRadius(sqrt(16*16*2)/2);//11.313f);
 
 		sm->setMaterialName("MeinKraft");
 
@@ -387,6 +534,9 @@ namespace Oryx
 		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
 		node->attachObject(cam);
 		Camera* c = new Camera(nombre,node,cam);
+		c->setFarClip(60);
+		c->setNearClip(0.1f);
+		c->setFOV(70.f);
 		mSceneNodes.push_back(c);
 		return c;
 	}
@@ -474,9 +624,12 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	void OgreSubsystem::takeScreenshot()
+	void OgreSubsystem::takeScreenshot(String name, String target)
 	{
-		mWindow->writeContentsToFile("OryxScreenshot"+TimeManager::getPtr()->getTimestamp()+".png");
+		if(target=="NULL")
+			mWindow->writeContentsToFile(name + ".png");
+		else
+			mRoot->getRenderSystem()->getRenderTarget(target)->writeContentsToFile(name + ".png");
 	}
 
 	unsigned int OgreSubsystem::getScreenWidth()
@@ -606,4 +759,22 @@ namespace Oryx
 		Ogre::FontManager::getSingletonPtr()->load(name, "General");
 	}
 	//-----------------------------------------------------------------------
+
+	int OgreSubsystem::getBatchCount()
+	{
+		return mWindow->getStatistics().batchCount;
+	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::enablePortalHack(int depth)
+	{
+		mPortalHack = true;
+		mPortalDepth = depth;
+		mListener = new StencilListener;
+		mListener->pass = std::make_pair(0,0);
+		mListener->numRecursions = depth;
+		mSceneManager->addRenderQueueListener(mListener);
+		mViewport->setClearEveryFrame(false);
+		createSignal("updateCam");
+	}
 }

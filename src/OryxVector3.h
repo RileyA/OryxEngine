@@ -156,7 +156,7 @@ namespace Oryx
 		/** Gets the Quaternion required to rotate this vector to another
 		 *		@param dest The destination vector 
 		 *		@return The rotation (as a Quaternion) */
-		Quaternion getRotationTo(const Vector3& dest) const;
+		Quaternion getRotationTo(const Vector3& dest, const Vector3& fallback = Vector3::ZERO) const;
 
 		bool operator==(const Vector3 vect)
 		{

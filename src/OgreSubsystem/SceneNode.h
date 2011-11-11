@@ -29,6 +29,7 @@ namespace Ogre
 	class SceneNode;
 }
 
+
 namespace Oryx
 {
 	class ORYX_OGRE_EXPORT SceneNode
@@ -48,19 +49,28 @@ namespace Oryx
 		Quaternion getOrientation();
 		Quaternion getAbsoluteOrientation();
 
+		void setDirectionHack(Vector3 dir);
+		static Quaternion hack(Vector3 dir, bool* fallback = 0);
+
 		virtual void setScale(Vector3 scale);
 
 		void setVisible(bool v);
-		//bool isVisible();
 
 		void yaw(Real angle);
 		void pitch(Real angle);
 		void roll(Real angle);
 
+		void rotate(Quaternion q);
+
 		void addChild(SceneNode* child);
 		void removeChild(SceneNode* child);
 		void removeChild(String name);
 		void removeAllChildren();
+
+		Vector3 worldToLocalPosition(Vector3 pos);
+		Quaternion worldToLocalOrientation(Quaternion quat);
+		Vector3 localToWorldPosition(Vector3 pos);
+		Quaternion localToWorldOrientation(Quaternion quat);
 
 		SceneNode* getParent();
 		SceneNode* getChild(String name);

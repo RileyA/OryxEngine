@@ -22,6 +22,7 @@
 #define ORYX_WAV_LOADER_H
 
 #include "AudioLoader.h"
+#include "ALdllmain.h"
 
 namespace Oryx
 {
@@ -41,7 +42,7 @@ namespace Oryx
 	};
 
 	/** Loads plain (PCM, uncompressed) WAV files */
-	class WavLoader : public AudioLoader
+	class ORYX_AL_EXPORT WavLoader : public AudioLoader
 	{
 	public:
 

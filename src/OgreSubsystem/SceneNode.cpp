@@ -105,6 +105,12 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------	
 
+	void SceneNode::rotate(Quaternion q)
+	{
+		mNode->rotate(convertOgre(q));
+	}
+	//-----------------------------------------------------------------------
+
 	void SceneNode::addChild(SceneNode* child)
 	{
 		mNode->addChild(child->getNode());
@@ -196,4 +202,28 @@ namespace Oryx
 		return mNode;
 	}
 	//--------------------------------------------------------------------------
+	
+	Vector3 SceneNode::worldToLocalPosition(Vector3 pos)
+	{
+		return convertOgre(mNode->convertWorldToLocalPosition(convertOgre(pos)));
+	}
+	//-----------------------------------------------------------------------
+
+	Quaternion SceneNode::worldToLocalOrientation(Quaternion quat)
+	{
+		return convertOgre(mNode->convertWorldToLocalOrientation(convertOgre(quat)));
+	}
+	//-----------------------------------------------------------------------
+
+	Vector3 SceneNode::localToWorldPosition(Vector3 pos)
+	{
+		return convertOgre(mNode->convertLocalToWorldPosition(convertOgre(pos)));
+	}
+	//-----------------------------------------------------------------------
+
+	Quaternion SceneNode::localToWorldOrientation(Quaternion quat)
+	{
+		return convertOgre(mNode->convertLocalToWorldOrientation(convertOgre(quat)));
+	}
+	//-----------------------------------------------------------------------
 }

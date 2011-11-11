@@ -23,6 +23,7 @@
 #include "Oryx.h"
 #include "OryxSharedPtr.h"
 #include "OryxVector3.h"
+#include "ALdllmain.h"
 
 typedef unsigned int ALuint;
 typedef int ALenum;
@@ -30,7 +31,7 @@ typedef int ALenum;
 namespace Oryx
 {
 	/** An abstract representation of a playing or ready-to-play sound */
-	class Sound : public EventHandler
+	class ORYX_AL_EXPORT Sound : public EventHandler
 	{
 	public:
 
