@@ -23,7 +23,7 @@
 #include "OryxMessageAny.h"
 
 #include "OISListener.h"
-#include "OIS.h"
+#include "OIS/OIS.h"
 
 namespace Oryx
 {

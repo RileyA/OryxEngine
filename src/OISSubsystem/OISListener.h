@@ -21,7 +21,7 @@
 #define ORYX_OISLISTENER_H
 
 #include "Oryx.h"
-#include "OIS.h"
+#include "OIS/OIS.h"
 
 namespace Oryx
 {

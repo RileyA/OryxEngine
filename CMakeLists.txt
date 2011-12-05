@@ -22,6 +22,8 @@ cmake_minimum_required (VERSION 2.6)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 
+enable_testing()
+
 # Some lib stuff, probably unneeded, but I don't know cmake too well yet...
 if (WIN32)
 	set(LIB_PREFIX )
@@ -38,22 +40,23 @@ option(BUILD_LUA_SUBSYSTEM "Build lua Subsystem." TRUE)
 option(BUILD_OGRE_SUBSYSTEM "Build OGRE Subsystem." TRUE)
 option(BUILD_OIS_SUBSYSTEM "Build OIS Subsystem." TRUE)
 option(BUILD_SDL_SUBSYSTEM "Build SDL Subsystem." TRUE)
-option(BUILD_GUI_SUBSYSTEM "Build SDL Subsystem." TRUE)
+option(BUILD_GUI_SUBSYSTEM "Build GUI Subsystem." TRUE)
+option(BUILD_UNIT_TESTS "Build Unit Tests." TRUE)
 
 set(INSTALL_RUNTIMES_TO "/usr/bin" CACHE FILEPATH "Where install executables.")
 set(INSTALL_LIBS_TO "/usr/lib" CACHE FILEPATH "Where to install libs.")
 
 # ogre
-set(OGRE_INCLUDE_DIR "/usr/include/OGRE" CACHE FILEPATH "Where to look for ogre includes.")
-set(OGRE_LIB_DIR "/usr/lib" CACHE FILEPATH "Where to look for ogre libs.")
+set(OGRE_INCLUDE_DIR "/usr/local/include/OGRE" CACHE FILEPATH "Where to look for ogre includes.")
+set(OGRE_LIB_DIR "/usr/local/lib" CACHE FILEPATH "Where to look for ogre libs.")
 
 # SDL
 set(SDL_INCLUDE_DIR "/usr/include" CACHE FILEPATH "Where to look for sdl includes.")
 set(SDL_LIB_DIR "/usr/lib" CACHE FILEPATH "Where to look for sdl libs.")
 
 # OIS
-set(OIS_INCLUDE_DIR "/usr/include/OIS" CACHE FILEPATH "Where to look for ois includes.")
-set(OIS_LIB_DIR "/usr/lib" CACHE FILEPATH "Where to look for ois libs.")
+set(OIS_INCLUDE_DIR "/usr/local/include/OIS" CACHE FILEPATH "Where to look for ois includes.")
+set(OIS_LIB_DIR "/usr/local/lib" CACHE FILEPATH "Where to look for ois libs.")
 
 # Bullet
 set(BT_INCLUDE_DIR "/usr/include/bullet" CACHE FILEPATH "Where to look for bullet includes.")
@@ -90,6 +93,7 @@ set(BT_MATH_LIB ${BT_LIB_DIR}/${LIB_PREFIX}LinearMath${LIB_POSTFIX})
 # boost
 #set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread-mt${LIB_POSTFIX})
 set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread${LIB_POSTFIX})
+set(BOOST_TEST_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_unit_test_framework${LIB_POSTFIX})
 # lua stuff
 set(LUA_LIB ${LUA_LIB_DIR}/${LIB_PREFIX}lua${LIB_POSTFIX})
 set(LUABIND_LIB ${LUABIND_LIB_DIR}/${LIB_PREFIX}luabind${LIB_POSTFIX})
@@ -119,4 +123,6 @@ endif ()
 if (BUILD_LUA_SUBSYSTEM)
 	add_subdirectory(src/LuaSubsystem)
 endif ()
-
+if (BUILD_UNIT_TESTS)
+	add_subdirectory(src/UnitTests)
+endif ()
