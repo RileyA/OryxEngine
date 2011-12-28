@@ -33,6 +33,7 @@
 #include "ParticleSystem.h"
 #include "Material.h"
 #include "ScreenMesh.h"
+#include "CustomRenderSequence.h"
 
 namespace Ogre
 {
@@ -45,7 +46,7 @@ namespace Ogre
 
 namespace Oryx
 {
-	class StencilListener;
+	class CustomRenderSequenceListener;
 	
 	/** 3d graphics subsystem that wraps the Ogre3d engine */
 	class ORYX_OGRE_EXPORT OgreSubsystem : public EngineSubsystem
@@ -167,9 +168,12 @@ namespace Oryx
 
 		int getBatchCount();
 
-		void enablePortalHack(int depth);
-		bool mPortalHack;
-		int mPortalDepth;
+		void enableCustomRenderSequence(CustomRenderSequence* seq);
+		void disableCustomRenderSequence();
+
+		//void enablePortalHack(int depth);
+		//bool mPortalHack;
+		//int mPortalDepth;
 
 		void add3dOverlay(String overlay, SceneNode* node);
 
@@ -185,11 +189,7 @@ namespace Oryx
 
 	protected:
 
-		//Gorilla::Silverback* mGUISys;
-
 		bool mInitialized;
-
-		//GUI* mGUI;
 
 		Ogre::Root* mRoot;
 		Ogre::SceneManager* mSceneManager;
@@ -202,7 +202,7 @@ namespace Oryx
 		SceneNode* mRootSceneNode;
 		std::vector<SceneNode*> mSceneNodes;
 
-		// sorta hacky, but it'll do for the time being
+		// TODO clean this up...
 		std::vector<ScreenMesh*> mScreenMeshes;
 
 		unsigned int mResolutionX;
@@ -214,7 +214,9 @@ namespace Oryx
 
 		int mAutoNameIndex;
 
-		StencilListener* mListener;
+		CustomRenderSequenceListener* mSequenceListener;
+		bool mCustomRenderSequenceEnabled;
+		CustomRenderSequence* mRenderSequence;
 
 	};
 }

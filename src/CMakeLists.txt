@@ -77,7 +77,6 @@ set(HEADER_FILES
 	OryxTimeManager.h
 	OryxVector2.h
 	OryxVector3.h
-	VersusPackets.h
 	)
 
 add_library(OryxEngine SHARED ${SOURCE_FILES} ${HEADER_FILES} )

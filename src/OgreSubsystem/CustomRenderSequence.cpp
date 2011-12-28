@@ -2,22 +2,36 @@
 
 namespace Oryx
 {
-	CustomRenderIteration* CustomRenderSequence::addIteration()
+	CustomRenderSequence::CustomRenderSequence()
 	{
-		mIterations.push_back();
-		return mIteration.back();
+
 	}
 	//---------------------------------------------------------------------------
 
-	CustomRenderIteration* CustomRenderSequence::getRenderingIteration(size_t index)
+	CustomRenderIteration& CustomRenderSequence::addIteration()
 	{
-		return *(mIterations.begin() + index);
+		mIterations.push_back(CustomRenderIteration());
+		return mIterations.back();
 	}
 	//---------------------------------------------------------------------------
 
-	std::list<CustomRenderIteration*>::iterator CustomRenderSequence::getIterator()
+	CustomRenderIteration& CustomRenderSequence::getRenderingIteration(size_t index)
+	{
+		std::list<CustomRenderIteration>::iterator it;
+		for(index; index > 0; --index) ++it;
+		return *it;
+	}
+	//---------------------------------------------------------------------------
+
+	std::list<CustomRenderIteration>::iterator CustomRenderSequence::getIterator()
 	{
 		return mIterations.begin();
+	}
+	//---------------------------------------------------------------------------
+
+	std::list<CustomRenderIteration>::iterator CustomRenderSequence::getEnd()
+	{
+		return mIterations.end();
 	}
 	//---------------------------------------------------------------------------
 }
