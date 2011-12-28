@@ -49,9 +49,6 @@ namespace Oryx
 			clearDepth = false;
 		}
 
-		// whether or not to clear the z buffer
-		bool clearDepth;
-
 		void addStencilConfig(int renderQueue, CompareFunction com,
 			uint32_t mask, uint32_t ref, StencilOperation fail,
 			StencilOperation depthFail, StencilOperation pass)
@@ -78,6 +75,8 @@ namespace Oryx
 		// stencil settings per render queue
 		std::map<int, StencilConfig> stencilConfigs;
 
+		// whether or not to clear the z buffer
+		bool clearDepth;
 	};
 
 	/** A custom sequence of rendering iterations, this is mainly for the sake of 
@@ -93,7 +92,7 @@ namespace Oryx
 		std::list<CustomRenderIteration>::iterator getIterator();
 		std::list<CustomRenderIteration>::iterator getEnd();
 
-	private:
+	//private:
 
 		std::list<CustomRenderIteration> mIterations;
 

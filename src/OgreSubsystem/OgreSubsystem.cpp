@@ -179,11 +179,6 @@ namespace Oryx
 			rendersys->clearFrameBuffer(Ogre::FBT_STENCIL | Ogre::FBT_COLOUR | Ogre::FBT_DEPTH,
 				mViewport->getBackgroundColour()); 
 
-			// enable stencil, but always pass
-			//rendersys->setStencilCheckEnabled(true); 
-			//rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
-			//	0, MASQUE_FULL, Ogre::SOP_ZERO,Ogre::SOP_ZERO,Ogre::SOP_ZERO,false);
-
 			// pass index
 			int pass = 0;
 
@@ -194,8 +189,8 @@ namespace Oryx
 
 			while (it != mRenderSequence->getEnd())
 			{
-				if(it->clearDepth)
-					rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
+				// signal after each iteration
+				getSignal("CustomRenderSequenceIteration")->send(pass);
 
 				// update iteration info with listener
 				mSequenceListener->iteration = &(*it);
@@ -216,15 +211,18 @@ namespace Oryx
 				}
 				else
 				{
-					rendersys->setStencilCheckEnabled(false); 
+					//rendersys->setStencilCheckEnabled(false); 
 				}
+
+				if(it->clearDepth)
+					rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
 				
 				// force a transformation update and render
 				getActiveCamera()->getCamera()->_notifyMoved();
 				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
 				
-				// signal after each iteration
-				getSignal("CustomRenderSequenceIteration")->send(pass++);
+				++pass;
+				++it;
 			}
 
 			// final signal
@@ -233,142 +231,7 @@ namespace Oryx
 			// finally swap the buffers
 			mWindow->swapBuffers();
 
-			// to keep track of what we're rendering: (portal index, recursion count)
-			/*std::pair<int, int> passInfo = std::make_pair(0, 0);
-
-			mListener->pass = passInfo;
-
-			// render once normally (inc. portals with stencil)
-			//mViewport->setMaterialScheme("test");
-			getActiveCamera()->getCamera()->_notifyMoved();
-
-			getActiveCamera()->getCamera()->_renderScene(mViewport, true);
-
-			// from here on out we'll always need stenciling
-			rendersys->setStencilCheckEnabled(true); 
-
-			// the first portal
-			passInfo.first = 1;
-			passInfo.second = 0;
-
-			for(passInfo.second = 0; passInfo.second < mPortalDepth; ++passInfo.second)
-			{
-				// notify
-				getSignal("updateCam")->send(passInfo);
-				mListener->pass = passInfo;
-				getActiveCamera()->getCamera()->_notifyMoved();
-
-				rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
-				rendersys->setStencilCheckEnabled(true); 
-				rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
-					passInfo.second + 1, MASQUE_FULL, Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_KEEP,false);
-
-				//mViewport->setMaterialScheme("regular");
-				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
-			}
-
-			// and the second
-			passInfo.first = 2;
-			passInfo.second = 0;
-
-			for(passInfo.second = 0; passInfo.second < mPortalDepth; ++passInfo.second)
-			{
-				// notify
-				getSignal("updateCam")->send(passInfo);
-				mListener->pass = passInfo;
-				getActiveCamera()->getCamera()->_notifyMoved();
-				//getActiveCamera()->getCamera()->updateFrustum();
-
-				rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
-				rendersys->setStencilCheckEnabled(true); 
-				rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
-					51 + passInfo.second, MASQUE_FULL, Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_KEEP,false);
-
-				//mViewport->setMaterialScheme("alternativo");
-				//mViewport->setMaterialScheme("regular");
-				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
-			}*/
 		}
-
-		/*if(mPortalHack)
-		{
-
-			// manually clear framebuffer
-			rendersys->clearFrameBuffer(Ogre::FBT_STENCIL | Ogre::FBT_COLOUR | Ogre::FBT_DEPTH,
-				mViewport->getBackgroundColour()); 
-
-			// enable stencil, but always pass
-			rendersys->setStencilCheckEnabled(true); 
-			rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
-				0, MASQUE_FULL, Ogre::SOP_ZERO,Ogre::SOP_ZERO,Ogre::SOP_ZERO,false);
-
-			// to keep track of what we're rendering: (portal index, recursion count)
-			std::pair<int, int> passInfo = std::make_pair(0, 0);
-
-			mListener->pass = passInfo;
-
-			// render once normally (inc. portals with stencil)
-			//mViewport->setMaterialScheme("test");
-			getActiveCamera()->getCamera()->_notifyMoved();
-
-			getActiveCamera()->getCamera()->_renderScene(mViewport, true);
-
-			// from here on out we'll always need stenciling
-			rendersys->setStencilCheckEnabled(true); 
-
-			// the first portal
-			passInfo.first = 1;
-			passInfo.second = 0;
-
-			for(passInfo.second = 0; passInfo.second < mPortalDepth; ++passInfo.second)
-			{
-				// notify
-				getSignal("updateCam")->send(passInfo);
-				mListener->pass = passInfo;
-				getActiveCamera()->getCamera()->_notifyMoved();
-
-				rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
-				rendersys->setStencilCheckEnabled(true); 
-				rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
-					passInfo.second + 1, MASQUE_FULL, Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_KEEP,false);
-
-				//mViewport->setMaterialScheme("regular");
-				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
-			}
-
-			// and the second
-			passInfo.first = 2;
-			passInfo.second = 0;
-
-			for(passInfo.second = 0; passInfo.second < mPortalDepth; ++passInfo.second)
-			{
-				// notify
-				getSignal("updateCam")->send(passInfo);
-				mListener->pass = passInfo;
-				getActiveCamera()->getCamera()->_notifyMoved();
-				//getActiveCamera()->getCamera()->updateFrustum();
-
-				rendersys->clearFrameBuffer(Ogre::FBT_DEPTH);
-				rendersys->setStencilCheckEnabled(true); 
-				rendersys->setStencilBufferParams(Ogre::CMPF_EQUAL,
-					51 + passInfo.second, MASQUE_FULL, Ogre::SOP_KEEP,Ogre::SOP_KEEP,Ogre::SOP_KEEP,false);
-
-				//mViewport->setMaterialScheme("alternativo");
-				//mViewport->setMaterialScheme("regular");
-				getActiveCamera()->getCamera()->_renderScene(mViewport, true);
-			}
-
-			// finally swap the buffers
-			mWindow->swapBuffers();
-
-			passInfo.first = 100;
-			getSignal("updateCam")->send(passInfo);
-		}
-		else
-		{
-			mRoot->renderOneFrame();
-			//mWindow->update(true);
-		}*/
 	}
 	//-----------------------------------------------------------------------
 
@@ -835,6 +698,8 @@ namespace Oryx
 	{
 		mRenderSequence = seq;
 		mCustomRenderSequenceEnabled = true;
+		mSceneManager->addRenderQueueListener(mSequenceListener);
+		mViewport->setClearEveryFrame(false);
 	}
 	//-----------------------------------------------------------------------
 
@@ -842,6 +707,8 @@ namespace Oryx
 	{
 		mRenderSequence = 0;
 		mCustomRenderSequenceEnabled = false;
+		mSceneManager->removeRenderQueueListener(mSequenceListener);
+		mViewport->setClearEveryFrame(true);
 	}
 	//-----------------------------------------------------------------------
 
