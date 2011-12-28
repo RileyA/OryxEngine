@@ -182,9 +182,6 @@ namespace Oryx
 			// pass index
 			int pass = 0;
 
-			// initial signal
-			getSignal("CustomRenderSequenceIteration")->send(pass);
-
 			std::list<CustomRenderIteration>::iterator it = mRenderSequence->getIterator();
 
 			while (it != mRenderSequence->getEnd())
@@ -208,10 +205,6 @@ namespace Oryx
 						static_cast<Ogre::StencilOperation>(cfg.depthFailOp), 
 						static_cast<Ogre::StencilOperation>(cfg.passOp), 
 						false);       
-				}
-				else
-				{
-					//rendersys->setStencilCheckEnabled(false); 
 				}
 
 				if(it->clearDepth)
