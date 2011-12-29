@@ -12,7 +12,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-
 // You should have received a copy of the GNU General Public License
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------
@@ -170,6 +169,8 @@ namespace Oryx
 
 		void enableCustomRenderSequence(CustomRenderSequence* seq);
 		void disableCustomRenderSequence();
+
+		bool isCustomRenderSequenceEnabled() {return mCustomRenderSequenceEnabled;}
 
 		//void enablePortalHack(int depth);
 		//bool mPortalHack;

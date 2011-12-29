@@ -66,11 +66,11 @@ namespace Oryx
 
 		/** Empty implementations... */
 		void preRenderQueues(){}
-		void postRenderQueues(){}
+		void postRenderQueues();
 		void renderQueueStarted(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat){}
 		
 		/** Manually render it here. */
-		void renderQueueEnded(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat);
+		void renderQueueEnded(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat){}
 
 		bool mHide;
 

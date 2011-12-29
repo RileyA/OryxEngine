@@ -156,9 +156,10 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void CustomMesh::renderQueueEnded(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat)
+	void CustomMesh::postRenderQueues()
+	//void CustomMesh::renderQueueEnded(Ogre::uint8 id, const Ogre::String& invocation, bool& repeat)
 	{
-		if (!mVisible || id != Ogre::RENDER_QUEUE_OVERLAY || !mHide)
+		if (!mVisible || mHide)
 			return;
 
 		Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
