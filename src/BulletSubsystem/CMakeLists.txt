@@ -5,8 +5,8 @@ set(SOURCE_FILES
 	BulletConversions.cpp
 	Bulletdllmain.cpp
 	BulletSubsystem.cpp
-	CCT_Compound.cpp
-	CCT_Primitive.cpp
+	#CCT_Compound.cpp
+	#CCT_Primitive.cpp
 	CharPrimitive.cpp
 	CollisionObject.cpp
 	#Hinge.cpp
@@ -19,7 +19,7 @@ set(SOURCE_FILES
 	PhysicsShape.cpp
 	PhysicsSphereShape.cpp
 	PhysicsTrimeshShape.cpp
-	QCharacterController.cpp
+	#QCharacterController.cpp
 	QuantaController.cpp
 	RigidBody.cpp
 	)
@@ -28,8 +28,8 @@ set(HEADER_FILES
 	BulletConversions.h
 	Bulletdllmain.h
 	BulletSubsystem.h
-	CCT_Compound.h
-	CCT_Primitive.h
+	#CCT_Compound.h
+	#CCT_Primitive.h
 	CharacterController.h
 	CharPrimitive.h
 	CollisionObject.h
@@ -43,7 +43,7 @@ set(HEADER_FILES
 	PhysicsShape.h
 	PhysicsSphereShape.h
 	PhysicsTrimeshShape.h
-	QCharacterController.h
+	#QCharacterController.h
 	QuantaController.h
 	RaycastReport.h
 	RigidBody.h

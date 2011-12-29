@@ -23,7 +23,6 @@ set(HEADER_FILES
 	Camera.h
 	Decal.h
 	Light.h
-	ManualObjectData.h
 	Material.h
 	Mesh.h
 	OgreConversions.h

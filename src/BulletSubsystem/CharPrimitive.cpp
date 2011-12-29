@@ -19,7 +19,7 @@
 
 #include "CharPrimitive.h"
 #include "BulletSubsystem.h"
-#include "CCT_Primitive.h"
+//#include "CCT_Primitive.h"
 #include "btBulletDynamicsCommon.h"
 
 namespace Oryx
