@@ -126,6 +126,9 @@ namespace Oryx
 		/** Sets the active camera */
 		void setActiveCamera(Camera* cam);
 
+		/** clears out the scene */
+		void clearScene();
+
 		/** Sets fog parameters */
 		void setLinearFog(float start, float end, Colour color);
 
@@ -164,6 +167,8 @@ namespace Oryx
 			@remarks Depending on the param, this may not take effect until
 					the system is restarted */
 		void setGfxParameter(String param,String value);
+
+		void forceRestart();
 
 		int getBatchCount();
 

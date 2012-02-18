@@ -44,9 +44,16 @@ namespace Oryx
 		Real b;
 		Real a;
 
-		/** Constructor */
-		explicit Colour( float red = 1.0f,float green = 1.0f,float blue = 1.0f,float alpha = 1.0f )
+		explicit Colour()
+			: r(1.f), g(1.f), b(1.f), a(1.f)
+		{}
+
+		explicit Colour(float red, float green, float blue, float alpha = 1.f)
 			: r(red), g(green), b(blue), a(alpha)
+		{}
+
+		explicit Colour(uint32_t color)
+			: r((color >> 24) / 255.f), g(((color >> 16) & 0xff) / 255.f), b(((color >> 8) & 0xff) / 255.f), a((color & 0xff) / 255.f)
 		{}
 
 		bool operator==(const Colour& col) const;

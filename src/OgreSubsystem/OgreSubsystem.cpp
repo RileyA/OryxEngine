@@ -53,11 +53,13 @@ namespace Oryx
 	{
 		if(!mInitialized)
 		{
-			//mPortalHack = false;
-			//mPortalDepth = 1;
 			Logger::getPtr()->logMessage("Ogre Subsystem starting up...");
 
 			mRoot = new Ogre::Root("","");
+
+			// suppress log output (TODO allow this to be redirected and enabled)
+			Ogre::LogManager::getSingleton().getDefaultLog()->setDebugOutputEnabled(false);
+			Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
 			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
@@ -539,6 +541,13 @@ namespace Oryx
 	}
 	//--------------------------------------------------------------------------
 
+	void OgreSubsystem::clearScene()
+	{
+		mRootSceneNode->destroyAllChildren();
+		mSceneNodes.clear();
+	}
+	//-----------------------------------------------------------------------
+
 	void OgreSubsystem::setLinearFog(float start, float end, Colour color)
 	{
 		mSceneManager->setFog(Ogre::FOG_LINEAR,convertOgre(color),0.f,start,end);
@@ -621,6 +630,12 @@ namespace Oryx
 			if(getGfxParameter(param)!=value)
 				mNeedsRestart = true;
 		}
+	}
+	//-----------------------------------------------------------------------
+
+	void OgreSubsystem::forceRestart()
+	{
+		mNeedsRestart = true;
 	}
 	//-----------------------------------------------------------------------
 

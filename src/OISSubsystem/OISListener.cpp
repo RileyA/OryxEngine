@@ -117,6 +117,7 @@ namespace Oryx
 		else if (mCursorY >= ms.height)
 			mCursorY = ms.height - 1;
 		mSubsystem->_setMousePos(mCursorX,mCursorY,ms.X.rel,ms.Y.rel);
+		mSubsystem->_setMouseScroll(ms.Z.abs,ms.Z.rel);
 	}
 	//-----------------------------------------------------------------------
 

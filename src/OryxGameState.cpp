@@ -24,5 +24,37 @@
 namespace Oryx
 {
 	GameState::GameState()
-		:mEngine(Engine::getPtr()){}
+		:mEngine(Engine::getPtr()),mUserPtr(0){}
+	//-----------------------------------------------------------------------
+
+	void GameState::setReturnParam(String param, String value)
+	{
+		mReturnParams[param] = value;
+	}
+	//-----------------------------------------------------------------------
+
+	void GameState::setReturnPtr(void* ptr)
+	{
+		mUserPtr = ptr;
+	}
+	//-----------------------------------------------------------------------
+
+	void* GameState::getReturnPtr()
+	{
+		return mUserPtr;
+	}
+	//-----------------------------------------------------------------------
+
+	std::map<String, String> GameState::getReturnParams()
+	{
+		return mReturnParams;
+	}
+	//-----------------------------------------------------------------------
+
+	void GameState::setInputParams(std::map<String, String> in, void* inptr)
+	{
+		mInputParams = in;
+		mInputPtr = inptr;
+	}
+	//-----------------------------------------------------------------------
 }

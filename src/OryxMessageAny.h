@@ -23,6 +23,7 @@
 #include "Oryx.h"
 #include "OryxMessage.h"
 
+
 namespace Oryx
 {
 	/** A Message holding some arbitrary data */
@@ -42,6 +43,11 @@ namespace Oryx
 			return &(message->data);
 		else
 			return 0;
+	}
+
+	template<class T> const T& unpackMsgUnsafe(const Message& msg)
+	{
+		return static_cast<const MessageAny<T>* >(&msg)->data;
 	}
 
 	/** Convenience function for casting a message into a given type */

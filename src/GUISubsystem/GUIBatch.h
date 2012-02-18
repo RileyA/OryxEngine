@@ -49,6 +49,7 @@ namespace Oryx
 		Oyster::Layer* getLayer(int index);
 
 		GUIElement* getCursor();
+		void setCursor(GUIElement* cursor);
 
 		void update();
 
@@ -67,7 +68,7 @@ namespace Oryx
 		int mWidth;
 
 		Oyster::Batch* mOysterBatch;
-		Empty* mCursor;
+		GUIElement* mCursor;
 		GUIElement* mHovered;
 		GUIElement* mClicked;
 

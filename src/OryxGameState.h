@@ -35,9 +35,20 @@ namespace Oryx
 
 		GameState();
 
+		void setReturnParam(String param, String value);
+		void setReturnPtr(void* ptr);
+		void* getReturnPtr();
+		std::map<String, String> getReturnParams();
+		void setInputParams(std::map<String, String> in, void* inptr);
+
 	protected:
 
 		Engine* mEngine;
+
+		std::map<String, String> mInputParams;
+		void* mInputPtr;
+		std::map<String, String> mReturnParams;
+		void* mUserPtr;
 
 	};
 }

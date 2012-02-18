@@ -34,7 +34,7 @@ namespace Oryx
 		mClicked = 0;
 
 		mBatch = this;
-		mCursor = new Empty(this, 9001);// the layer is OVER NINE THOUSAND (aka, it's always on top)
+		mCursor = 0;//new Empty(this, 9001);// the layer is OVER NINE THOUSAND (aka, it's always on top)
 		//addChild(mCursor);
 	
 		createSlot("mouseMoved", this, &Batch::mouseMoved);
@@ -85,10 +85,18 @@ namespace Oryx
 	}
 	//----------------------------------------------------------------------
 
+	void Batch::setCursor(GUIElement* cursor)
+	{
+		mCursor = cursor;
+	}
+	//----------------------------------------------------------------------
+
 	void Batch::mouseMoved(const Message& m)
 	{
 		Vector2 v = static_cast<const MessageAny<Vector2>&>(m).data;
-		mCursor->setPositionPx(v.x, v.y);
+
+		if(mCursor)
+			mCursor->setPositionPx(v.x, v.y);
 
 		GUIElement* under = 0;
 		
@@ -114,13 +122,13 @@ namespace Oryx
 			if(mHovered)
 			{
 				mHovered->unHovered();
-				mHovered->getSignal("hover_exit")->fire(MessageAny<int>(5));
+				mHovered->getSignal("hover_exit")->fire(MessageAny<GUIElement*>(mHovered));
 			}
 			mHovered = under;
 			if(mHovered)
 			{
 				mHovered->hovered();
-				mHovered->getSignal("hover_enter")->fire(MessageAny<int>(5));
+				mHovered->getSignal("hover_enter")->fire(MessageAny<GUIElement*>(mHovered));
 			}
 		}
 	}
@@ -129,10 +137,11 @@ namespace Oryx
 	void Batch::mouseUp(const Message& m)
 	{
 		uint btn = static_cast<const MessageAny<uint>&>(m).data;
+
 		if(btn == 0)
 		{
 			GUIElement* under = 0;
-			
+
 			for(std::list<GUIElement*>::reverse_iterator it = mChildren.rbegin();
 				it != mChildren.rend(); ++it)
 				if((*it)!=mCursor && (under = (*it)->_search(mCursor->getPosition())))
@@ -141,14 +150,14 @@ namespace Oryx
 			if(under == mClicked && under)
 			{
 				mClicked->clicked();
-				mClicked->getSignal("clicked")->fire(MessageAny<int>(5));
+				mClicked->getSignal("clicked")->fire(MessageAny<GUIElement*>(mClicked));
 			}
 			else
 			{
 				if(mClicked)
 				{
 					mClicked->released();
-					mClicked->getSignal("released")->fire(MessageAny<int>(5));
+					mClicked->getSignal("released")->fire(MessageAny<GUIElement*>(mClicked));
 				}
 			}
 
@@ -160,10 +169,11 @@ namespace Oryx
 	void Batch::mouseDown(const Message& m)
 	{
 		uint btn = static_cast<const MessageAny<uint>&>(m).data;
+
 		if(btn == 0)
 		{
 			GUIElement* under = 0;
-			
+
 			for(std::list<GUIElement*>::reverse_iterator it = mChildren.rbegin();
 				it != mChildren.rend(); ++it)
 				if((*it)!=mCursor && (under = (*it)->_search(mCursor->getPosition())))
@@ -173,7 +183,7 @@ namespace Oryx
 			{
 				mClicked = under;
 				mClicked->pressed();
-				mClicked->getSignal("pressed")->fire(MessageAny<int>(5));
+				mClicked->getSignal("pressed")->fire(MessageAny<GUIElement*>(mClicked));
 			}
 		}
 	}

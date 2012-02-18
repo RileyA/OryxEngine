@@ -27,12 +27,14 @@ namespace Oryx
 {
 	SceneNode::SceneNode(String name,Ogre::SceneNode* node)
 		:mName(name),mNode(node){}
+	//-----------------------------------------------------------------------
 
 	SceneNode::~SceneNode()
 	{
 		mNode->getCreator()->destroySceneNode(mNode);
 	}
 	//-----------------------------------------------------------------------
+
 	void SceneNode::setPosition(Vector3 pos)
 	{
 		mNode->setPosition(convertOgre(pos));
@@ -158,6 +160,14 @@ namespace Oryx
 			(*i)->setParent(0);
 		mChildren.clear();
 		mNode->removeAllChildren();
+	}
+	//-----------------------------------------------------------------------
+
+	void SceneNode::destroyAllChildren()
+	{
+		for(int i = 0; i < mChildren.size(); ++i)
+			delete mChildren[i];
+		mChildren.clear();
 	}
 	//-----------------------------------------------------------------------
 

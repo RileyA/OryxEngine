@@ -118,9 +118,13 @@ namespace Oryx
 			}
 
 			mStates.front()->deinit();
-			delete mStates.front();
-
+			GameState* oldState = mStates.front();
 			mStates.pop_front();
+
+			if(!mStates.empty())
+				mStates.front()->setInputParams(oldState->getReturnParams(), oldState->getReturnPtr());
+
+			delete oldState;
 
 			std::map<String,Bucket*>::iterator it = mBuckets.begin();;
 

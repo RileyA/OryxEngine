@@ -19,7 +19,7 @@
 
 #include "OISdllmain.h"
 #include "OISSubsystem.h"
-#include "OryxLogger.h"
+#include "OryxLogger.h"//
 #include "OryxMessageAny.h"
 
 #include "OISListener.h"
@@ -54,6 +54,9 @@ namespace Oryx
 			createSignal("mouseReleased"); // passes mouse button code on release
 			createSignal("mouseMoved");   // passes mouse pos on move
 			createSignal("mouseMovedAbs");// passes absolute mouse pos when moved
+			createSignal("mouseScrolled");   // passes mouse pos on move
+			createSignal("mouseScrolledAbs");// passes absolute mouse pos when moved
+
 
 			assignConversions();
 
@@ -210,6 +213,14 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	void OISSubsystem::_setMouseScroll(int scroll, int relScroll)
+	{
+		mScroll = scroll;
+		getSignal("mouseScrolled")->fire(MessageAny<int>(relScroll));
+		getSignal("mouseScrolledAbs")->fire(MessageAny<int>(mScroll));
+	}
+	//-----------------------------------------------------------------------
+
 	void OISSubsystem::_key(uint key, bool up, uint val)
 	{
 		mKeyStates[key] = up;
@@ -235,14 +246,16 @@ namespace Oryx
 		mButtonStates[button] = up;
 		if(!up)
 		{
-			getSignal(String("released_")+String(mButtons[button]))->fire(0);
+			getSignal(String("released_")+String(mButtons[button]))->fire(
+				MessageAny<uint>(button));
 			getSignal("mouseReleased")->fire(MessageAny<uint>(button));
 		}
 		else
 		{
 			mButtonPresses[button] = true;
 			getSignal("mousePressed")->fire(MessageAny<uint>(button));
-			getSignal(String("pressed_")+String(mButtons[button]))->fire(0);
+			getSignal(String("pressed_")+String(mButtons[button]))->fire(
+				MessageAny<uint>(button));
 		}
 	}
 	//-----------------------------------------------------------------------

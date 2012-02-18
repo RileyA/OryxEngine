@@ -66,6 +66,7 @@ namespace Oryx
 		void removeChild(SceneNode* child);
 		void removeChild(String name);
 		void removeAllChildren();
+		void destroyAllChildren();
 
 		Vector3 worldToLocalPosition(Vector3 pos);
 		Quaternion worldToLocalOrientation(Quaternion quat);

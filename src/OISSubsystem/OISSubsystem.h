@@ -82,6 +82,8 @@ namespace Oryx
 
 		/** Called when the mouse moves */
 		void _setMousePos(int x,int y,int relx,int rely);
+		/** Called when the mouse moves */
+		void _setMouseScroll(int scroll, int relScroll);
 		/** Called on each key event */
 		void _key(uint key,bool up,uint val);
 		/** Called on mouse button events */
@@ -105,6 +107,7 @@ namespace Oryx
 		std::vector<bool> mButtonPresses;
 
 		Vector2 mMousePos;
+		int mScroll;
 
 		bool mGrabbedMouse;
 
