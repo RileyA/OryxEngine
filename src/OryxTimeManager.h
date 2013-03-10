@@ -21,9 +21,12 @@
 #define ORYXTIMEMANAGER_H
 
 #include "Oryx.h"
-#include <sys/time.h>
 #include <stdio.h>
+
+#if (ORYX_PLATFORM == ORYX_PLATFORM_LINUX)
+#include <sys/time.h>
 #include <unistd.h>
+#endif
 
 namespace Oryx
 {
@@ -73,7 +76,7 @@ namespace Oryx
 		Real mDeltaTime;
 		Real mTimeSpeed;
 
-		#if ORYX_PLATFORM == PLATFORM_WIN32
+		#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
 			LARGE_INTEGER mStart;
 		#else
 			struct timeval mStart;

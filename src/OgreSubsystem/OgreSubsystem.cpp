@@ -61,9 +61,15 @@ namespace Oryx
 			Ogre::LogManager::getSingleton().getDefaultLog()->setDebugOutputEnabled(false);
 			Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
 
+			//#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
+			//mRoot->loadPlugin("OgrePlugins/RenderSystem_GL.dll");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager.dll");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX.dll");
+			//#else
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
 			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
 			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
+			//#endif
 
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");

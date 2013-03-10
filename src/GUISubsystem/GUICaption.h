@@ -28,7 +28,7 @@
 
 namespace Oryx
 {
-	class Caption : public GUIElement
+	class ORYX_GUI_EXPORT Caption : public GUIElement
 	{
 	public:
 

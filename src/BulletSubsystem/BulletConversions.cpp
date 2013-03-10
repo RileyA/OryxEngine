@@ -22,7 +22,7 @@
 
 namespace Oryx
 {
-	Vector3 convertBullet(btVector3 v)
+	Vector3 convertBullet(const btVector3& v)
 	{
 		return Vector3(v.getX(),v.getY(),v.getZ());
 	}
@@ -32,7 +32,7 @@ namespace Oryx
 		return btVector3(v.x,v.y,v.z);
 	}
 
-	Quaternion convertBullet(btQuaternion q)
+	Quaternion convertBullet(const btQuaternion& q)
 	{
 		return Quaternion(q.getAxis().getX(),q.getAxis().getY(),q.getAxis().getZ(),q.getAngle());
 	}

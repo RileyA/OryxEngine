@@ -28,7 +28,7 @@
 namespace Oryx
 {
 	/** Empty element, used for layout/etc */
-	class Empty : public GUIElement
+	class ORYX_GUI_EXPORT Empty : public GUIElement
 	{
 	public:
 

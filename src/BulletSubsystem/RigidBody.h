@@ -25,9 +25,9 @@
 #include "Bulletdllmain.h"
 
 class btDynamicsWorld;
-struct btRigidBody;
-struct btCollisionObject;
-struct btCollisionShape;
+class btRigidBody;
+class btCollisionObject;
+class btCollisionShape;
 
 namespace Oryx
 {

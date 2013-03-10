@@ -28,7 +28,7 @@ namespace Oryx
 {
 	class Batch;
 
-	class GUIElement : public EventHandler
+	class ORYX_GUI_EXPORT GUIElement : public EventHandler
 	{
 	public:
 

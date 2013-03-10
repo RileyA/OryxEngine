@@ -28,7 +28,7 @@
 
 	#include <windows.h>
 
-	#ifdef BUILD_AL_DLL
+	#ifdef ALSubsystem_EXPORTS 
 		#define ORYX_AL_EXPORT __declspec(dllexport)
 	#else
 		#define ORYX_AL_EXPORT __declspec(dllimport)

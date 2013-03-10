@@ -1,5 +1,6 @@
 # Build file for the Ogre Subsystem
 include_directories("${OGRE_INCLUDE_DIR}")
+include_directories("${BOOST_INCLUDE_DIR}")
 
 set(SOURCE_FILES
 	Camera.cpp
@@ -39,7 +40,7 @@ set(HEADER_FILES
 
 add_library(OgreSubsystem SHARED ${SOURCE_FILES} ${HEADER_FILES} )
 set_target_properties(OgreSubsystem PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries (OgreSubsystem ${ORYX_LIB} ${BOOST_LIB} ${OGRE_LIB})
+target_link_libraries (OgreSubsystem ${ORYX_LIB} ${BOOST_THREAD_LIB} ${BOOST_TIME_LIB} ${OGRE_LIB})
 
 
 install(TARGETS OgreSubsystem

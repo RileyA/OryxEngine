@@ -24,7 +24,7 @@
 
 namespace Oryx
 {
-	class Button : public Panel
+	class ORYX_GUI_EXPORT Button : public Panel
 	{
 	protected:
 

@@ -45,7 +45,7 @@ namespace Oryx
 
 	ruint Rand::gen(int minmax)
 	{
-		gen(-minmax, minmax);
+		return gen(-minmax, minmax);
 	}
 
 	float Rand::genFloat(float min, float max)

@@ -23,7 +23,7 @@
 #include "PhysicsShape.h"
 #include "Bulletdllmain.h"
 
-struct btCompoundShape;
+class btCompoundShape;
 
 namespace Oryx
 {

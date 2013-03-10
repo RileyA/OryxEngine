@@ -26,7 +26,7 @@
 #include "Bulletdllmain.h"
 #include "BulletConversions.h"
 
-struct btCollisionObject;
+class btCollisionObject;
 class btDynamicsWorld;
 
 namespace Oryx

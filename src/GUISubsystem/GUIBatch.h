@@ -28,7 +28,7 @@ namespace Oryx
 {
 	class Empty;
 
-	class Batch : public GUIElement
+	class ORYX_GUI_EXPORT Batch : public GUIElement
 	{
 	public:
 		
