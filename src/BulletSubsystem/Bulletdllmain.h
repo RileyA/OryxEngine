@@ -29,7 +29,7 @@
 
 	#include <windows.h>
 
-	#ifdef BUILD_BULLET_DLL
+	#ifdef BulletSubsystem_EXPORTS 
 		#define ORYX_BULLET_EXPORT __declspec(dllexport)
 	#else
 		#define ORYX_BULLET_EXPORT __declspec(dllimport)

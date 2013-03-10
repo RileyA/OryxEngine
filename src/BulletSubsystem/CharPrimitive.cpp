@@ -21,6 +21,7 @@
 #include "BulletSubsystem.h"
 //#include "CCT_Primitive.h"
 #include "btBulletDynamicsCommon.h"
+#include <algorithm>
 
 namespace Oryx
 {

@@ -36,12 +36,12 @@
 
 // Win32 dll stuff
 #ifdef WIN32
-	//#define NOMINMAX
+	#define NOMINMAX
 	#define WIN32_LEAN_AND_MEAN
 
 	#include <windows.h>
 
-	#ifdef BUILD_ORYX_DLL
+	#ifdef OryxEngine_EXPORTS
 		#define ORYX_EXPORT __declspec(dllexport)
 	#else
 		#define ORYX_EXPORT __declspec(dllimport)
@@ -49,6 +49,8 @@
 
 	// make msvc shut up about template export-age...
 	#pragma warning(disable:4251)
+	// and exception stuff
+	#pragma warning(disable:4275)
 #else
 	#define ORYX_EXPORT
 #endif

@@ -26,8 +26,8 @@ class btQuaternion;
 
 namespace Oryx
 {
-	ORYX_BULLET_EXPORT Vector3 convertBullet(btVector3 v);
+	ORYX_BULLET_EXPORT Vector3 convertBullet(const btVector3& v);
 	ORYX_BULLET_EXPORT btVector3 convertBullet(Vector3 v);
-	ORYX_BULLET_EXPORT Quaternion convertBullet(btQuaternion q);
+	ORYX_BULLET_EXPORT Quaternion convertBullet(const btQuaternion& q);
 	ORYX_BULLET_EXPORT btQuaternion convertBullet(Quaternion q);
 }

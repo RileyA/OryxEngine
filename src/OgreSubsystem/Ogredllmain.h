@@ -28,7 +28,7 @@
 
 	#include <windows.h>
 
-	#ifdef BUILD_OGRE_DLL
+	#ifdef OgreSubsystem_EXPORTS
 		#define ORYX_OGRE_EXPORT __declspec(dllexport)
 	#else
 		#define ORYX_OGRE_EXPORT __declspec(dllimport)

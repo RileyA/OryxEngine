@@ -22,6 +22,7 @@
 
 namespace Oryx
 {
+#if (ORYX_PLATFORM != ORYX_PLATFORM_WIN32)
 	Real tDifference(struct timeval start,struct timeval end)
 	{
 		long seconds  = end.tv_sec  - start.tv_sec;
@@ -29,6 +30,7 @@ namespace Oryx
 		long ms = (seconds*1000+useconds/1000.f)+0.5;
 		return (seconds*1000.f+useconds/1000.f)/1000.f;
 	}
+#endif
 	//-----------------------------------------------------------------------
 
 	void TimeManager::setTimeSpeed(Real speed)
@@ -45,7 +47,7 @@ namespace Oryx
 
 	Real TimeManager::getTimeDecimal()
 	{
-#if ORYX_PLATFORM == PLATFORM_WIN32
+#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
 		LARGE_INTEGER now;
 		QueryPerformanceCounter(&now);
 		long long tm = now.QuadPart - mStart.QuadPart;
@@ -123,7 +125,7 @@ namespace Oryx
 	//-----------------------------------------------------------------------
 	void TimeManager::start()
 	{
-#if ORYX_PLATFORM == PLATFORM_WIN32
+#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
 		QueryPerformanceCounter(&mStart);
 #else
 		gettimeofday(&mStart, 0);

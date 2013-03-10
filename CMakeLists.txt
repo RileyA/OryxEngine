@@ -81,7 +81,11 @@ set(BOOST_LIB_DIR "/usr/lib" CACHE FILEPATH "Where to look for boost libs.")
 include_directories("src")
 
 # lib stuff, ugly, but gets the job done for now...
-set(ORYX_LIB ${PROJECT_BINARY_DIR}/lib/${LIB_PREFIX}OryxEngine${LIB_POSTFIX})
+if (WIN32)
+	set(ORYX_LIB ${PROJECT_BINARY_DIR}/src/${LIB_PREFIX}OryxEngine${LIB_POSTFIX})
+else ()
+	set(ORYX_LIB ${PROJECT_BINARY_DIR}/lib/${LIB_PREFIX}OryxEngine${LIB_POSTFIX})
+endif ()
 # Ogre
 set(OGRE_LIB ${OGRE_LIB_DIR}/${LIB_PREFIX}OgreMain${LIB_POSTFIX})
 # SDL
@@ -94,8 +98,14 @@ set(BT_D_LIB ${BT_LIB_DIR}/${LIB_PREFIX}BulletDynamics${LIB_POSTFIX})
 set(BT_MATH_LIB ${BT_LIB_DIR}/${LIB_PREFIX}LinearMath${LIB_POSTFIX})
 # boost
 #set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread-mt${LIB_POSTFIX})
-set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread${LIB_POSTFIX})
-set(BOOST_TEST_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_unit_test_framework${LIB_POSTFIX})
+if (WIN32)
+	set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}libboost_thread-vc100-mt-1_44${LIB_POSTFIX})
+	set(BOOST_TIME_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}libboost_date_time-vc100-mt-1_44${LIB_POSTFIX})
+	set(BOOST_TEST_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}libboost_unit_test_framework-vc100-mt-1_44${LIB_POSTFIX})
+else ()
+	set(BOOST_THREAD_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_thread${LIB_POSTFIX})
+	set(BOOST_TEST_LIB ${BOOST_LIB_DIR}/${LIB_PREFIX}boost_unit_test_framework${LIB_POSTFIX})
+endif ()
 # lua stuff
 set(LUA_LIB ${LUA_LIB_DIR}/${LIB_PREFIX}lua${LIB_POSTFIX})
 set(LUABIND_LIB ${LUABIND_LIB_DIR}/${LIB_PREFIX}luabind${LIB_POSTFIX})

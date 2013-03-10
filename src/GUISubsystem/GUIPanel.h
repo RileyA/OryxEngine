@@ -28,7 +28,7 @@
 
 namespace Oryx
 {
-	class Panel : public GUIElement
+	class ORYX_GUI_EXPORT Panel : public GUIElement
 	{
 	public:
 

@@ -2,6 +2,7 @@
 #define CustomRenderSequence_H
 
 #include "Oryx.h"
+#include "Ogredllmain.h"
 
 namespace Oryx
 {
@@ -81,7 +82,7 @@ namespace Oryx
 
 	/** A custom sequence of rendering iterations, this is mainly for the sake of 
 	 * doing tricky stencil stuffs. Sort of hacked in for Portal-y stuff, I'll tidy up later... */
-	class CustomRenderSequence
+	class ORYX_OGRE_EXPORT CustomRenderSequence
 	{
 	public:
 

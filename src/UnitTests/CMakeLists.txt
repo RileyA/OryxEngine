@@ -1,5 +1,4 @@
-# Build file for the Ogre Subsystem
-include_directories("${OGRE_INCLUDE_DIR}")
+include_directories("${BOOST_INCLUDE_DIR}")
 
 set(SOURCE_FILES
 	OryxTests.cpp

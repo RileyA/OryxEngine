@@ -31,7 +31,7 @@ namespace Oryx
 	class CustomMesh;
 
 	/** Basically just wraps custommesh.. */
-	class ScreenMesh : public EventHandler
+	class ORYX_OGRE_EXPORT ScreenMesh : public EventHandler
 	{
 	public:
 		

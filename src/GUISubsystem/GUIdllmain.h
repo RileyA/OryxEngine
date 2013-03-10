@@ -40,7 +40,7 @@ namespace Oyster
 
 	#include <windows.h>
 
-	#ifdef BUILD_GUI_DLL
+	#ifdef GUISubsystem_EXPORTS
 		#define ORYX_GUI_EXPORT __declspec(dllexport)
 	#else
 		#define ORYX_GUI_EXPORT __declspec(dllimport)

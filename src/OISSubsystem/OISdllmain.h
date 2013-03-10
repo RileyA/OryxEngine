@@ -28,7 +28,7 @@
 
 	#include <windows.h>
 
-	#ifdef BUILD_OIS_DLL
+	#ifdef OISSubsystem_EXPORTS
 		#define ORYX_OIS_EXPORT __declspec(dllexport)
 	#else
 		#define ORYX_OIS_EXPORT __declspec(dllimport)

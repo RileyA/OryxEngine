@@ -20,7 +20,7 @@
 #include "Oryx.h"
 
 
-#if ORYX_PLATFORM == ORYX_PLATFORM_WIN32
+#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	switch (fdwReason)

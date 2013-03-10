@@ -61,9 +61,15 @@ namespace Oryx
 			Ogre::LogManager::getSingleton().getDefaultLog()->setDebugOutputEnabled(false);
 			Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
 
+			//#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
+			//mRoot->loadPlugin("OgrePlugins/RenderSystem_GL.dll");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager.dll");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX.dll");
+			//#else
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
-			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
 			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
+			//#endif
 
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
 				"OpenGL Rendering Subsystem");
@@ -431,7 +437,7 @@ namespace Oryx
 		//int dims = 16;
 		//m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
 		m->_setBounds(AxisAlignedBox(-8.f,-64.f,-8.f,8.f,64.f,8.f));
-		m->_setBoundingSphereRadius(sqrt(16*16*2)/2);//11.313f);
+		m->_setBoundingSphereRadius(sqrt(16.f*16.f*2.f)/2);//11.313f);
 
 		sm->setMaterialName("MeinKraft");
 

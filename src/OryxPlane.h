@@ -26,7 +26,7 @@
 
 namespace Oryx
 {
-	class ORYX_EXPORT Plane
+	class Plane
 	{
 	public:
 	
