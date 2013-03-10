@@ -42,6 +42,29 @@ namespace Oryx
 	/** Simple struct representing a 3d mesh (meant for interchange between subsystems etc..) */
 	struct ORYX_EXPORT MeshData
 	{
+    MeshData() {
+      reset();
+    }
+
+    void reset() {
+      for (int i = 0; i < 3; ++i) bbox[i] = 1e10;
+      for (int i = 0; i < 3; ++i) bbox[3 + i] = -1e10;
+      vertices.clear();
+      texcoords.clear();
+      normals.clear();
+      indices.clear();
+      addTexcoordSet();
+    }
+    
+    void updateBBox(Vector3 vertex) {
+      bbox[0] = std::min(bbox[0], vertex.x);
+      bbox[1] = std::min(bbox[1], vertex.y);
+      bbox[2] = std::min(bbox[2], vertex.z);
+      bbox[3] = std::max(bbox[3], vertex.x);
+      bbox[4] = std::max(bbox[4], vertex.y);
+      bbox[5] = std::max(bbox[5], vertex.z);
+    }
+    
 		/** Add a vertex to this mesh
 		 *		@remarks Since I'm lazy, indices are just an incrementing list...
 		 *		@param v The vertex position 
@@ -50,6 +73,7 @@ namespace Oryx
 		 *		@param d The vertex color (optional) */
 		void vertex(Vector3 v,Vector3 n,Vector2 t,Vector3 d=Vector3(-1,-1,-1))
 		{
+      updateBBox(v);
 			vertices.push_back(v.x);
 			vertices.push_back(v.y);
 			vertices.push_back(v.z);
@@ -69,6 +93,7 @@ namespace Oryx
 		
 		void vertex(Vector3 v,Vector2 t)
 		{
+      updateBBox(v);
 			vertices.push_back(v.x);
 			vertices.push_back(v.y);
 			vertices.push_back(v.z);
@@ -79,6 +104,7 @@ namespace Oryx
 
 		void vertex(Vector3 v)
 		{
+      updateBBox(v);
 			vertices.push_back(v.x);
 			vertices.push_back(v.y);
 			vertices.push_back(v.z);
@@ -179,6 +205,7 @@ namespace Oryx
 		std::vector<std::vector<float> > texcoords;
 		std::vector<float> diffuse;
 		std::vector<unsigned short> indices;
+    float bbox[6];// -x -y -z +x +y +z
 	};
 }
 

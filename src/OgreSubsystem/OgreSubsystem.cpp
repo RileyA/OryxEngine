@@ -62,7 +62,7 @@ namespace Oryx
 			Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
 
 			mRoot->loadPlugin("OgrePlugins/RenderSystem_GL");
-			mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
+			//mRoot->loadPlugin("OgrePlugins/Plugin_CgProgramManager");
 			mRoot->loadPlugin("OgrePlugins/Plugin_ParticleFX");
 
 			Ogre::RenderSystem* rs = mRoot->getRenderSystemByName(
@@ -428,10 +428,8 @@ namespace Oryx
 		m->load();
 		m->touch();
 
-		//int dims = 16;
-		//m->_setBounds(AxisAlignedBox(-dims/2,-64/2,-dims/2,dims/2,64/2,dims/2));
-		m->_setBounds(AxisAlignedBox(-8.f,-64.f,-8.f,8.f,64.f,8.f));
-		m->_setBoundingSphereRadius(sqrt(16*16*2)/2);//11.313f);
+		m->_setBounds(AxisAlignedBox(data.bbox[0],data.bbox[1],data.bbox[2],
+        data.bbox[3],data.bbox[4],data.bbox[5]), false);
 
 		sm->setMaterialName("MeinKraft");
 
