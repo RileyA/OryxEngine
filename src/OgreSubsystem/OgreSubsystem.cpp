@@ -724,6 +724,16 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	void OgreSubsystem::setMaterialScheme(String scheme) {
+		mViewport->setMaterialScheme(scheme);
+	}
+	//-----------------------------------------------------------------------
+
+	String OgreSubsystem::getMaterialScheme() {
+		return mViewport->getMaterialScheme();
+	}
+	//-----------------------------------------------------------------------
+
 	/*void OgreSubsystem::enablePortalHack(int depth)
 	{
 		mPortalHack = true;

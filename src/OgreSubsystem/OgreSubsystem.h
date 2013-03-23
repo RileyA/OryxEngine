@@ -192,6 +192,8 @@ namespace Oryx
 		void setOverlayTextColour(String element, Colour color);
 		void setOverlayTextColour(String element, Colour color, Colour color2);
 		void loadFont(String name);
+		void setMaterialScheme(String scheme);
+		String getMaterialScheme();
 
 	protected:
 
