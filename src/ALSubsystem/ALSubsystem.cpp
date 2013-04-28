@@ -192,6 +192,7 @@ namespace Oryx
 		{
 			out.bind(new BufferedSound(getSource(), mAudioBuffers[name]));
 			mActiveSounds.push_back(out);
+      out->setGain(0.f, 1.f, 1.f);
 			if(!startPaused)
 				out->play();
 		}

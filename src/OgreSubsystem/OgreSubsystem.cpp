@@ -124,6 +124,15 @@ namespace Oryx
 
 			Logger::getPtr()->logMessage("Ogre Subsystem started up.");
 			mInitialized = true;
+      /*mSceneManager->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::LiSPSMShadowCameraSetup()));
+      mSceneManager->setShadowTexturePixelFormat(Ogre::PF_FLOAT16_R);
+      mSceneManager->setShadowTextureCasterMaterial("depthcaster");
+      mSceneManager->setShadowTextureSelfShadow(true);	
+      mSceneManager->setShadowTextureSize(512);	
+      mSceneManager->setShadowTextureCount(3);
+      mSceneManager->setShadowCasterRenderBackFaces(false);
+      mSceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE_INTEGRATED);;
+      mSceneManager->setShadowFarDistance(1000000.f);*/
 		}
 	}
 	//-----------------------------------------------------------------------
@@ -442,7 +451,7 @@ namespace Oryx
 		Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
 		Ogre::SceneNode* node = mSceneManager->createSceneNode(nombre);
 		node->attachObject(ent);
-		ent->setCastShadows(true);
+		ent->setCastShadows(false);
 		Mesh* mm = new Mesh(nombre,node,ent);
 		mSceneNodes.push_back(mm);
 		return mm;
@@ -477,12 +486,12 @@ namespace Oryx
 			++mAutoNameIndex;
 		}
 		Ogre::Light* light = mSceneManager->createLight(nombre);
-		light->setCastShadows(false);
 		light->setAttenuation(500,0,0,0);
     light->setType(Ogre::Light::LT_SPOTLIGHT);
     light->setSpotlightInnerAngle(Ogre::Radian(Ogre::Degree(50.f)));
     light->setSpotlightOuterAngle(Ogre::Radian(Ogre::Degree(70.f)));
     light->setSpotlightFalloff(0.5f);
+    light->setCastShadows(false);
 		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
 		node->attachObject(light);
 		Light* l = new Light(nombre,node,light);

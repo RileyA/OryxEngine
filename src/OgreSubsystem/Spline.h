@@ -21,6 +21,7 @@
 #define ORYX_SPLINE
 
 #include "Oryx.h"
+#include "Ogredllmain.h"
 #include "Oryx3DMath.h"
 
 namespace Ogre
@@ -30,7 +31,7 @@ namespace Ogre
 
 namespace Oryx
 {
-	class Spline
+	class ORYX_OGRE_EXPORT Spline
 	{
 	public:
 

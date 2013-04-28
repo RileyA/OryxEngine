@@ -28,7 +28,7 @@ namespace Oryx
 	typedef long long ruint;
 
 	/** Very simple pseudorandom number generator */
-	class Rand
+	class ORYX_EXPORT Rand
 	{
 	public:
 
