@@ -26,27 +26,29 @@ namespace Oryx
 		:PhysicsShape(name == "NULL",name)
 	{
 		btTriangleMesh *triMesh = new btTriangleMesh();
-		/*for(int i=0;i+3<d.indices.size();i+=3)
-		{
-			btVector3 points[3];
-			for(int j=0;j<3;++j)
-				points[j] = btVector3(
-					d.vertices[d.indices[i+j]*3],
-					d.vertices[d.indices[i+j]*3+1],
-					d.vertices[d.indices[i+j]*3+2]);
-			triMesh->addTriangle(points[0],points[1],points[2]);
-		}*/
-
-		for(int i=0;i+8<d.vertices.size();i+=9)
-		{
-			btVector3 points[3];
-			for(int j=0;j<3;++j)
-				points[j] = btVector3(
-					d.vertices[i + j*3],
-					d.vertices[i + j*3+1],
-					d.vertices[i + j*3+2]);
-			triMesh->addTriangle(points[0],points[1],points[2]);
-		}
+    if (d.indices.size() > 0) { 
+      for(int i=0;i+3<d.indices.size();i+=3)
+      {
+        btVector3 points[3];
+        for(int j=0;j<3;++j)
+          points[j] = btVector3(
+            d.vertices[d.indices[i+j]*3],
+            d.vertices[d.indices[i+j]*3+1],
+            d.vertices[d.indices[i+j]*3+2]);
+        triMesh->addTriangle(points[0],points[1],points[2]);
+      }
+    } else {
+      for(int i=0;i+8<d.vertices.size();i+=9)
+      {
+        btVector3 points[3];
+        for(int j=0;j<3;++j)
+          points[j] = btVector3(
+            d.vertices[i + j*3],
+            d.vertices[i + j*3+1],
+            d.vertices[i + j*3+2]);
+        triMesh->addTriangle(points[0],points[1],points[2]);
+      }
+    }
 
 		mShape = new btBvhTriangleMeshShape(triMesh,true);
 	}

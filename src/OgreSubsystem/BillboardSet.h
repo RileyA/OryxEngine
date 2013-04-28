@@ -17,25 +17,41 @@
 // along with Oryx Engine.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
+#ifndef ORYX_OGRE_BILLBOARD_H
+#define ORYX_OGRE_BILLBOARD_H
+
 #include "Oryx.h"
-#include "Light.h"
-#include "Oryx3DMath.h"	
-#include "Ogre.h"
-#include "OgreConversions.h"
+#include "SceneNode.h"
+#include "Ogredllmain.h"
+#include "Oryx3DMath.h"
+#include "Material.h"
+
+namespace Ogre
+{
+	class SceneNode;
+	class Entity;
+	class BillboardSet;
+}
 
 namespace Oryx
 {
-	Light::Light(String name,Ogre::SceneNode* node,Ogre::Light* light)
-		:SceneNode(name,node),mLight(light){}
-	//--------------------------------------------------------------------------
-
-	Light::~Light()
+	class ORYX_OGRE_EXPORT BillboardSet : public SceneNode
 	{
-		mNode->getCreator()->destroyLight(mLight);
-	}
-	//--------------------------------------------------------------------------
+	public:
 
-  void Light::setDirection(Vector3 d) {
-    mLight->setDirection(convertOgre(d));
-  }
+		BillboardSet(String name,Ogre::SceneNode* node,Ogre::BillboardSet* bs);
+		virtual ~BillboardSet();
+
+		String getMaterialName();
+		Material getMaterial();
+		void setMaterialName(String name);
+
+    void addBillboard(Vector3 pos, Real w, Real h);
+
+	protected:
+
+		Ogre::BillboardSet* mBill;
+	};
 }
+
+#endif

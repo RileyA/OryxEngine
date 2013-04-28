@@ -255,4 +255,24 @@ namespace Oryx
 		}
 	}
 	//-----------------------------------------------------------------------
+
+  void Engine::killObject(String name) {
+		std::map<String,Bucket*>::iterator it = mBuckets.begin();
+		for(it;it!=mBuckets.end();++it)
+		{
+      if (it->second->killObject(name)) {
+        break;
+      }
+		}
+  }
+
+  void Engine::killObject(OryxID id) {
+		std::map<String,Bucket*>::iterator it = mBuckets.begin();
+		for(it;it!=mBuckets.end();++it)
+		{
+      if (it->second->killObject(id)) {
+        break;
+      }
+		}
+  }
 }

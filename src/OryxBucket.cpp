@@ -93,6 +93,31 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
+	bool Bucket::killObject(String name)
+	{
+		std::map<OryxID,Object*>::iterator it = mObjects.begin();
+		for(it;it!=mObjects.end();++it)
+		{
+			if(it->second->getName()==name) {
+        delete it->second;
+        mObjects.erase(it);
+				return true;
+      }
+		}
+		return false;
+	}
+	//-----------------------------------------------------------------------
+
+	bool Bucket::killObject(OryxID id)
+	{
+		if(mObjects.find(id)!=mObjects.end()) {
+      delete mObjects.find(id)->second;
+			mObjects.erase(mObjects.find(id));
+      return true;
+    }
+    return false;
+	}
+ 
 	bool Bucket::isTemporary() const
 	{
 		return mTemporary;

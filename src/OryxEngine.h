@@ -90,6 +90,9 @@ namespace Oryx
 		 *		@return A pointer to the object (or 0 if non existent) */
 		Object* getObject(String name);
 
+    void killObject(String name);
+    void killObject(OryxID id);
+
 		/** Gets an object by ID (this searches all buckets)
 		 *		@param id The id to search for 
 		 *		@return A pointer to the object */

@@ -17,6 +17,9 @@
 // along with Oryx Engine. If not, see <http://www.gnu.org/licenses/>
 //---------------------------------------------------------------------------
 
+#ifndef ORYX_SPLINE
+#define ORYX_SPLINE
+
 #include "Oryx.h"
 #include "Oryx3DMath.h"
 
@@ -46,3 +49,5 @@ namespace Oryx
 
 	};
 }
+
+#endif

@@ -25,6 +25,9 @@
 #include "CharPrimitive.h"
 #include "Bulletdllmain.h"
 
+class btPairCachingGhostObject;
+class btKinematicCharacterController;
+
 namespace Oryx
 {
 	class ORYX_BULLET_EXPORT QuantaController : public CharacterController
@@ -40,9 +43,9 @@ namespace Oryx
 		virtual void update(bool frame, Real interpolation, Vector3 gravity);
 		virtual void jump(Real strength);
 
+		void move(Vector3 d, Real dist, bool slide = false);
 	private:
 
-		void move(Vector3 d, Real dist, bool slide = false);
 
 		Real mGravityFactor;
 		std::vector<CharPrimitive*> mComponents;
@@ -50,7 +53,11 @@ namespace Oryx
 
 		Vector3 mPosition[2];// 0 is last frame, 1 is next frame
 
-		static const int NUM_SPHERES = 1;
+    btPairCachingGhostObject* mGhostObject;
+    btKinematicCharacterController* mCharacter;
+    BulletSubsystem* mBullet;
+
+		//static const int NUM_SPHERES = 4;
 	};
 }
 

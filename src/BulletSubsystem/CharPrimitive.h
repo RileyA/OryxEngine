@@ -45,6 +45,7 @@ namespace Oryx
 		 *			a fixed timestep
 		 *		@param depth The max number of recursions to perform for sliding */
 		Vector3 move(Vector3 direction, Real distance, int maxDepth = 1);
+		Vector3 move(Vector3 direction, Real distance, int maxDepth, Vector3 position);
 
 		void translate(Vector3 v);
 		Vector3 getPosition();

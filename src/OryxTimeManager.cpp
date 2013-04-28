@@ -72,7 +72,7 @@ namespace Oryx
 
 	Real TimeManager::getDeltaTime()
 	{
-		return mDeltaTime;
+		return mDeltaTime * mTimeSpeed;
 	}
 	//-----------------------------------------------------------------------
 

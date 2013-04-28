@@ -145,6 +145,13 @@ namespace Oryx
 			return (180.f/3.14159265f)*(acos(f));
 		}
 
+		Real angleBetween2( Vector3 dest)
+		{
+      Real s = crossProduct(dest).length();
+      Real c = dotProduct(dest);
+      return (180.f/3.14159265f)*atan2(s, c);
+    }
+
 		/** Gets whether or not this Vector has a length of zero
 		 *		@param Whether it's zero or not */
 		bool isZeroLength()
@@ -270,6 +277,10 @@ namespace Oryx
 			return *(&x+i);
 		}
 
+
+    Vector3 randomDeviant(
+        const Real& angle,
+        const Vector3& up) const;
 	};
 }
 

@@ -341,6 +341,9 @@ namespace Oryx
 		Ogre::VertexBufferBinding* vbind = sm->vertexData->vertexBufferBinding;
 		const Ogre::VertexElement* pos = vdecl->findElementBySemantic(Ogre::VES_POSITION);
 		Ogre::HardwareVertexBufferSharedPtr buffer = vbind->getBuffer(pos->getSource());
+
+		//mEntity->getMesh()->_setBounds(AxisAlignedBox(data.bbox[0],data.bbox[1],data.bbox[2],
+    //    data.bbox[3],data.bbox[4],data.bbox[5]), false);
 		if(pos && !buffer.isNull())
 		{
 			buffer->writeData(0,buffer->getSizeInBytes(),&(d.vertices[0]), true);

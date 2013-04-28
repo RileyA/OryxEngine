@@ -35,6 +35,8 @@
 
 #include "btBulletDynamicsCommon.h"
 #include "BulletCollision/CollisionShapes/btShapeHull.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
+#include "BulletDynamics/Character/btKinematicCharacterController.h"
 
 namespace Oryx
 {
@@ -132,11 +134,13 @@ namespace Oryx
 			mCollisionConfiguration = new btDefaultCollisionConfiguration();
 			mDispatcher = new	btCollisionDispatcher(mCollisionConfiguration);
 			mBroadphase = new btDbvtBroadphase();
+      mBroadphase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 			mSolver = new btSequentialImpulseConstraintSolver;
 			mDynamicsWorld = new btDiscreteDynamicsWorld(mDispatcher,mBroadphase,
 				mSolver,mCollisionConfiguration);
 
 			mDynamicsWorld->setGravity(btVector3(0,-1,0));
+      mDynamicsWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
 			mGravity = Vector3(0,-1,0);
 
 			mTimeStep = 1.f/100.f;

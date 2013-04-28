@@ -85,4 +85,22 @@ namespace Oryx
 		return q;
 	}
 	//-----------------------------------------------------------------------
+
+  Vector3 Vector3::randomDeviant(
+      const Real& angle,
+      const Vector3& up) const
+  {
+      Vector3 newUp;
+
+      newUp = up;
+
+      // Rotate up vector by random amount around this
+      Quaternion q;
+      q.FromAngleAxis(3.1415926 * 2.f * Rand::get().genFloat(0.f, 1.f), *this );
+      newUp = q * newUp;
+
+      // Finally rotate this by given angle around randomised up
+      q.FromAngleAxis( angle, newUp );
+      return q * (*this);
+  }
 }

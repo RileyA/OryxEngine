@@ -40,6 +40,8 @@ namespace Oryx
 		Light(String name,Ogre::SceneNode* node,Ogre::Light* light);
 		virtual ~Light();
 
+    void setDirection(Vector3 d);
+
 		// TODO: materials, animation, etc
 
 	protected:

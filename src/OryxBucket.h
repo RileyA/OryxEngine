@@ -64,6 +64,9 @@ namespace Oryx
 		 *		@return Whether or not the object was found */
 		bool hasObject(OryxID id) const;
 
+    bool killObject(String name);
+    bool killObject(OryxID name);
+
 		/** Gets whether or not this bucket will automagically be
 		 *		deleted at the end of the current GameState */
 		bool isTemporary() const;

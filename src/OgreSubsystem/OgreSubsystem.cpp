@@ -58,8 +58,8 @@ namespace Oryx
 			mRoot = new Ogre::Root("","");
 
 			// suppress log output (TODO allow this to be redirected and enabled)
-			Ogre::LogManager::getSingleton().getDefaultLog()->setDebugOutputEnabled(false);
-			Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
+			//Ogre::LogManager::getSingleton().getDefaultLog()->setDebugOutputEnabled(false);
+			//Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
 
 			//#if (ORYX_PLATFORM == ORYX_PLATFORM_WIN32)
 			//mRoot->loadPlugin("OgrePlugins/RenderSystem_GL.dll");
@@ -437,7 +437,7 @@ namespace Oryx
 		m->_setBounds(AxisAlignedBox(data.bbox[0],data.bbox[1],data.bbox[2],
         data.bbox[3],data.bbox[4],data.bbox[5]), false);
 
-		sm->setMaterialName("MeinKraft");
+		sm->setMaterialName("Terrain");
 
 		Ogre::Entity* ent = mSceneManager->createEntity(nombre,m->getName());
 		Ogre::SceneNode* node = mSceneManager->createSceneNode(nombre);
@@ -477,8 +477,12 @@ namespace Oryx
 			++mAutoNameIndex;
 		}
 		Ogre::Light* light = mSceneManager->createLight(nombre);
-		light->setCastShadows(true);
+		light->setCastShadows(false);
 		light->setAttenuation(500,0,0,0);
+    light->setType(Ogre::Light::LT_SPOTLIGHT);
+    light->setSpotlightInnerAngle(Ogre::Radian(Ogre::Degree(50.f)));
+    light->setSpotlightOuterAngle(Ogre::Radian(Ogre::Degree(70.f)));
+    light->setSpotlightFalloff(0.5f);
 		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
 		node->attachObject(light);
 		Light* l = new Light(nombre,node,light);
@@ -745,4 +749,29 @@ namespace Oryx
 		mViewport->setClearEveryFrame(false);
 		createSignal("updateCam");
 	}*/
+
+  void OgreSubsystem::setCompositor(String name, bool enabled) {
+    Ogre::CompositorManager::getSingleton().setCompositorEnabled(mViewport,
+      name, enabled);
+  }
+
+  void OgreSubsystem::addCompositor(String name) {
+    Ogre::CompositorManager::getSingleton().addCompositor(mViewport, name);
+  }
+
+  BillboardSet* OgreSubsystem::createBillboardSet(String name) {
+		String nombre = name;
+		if(name=="AUTO_NAME_ME")
+		{
+			nombre = "OryxSceneNodeAutoNamed"+StringUtils::toString(mAutoNameIndex);
+			++mAutoNameIndex;
+		}
+		Ogre::BillboardSet* bs = mSceneManager->createBillboardSet(nombre);
+		Ogre::SceneNode* node  = mSceneManager->createSceneNode(nombre);
+		node->attachObject(bs);
+		bs->setCastShadows(false);
+		BillboardSet* b = new BillboardSet(nombre,node,bs);
+		mSceneNodes.push_back(b);
+		return b;
+  }
 }

@@ -19,74 +19,84 @@
 
 #include "BulletSubsystem.h"
 #include "QuantaController.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
+#include "BulletDynamics/Character/btKinematicCharacterController.h"
+#include "btBulletDynamicsCommon.h"
 
 namespace Oryx
 {
 	QuantaController::QuantaController(BulletSubsystem* bullet,Vector3 startPos)
 		:CharacterController(bullet->getWorld()),mGravityFactor(1.f)
 	{
-		for(int i = 0; i < NUM_SPHERES; ++i)
-			mComponents.push_back(new CharPrimitive(bullet,startPos+Vector3(0,0.2*i,0)));
+    btTransform startTransform;
+    startTransform.setIdentity();
+    startTransform.setOrigin(convertBullet(startPos));
+
+    mGhostObject = new btPairCachingGhostObject();
+    mGhostObject->setWorldTransform(startTransform);
+    btScalar characterHeight = 1.5;
+    btScalar characterWidth  = 0.35;
+    btConvexShape* capsule = new btCapsuleShape(characterWidth,characterHeight);
+    mGhostObject->setCollisionShape(capsule);
+    mGhostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+
+    btScalar stepHeight = btScalar(0.35);
+    mCharacter = new btKinematicCharacterController(mGhostObject, capsule, stepHeight);
+
+    bullet->getWorld()->addCollisionObject(mGhostObject);
+      //btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
+    bullet->getWorld()->addAction(mCharacter);
+    mGhostObject->getBroadphaseHandle()->m_collisionFilterGroup = 0x1;
+    mGhostObject->getBroadphaseHandle()->m_collisionFilterMask = 0xffff;
+    mBullet = bullet;
+    //mCharacter->setUpAxis(1);
+    //mCharacter->setMaxSlope(60.f * (3.141592/180.f));
+    mCharacter->setUseGhostSweepTest(true);
+    //mCharacter->setFallSpeed(0.0);
 	}
 	//-----------------------------------------------------------------------
 	
 	QuantaController::~QuantaController()
 	{
-		for(int i = 0; i < NUM_SPHERES; ++i)
-			delete mComponents[i];
+    mBullet->getWorld()->removeCollisionObject(mGhostObject);
 	}
 	//-----------------------------------------------------------------------
 	
 	Vector3 QuantaController::getPosition()
 	{
-		return mPosition[1]*mInterpolation + mPosition[0]*(1-mInterpolation);
+    Vector3 out = convertBullet(mGhostObject->getWorldTransform().getOrigin());
+    //std::cout<<out.x<<" "<<out.y<<" "<<out.z<<"\n";
+    return out;
 	}
 	//-----------------------------------------------------------------------
 	
 	Quaternion QuantaController::getOrientation()
 	{
-		return Quaternion::IDENTITY;
+    return Quaternion::IDENTITY;
 	}
 	//-----------------------------------------------------------------------
 	
 	void QuantaController::update(bool frame, Real interpolation, Vector3 gravity)
 	{
-		mInterpolation = interpolation;
-
-		if(frame)
-		{
-			if(mGravityFactor < 1.f)
-			{
-				mGravityFactor += 0.02f;
-				if(mGravityFactor > 1.f)
-					mGravityFactor = 1.f;
-			}
-			mPosition[0] = mPosition[1];
-			//move(Vector3(0,:!1,0),0.1f*mGravityFactor);// gravity
-			move(mMove,0.05f,true);    // motion
-			mPosition[1] = mComponents[0]->getPosition();
-		}
+    // ...
 	}
 	//-----------------------------------------------------------------------
 	
 	void QuantaController::jump(Real strength)
 	{
-		mGravityFactor = strength*2;
+    //mCharacter->jump(strength);
+    mCharacter->setMaxJumpHeight(5.f);
+    mCharacter->setJumpSpeed(strength);
+    if (mCharacter->canJump()) {
+      mCharacter->jump();
+    }
 	}
 	//-----------------------------------------------------------------------
 
 	void QuantaController::move(Vector3 d, Real dist, bool slide)
 	{
-		Vector3 minMove = Vector3(100,100,100);
-		for(int i = 0;i < NUM_SPHERES; ++i)
-		{
-			Vector3 delta = mComponents[i]->move(d,dist,slide?5:1);
+    mCharacter->setVelocityForTimeInterval(convertBullet(d * dist), 1.f);
+    //mCharacter->setWalkDirection(convertBullet(d * dist));
 
-			if(delta.squaredLength() < minMove.squaredLength())
-				minMove = delta;
-		}
-
-		for(int i = 0;i < NUM_SPHERES; ++i)
-			mComponents[i]->translate(minMove);
 	}
 }

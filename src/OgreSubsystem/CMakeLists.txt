@@ -3,6 +3,7 @@ include_directories("${OGRE_INCLUDE_DIR}")
 include_directories("${BOOST_INCLUDE_DIR}")
 
 set(SOURCE_FILES
+  BillboardSet.cpp
 	Camera.cpp
 	Decal.cpp
 	Light.cpp
@@ -21,6 +22,7 @@ set(SOURCE_FILES
 	)
 
 set(HEADER_FILES
+  BillboardSet.h
 	Camera.h
 	Decal.h
 	Light.h

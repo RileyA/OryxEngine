@@ -122,7 +122,7 @@ namespace Oryx
 		 *		@param d The mesh to base the physics object off of (only needs to be a point cloud
 		 *			indices, normals, etc are not necessary)
 		 *		@param pos The position to place the created object 
-		 *		@param mass The mass of the new object (recommended unit: kg), 0 is static
+		 *		@param mass The mass of the mkanew object (recommended unit: kg), 0 is static
 		 *		@param name A name for the mesh, so that identical objects may be 
 		 *			cached and reused (optional)
 		 *		@returns a pointer to the PhysicsObject */

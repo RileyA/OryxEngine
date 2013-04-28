@@ -27,6 +27,7 @@
 
 #include "SceneNode.h"
 #include "Mesh.h"
+#include "BillboardSet.h"
 #include "Camera.h"
 #include "Light.h"
 #include "ParticleSystem.h"
@@ -194,6 +195,11 @@ namespace Oryx
 		void loadFont(String name);
 		void setMaterialScheme(String scheme);
 		String getMaterialScheme();
+
+    void setCompositor(String name, bool enabled);
+    void addCompositor(String name);
+
+    BillboardSet* createBillboardSet(String name);
 
 	protected:
 

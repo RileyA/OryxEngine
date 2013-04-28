@@ -35,6 +35,14 @@ namespace Oryx
 	
 	Vector3 CharPrimitive::move(Vector3 direction, Real distance, int maxDepth)
 	{
+
+    std::cout<<"lenm: "<<distance<<"\n";
+
+		if (distance < 0.f) {
+			distance *= -1.f;
+			direction *= -1.f;
+		}
+
 		if(maxDepth <= 0)
 			return Vector3::ZERO;
 		
@@ -43,20 +51,136 @@ namespace Oryx
 			COLLISION_GROUP_3,COLLISION_GROUP_3);
 		
 		if(!s.hit)
+    {
 			return direction * distance;
+		} 
 		else
 		{
-			Real travel = std::max(distance - (castLength - castLength * s.hitFraction),0.f);
+			Real travel = castLength * s.hitFraction;
 
-			Vector3 slide = direction + s.normal * direction.dotProduct(s.normal * -1);
-			// TODO: get rid of this?
-			//Plane pl = Plane(Vector3(0,1,0),0);
-			//slide = pl.projectVector(slide);
 
-			return direction * travel + move(slide, distance - travel, maxDepth -1);
+      Vector3 pd = direction.crossProduct(s.normal);
+      Plane p;
+      pd.normalize();
+      std::cout<<"pd: "<<pd.x<<" "<<pd.y<<" "<<pd.z<<"\n";
+      p.n = pd;
+      p.d = 0.f;
+      Vector3 n = p.projectVector(s.normal);
+      Vector3 d = p.projectVector(direction);
+
+      n.normalize();
+      d.normalize();
+
+      n *= -mSkinWidth;
+      d *= travel;
+      std::cout<<"n: "<<n.x<<" "<<n.y<<" "<<n.z<<" "<<n.length()<<"\n";
+      std::cout<<"d: "<<d.x<<" "<<d.y<<" "<<d.z<<" "<<d.length()<<"\n";
+
+      Vector3 e = n * (n.dotProduct(d) / (n.dotProduct(n)));
+      std::cout<<"e: "<<e.x<<" "<<e.y<<" "<<e.z<<" "<<e.length()<<"\n";
+      Real len = e.length();
+      e /= len;
+      e *= len - mSkinWidth;
+      std::cout<<"e: "<<e.x<<" "<<e.y<<" "<<e.z<<" "<<e.length()<<"\n";
+
+      Vector3 r = d * (d.dotProduct(e) / d.dotProduct(d));
+
+      std::cout<<"r: "<<r.x<<" "<<r.y<<" "<<r.z<<" "<<r.length()<<"\n";
+
+
+      std::cout<<"travel "<<travel<<"\n";
+
+      // how much we'd penetrate the collided pt if we kept going
+      /*Real lost = travel - castLength; 
+
+      // offset by skinwidth
+      Real actual_travel = travel - mSkinWidth;
+      std::cout<<"travela "<<actual_travel<<"\n";
+
+      if (actual_travel < 0.f) {
+        actual_travel = 0.f;
+      }
+
+      */
+
+      Real actual_travel = r.length();
+      // how much slides could go for
+      Real remaining_dist = distance - actual_travel;
+
+      Vector3 slide = s.normal * direction.dotProduct(s.normal * -1);
+      Vector3 motion = direction * actual_travel;
+
+      std::cout<<"motion: "<<motion.x<<" "<<motion.y<<" "<<motion.z<<"\n";
+
+      std::cout<<"direction: "<<direction.x<<" "<<direction.y<<" "<<direction.z<<"\n";
+      std::cout<<"normal: "<<s.normal.x<<" "<<s.normal.y<<" "<<s.normal.z<<"\n";
+      Real dot = direction.dotProduct(s.normal) * -1;
+      std::cout<<"DOT: "<<dot<<"\n";
+
+      //if (remaining_dist < 0.00001f || fabs(dot) > 0.9f)
+      //{
+      //  return motion;
+      //}
+      //else
+      //{
+        return motion + move(slide, (remaining_dist) * slide.length(), maxDepth -1,
+               mPosition + motion);
+      //}
 		}
 	}
 	//-----------------------------------------------------------------------
+
+	Vector3 CharPrimitive::move(Vector3 direction, Real distance, int maxDepth, Vector3 position)
+	{
+    //std::cout<<"direction_s: "<<direction.x<<" "<<direction.y<<" "<<direction.z<<" "<<maxDepth<<"\n";
+    std::cout<<"lens: "<<distance<<"\n";
+		if (distance < 0.f) {
+			distance *= -1.f;
+			direction *= -1.f;
+		}
+    direction.normalize();
+
+		if(maxDepth <= 0)
+			return Vector3::ZERO;
+		
+		Real castLength = distance + mSkinWidth;
+		SweepReport s = mBullet->sweep(mSphere, position, direction, castLength,
+			COLLISION_GROUP_3,COLLISION_GROUP_3);
+		
+		if(!s.hit) {
+      Vector3 motion = direction * distance;
+      std::cout<<"slided_unobstructed: "<<motion.x<<" "<<motion.y<<" "<<motion.z<<"\n";
+			return direction * distance;
+		} 
+		else
+		{
+			Real travel = castLength * s.hitFraction;
+
+      // how much we'd penetrate the collided pt if we kept going
+      Real lost = travel - castLength; 
+
+      // offset by skinwidth
+      Real actual_travel = travel - mSkinWidth;
+
+      // how much slides could go for
+      Real remaining_dist = distance - actual_travel;
+
+      Vector3 slide = s.normal * direction.dotProduct(s.normal * -1);
+      Vector3 motion = direction * actual_travel;
+
+      std::cout<<"slided: "<<motion.x<<" "<<motion.y<<" "<<motion.z<<"\n";
+
+      if (remaining_dist < 0.00001f)
+      {
+        return motion;
+      }
+      else
+      {
+        return motion + move(slide, remaining_dist, maxDepth -1,
+               mPosition + motion);
+      }
+		}
+	}
 	
 	void CharPrimitive::translate(Vector3 v)
 	{
