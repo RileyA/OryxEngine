@@ -21,7 +21,7 @@
 #define ORYX_GUI_CAPTION
 
 #include "Oryx.h"
-#include "OryxColour.h"
+#include "OryxColor.h"
 #include "OryxEventHandler.h"
 #include "GUIdllmain.h"
 #include "GUIElement.h"
@@ -42,7 +42,7 @@ namespace Oryx
 		/** Gets the name of the type of element */
 		virtual String getType(){return "Caption";}
 
-		void setColor(Colour c);
+		void setColor(Color c);
 		void setCaption(String text);
 		String getCaption(){return mCaption;}
 

@@ -28,7 +28,7 @@
 #include "OryxGameState.h"
 #include "OryxEngineSubsystem.h"
 
-#include "OryxColour.h"
+#include "OryxColor.h"
 #include "Oryx3DMath.h"
 #include "OryxBucket.h"
 #include "OryxObject.h"
@@ -83,6 +83,7 @@ namespace Oryx
 
 			mInitialized = true;
 			Logger::getPtr()->logMessage("Lua Subsystem Initialized.");
+      runString("print(2)");
 		}
 	}
 	//-----------------------------------------------------------------------

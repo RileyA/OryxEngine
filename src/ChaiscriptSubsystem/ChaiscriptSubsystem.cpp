@@ -28,7 +28,7 @@
 #include "OryxGameState.h"
 #include "OryxEngineSubsystem.h"
 
-#include "OryxColour.h"
+#include "OryxColor.h"
 #include "Oryx3DMath.h"
 
 #ifdef ORYX_CHAI_REGISTER_OPENAL
@@ -180,11 +180,11 @@ namespace Oryx
 		mChai->registerFunction(&ChaiscriptSubsystem::runString, "runString");
 		mChai->registerFunction(&ChaiscriptSubsystem::runString, "runScript");
 
-		mChai->registerType<Colour>("Colour");
-		mChai->registerFunction(&Colour::r, "r");
-		mChai->registerFunction(&Colour::g, "g");
-		mChai->registerFunction(&Colour::b, "b");
-		mChai->registerFunction(&Colour::a, "a");
+		mChai->registerType<Color>("Color");
+		mChai->registerFunction(&Color::r, "r");
+		mChai->registerFunction(&Color::g, "g");
+		mChai->registerFunction(&Color::b, "b");
+		mChai->registerFunction(&Color::a, "a");
 
 		mChai->registerType<Vector3>("Vector3");
 		mChai->registerFunction(&Vector3::x, "x");

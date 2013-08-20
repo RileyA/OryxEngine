@@ -64,7 +64,7 @@ namespace Oryx
 			{
 				for(int y=0;y<mHeight;++y)
 				{
-					drawPixel(x,y,mBackgroundColour);
+					drawPixel(x,y,mBackgroundColor);
 				}
 			}
 
@@ -109,7 +109,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void SDLSubsystem::drawPixel(int x,int y,Colour colour)
+	void SDLSubsystem::drawPixel(int x,int y,Color colour)
 	{
 		drawPixel(x, y, colour.getR8(), colour.getG8(), colour.getB8());
 	}
@@ -177,15 +177,15 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void SDLSubsystem::setBackgroundColour(Colour col)
+	void SDLSubsystem::setBackgroundColor(Color col)
 	{
-		mBackgroundColour = col;
+		mBackgroundColor = col;
 	}
 	//-----------------------------------------------------------------------
 
-	Colour SDLSubsystem::getBackgroundColour()
+	Color SDLSubsystem::getBackgroundColor()
 	{
-		return mBackgroundColour;
+		return mBackgroundColor;
 	}
 	//-----------------------------------------------------------------------
 	

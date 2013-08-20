@@ -19,7 +19,7 @@
 
 #include "GUICaption.h"
 #include "Oyster.h"
-#include "OryxColour.h"
+#include "OryxColor.h"
 
 namespace Oryx
 {
@@ -49,7 +49,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	void Caption::setColor(Colour c)
+	void Caption::setColor(Color c)
 	{
 		mText->setColor(c.r * 255, c.g * 255, c.b * 255, c.a * 255);
 	}

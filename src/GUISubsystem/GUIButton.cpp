@@ -31,9 +31,9 @@ namespace Oryx
 		mText->setAlign(static_cast<Oyster::HorizontalAlign>(HA_CENTER));
 		mPressed = false;
 		mOver = false;
-		setDefaultAppearance(Colour(1.f,1.f,1.f,1.f), Colour(0.f,0.f,0.f,1.f));
-		setMouseOverAppearance(Colour(1.f,1.f,1.f,1.f), Colour(0.f,0.f,0.f,1.f));
-		setClickAppearance(Colour(1.f,1.f,1.f,1.f), Colour(0.f,0.f,0.f,1.f));
+		setDefaultAppearance(Color(1.f,1.f,1.f,1.f), Color(0.f,0.f,0.f,1.f));
+		setMouseOverAppearance(Color(1.f,1.f,1.f,1.f), Color(0.f,0.f,0.f,1.f));
+		setClickAppearance(Color(1.f,1.f,1.f,1.f), Color(0.f,0.f,0.f,1.f));
 		setAppearance(mDefault);
 	}
 	//-----------------------------------------------------------------------
@@ -44,7 +44,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Button::setDefaultAppearance(Colour rect, Colour text, String sprite)
+	void Button::setDefaultAppearance(Color rect, Color text, String sprite)
 	{
 		mDefault.rectColor = rect;
 		mDefault.textColor = text;
@@ -54,7 +54,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Button::setMouseOverAppearance(Colour rect, Colour text, String sprite)
+	void Button::setMouseOverAppearance(Color rect, Color text, String sprite)
 	{
 		mHover.rectColor = rect;
 		mHover.textColor = text;
@@ -64,7 +64,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Button::setClickAppearance(Colour rect, Colour text, String sprite)
+	void Button::setClickAppearance(Color rect, Color text, String sprite)
 	{
 		mClick.rectColor = rect;
 		mClick.textColor = text;

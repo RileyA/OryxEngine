@@ -20,7 +20,7 @@
 set(SOURCE_FILES
 	OryxBox.cpp
 	OryxBucket.cpp
-	OryxColour.cpp
+	OryxColor.cpp
 	Oryxdllmain.cpp
 	OryxEngine.cpp
 	OryxEventHandler.cpp
@@ -48,7 +48,7 @@ set(HEADER_FILES
 	Oryx3DMath.h
 	OryxBox.h
 	OryxBucket.h
-	OryxColour.h
+	OryxColor.h
 	OryxEngine.h
 	OryxEngineSubsystem.h
 	OryxEventHandler.h

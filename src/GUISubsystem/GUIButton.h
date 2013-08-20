@@ -31,8 +31,8 @@ namespace Oryx
 		// a set of info about appearance during a state (mouseover, etc)
 		struct StateAppearance
 		{
-			Colour rectColor;
-			Colour textColor;
+			Color rectColor;
+			Color textColor;
 			String sprite;
 		};
 
@@ -44,9 +44,9 @@ namespace Oryx
 		/** Gets the name of the type of element */
 		virtual String getType(){return "Button";}
 
-		void setDefaultAppearance(Colour rect, Colour text, String sprite = "WhitePixel");
-		void setMouseOverAppearance(Colour rect, Colour text, String sprite = "WhitePixel");
-		void setClickAppearance(Colour rect, Colour text, String sprite = "WhitePixel");
+		void setDefaultAppearance(Color rect, Color text, String sprite = "WhitePixel");
+		void setMouseOverAppearance(Color rect, Color text, String sprite = "WhitePixel");
+		void setClickAppearance(Color rect, Color text, String sprite = "WhitePixel");
 
 		void setAppearance(StateAppearance& appear);
 		void chooseAppearance();

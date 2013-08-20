@@ -79,22 +79,6 @@ namespace Oryx
 			}
 		}
 		
-		/** Registers a constructor for a class
-		 *		@tparam T The constructor's signature 
-		 *		@param name The name to use to refer to it */
-		//template<typename T> void registerConstructor(String name)
-		//{
-		//    mChai.add(chaiscript::constructor<T>(),name);
-		//}
-
-		/** Registers a type with Chaiscript
-		 *		@tparam T The type to register
-		 *		@param name The name to use in the scripting system */
-		//template<typename T> void registerType(String name)
-		//{
-		//	mChai.add(chaiscript::user_type<T>(), name);
-		//}
-
 	protected:
 
 		lua_State* mLua;

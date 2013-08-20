@@ -23,7 +23,7 @@
 #include "Oryx.h"
 #include "SDLdllmain.h"
 #include "OryxEngineSubsystem.h"
-#include "OryxColour.h"
+#include "OryxColor.h"
 
 struct SDL_Surface;
 
@@ -45,12 +45,12 @@ namespace Oryx
 		void lock();
 		void unlock();
 		void flip();
-		void drawPixel(int x,int y,Colour colour);
+		void drawPixel(int x,int y,Color colour);
 		void drawPixel(int x,int y,byte r, byte g, byte b);
 		void setManual(bool manual);
 		bool getManual();
-		void setBackgroundColour(Colour col);
-		Colour getBackgroundColour();
+		void setBackgroundColor(Color col);
+		Color getBackgroundColor();
 
 		void drawRaw(byte* data, int x=0, int y=0);
 
@@ -59,7 +59,7 @@ namespace Oryx
 		bool mInitialized;
 
 		SDL_Surface* mSurface;
-		Colour mBackgroundColour;
+		Color mBackgroundColor;
 
 		int mWidth;
 		int mHeight;

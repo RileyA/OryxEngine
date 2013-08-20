@@ -21,7 +21,7 @@
 #define ORYX_OGRE_MATERIAL_H
 
 #include "Oryx.h"
-#include "OryxColour.h"
+#include "OryxColor.h"
 
 namespace Ogre
 {
@@ -44,7 +44,7 @@ namespace Oryx
 		/** Sets the texture at the specified index
 		 *		@param index The texture_unit to refer to 
 		 *		@param colour The soliud color to use as a texture */
-		void setTexture(size_t index, Colour colour);
+		void setTexture(size_t index, Color colour);
 
 		/** Clones this material
 		 *		@return The name of the new material*/

@@ -46,13 +46,13 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 	
-	Colour convertOgre(Ogre::ColourValue c)
+	Color convertOgre(Ogre::ColourValue c)
 	{
-		return Colour(c.r,c.g,c.b,c.a);
+		return Color(c.r,c.g,c.b,c.a);
 	}
 	//-----------------------------------------------------------------------
 
-	Ogre::ColourValue convertOgre(Colour c)
+	Ogre::ColourValue convertOgre(Color c)
 	{
 		return Ogre::ColourValue(c.r,c.g,c.b,c.a);
 	}

@@ -21,7 +21,7 @@
 
 #include "Oryx.h"
 #include "Oryx3DMath.h"
-#include "OryxColour.h"
+#include "OryxColor.h"
 #include "Ogre.h"
 
 namespace Oryx
@@ -33,8 +33,8 @@ namespace Oryx
 	Ogre::Quaternion convertOgre(Quaternion quat);
 	Quaternion convertOgre(Ogre::Quaternion quat);
 
-	Colour convertOgre(Ogre::ColourValue c);
-	Ogre::ColourValue convertOgre(Colour c);
+	Color convertOgre(Ogre::ColourValue c);
+	Ogre::ColourValue convertOgre(Color c);
 }
 
 #endif

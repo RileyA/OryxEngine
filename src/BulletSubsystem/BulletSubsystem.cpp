@@ -27,7 +27,7 @@
 #include "OryxGameState.h"
 #include "OryxEngineSubsystem.h"
 
-#include "OryxColour.h"
+#include "OryxColor.h"
 #include "Oryx3DMath.h"
 #include "OryxStringUtils.h"
 

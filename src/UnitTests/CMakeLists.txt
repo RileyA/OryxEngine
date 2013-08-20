@@ -2,7 +2,7 @@ include_directories("${BOOST_INCLUDE_DIR}")
 
 set(SOURCE_FILES
 	OryxTests.cpp
-	OryxColourTest.cpp
+	OryxColorTest.cpp
 	OryxStringUtilsTest.cpp
 	)
 

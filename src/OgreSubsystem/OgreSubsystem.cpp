@@ -277,13 +277,13 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void OgreSubsystem::setBackgroundColor(Colour bc)
+	void OgreSubsystem::setBackgroundColor(Color bc)
 	{
 		mViewport->setBackgroundColour(convertOgre(bc));
 	}
 	//-----------------------------------------------------------------------
 
-	Colour OgreSubsystem::getBackgroundColor()
+	Color OgreSubsystem::getBackgroundColor()
 	{
 		return convertOgre(mViewport->getBackgroundColour());
 	}
@@ -565,7 +565,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void OgreSubsystem::setLinearFog(float start, float end, Colour color)
+	void OgreSubsystem::setLinearFog(float start, float end, Color color)
 	{
 		mSceneManager->setFog(Ogre::FOG_LINEAR,convertOgre(color),0.f,start,end);
 	}
@@ -692,13 +692,13 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void OgreSubsystem::setOverlayTextColour(String element, Colour color)
+	void OgreSubsystem::setOverlayTextColor(String element, Color color)
 	{
 		Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element)->setColour(convertOgre(color));
 	}
 	//-----------------------------------------------------------------------
 
-	void OgreSubsystem::setOverlayTextColour(String element, Colour color, Colour color2)
+	void OgreSubsystem::setOverlayTextColor(String element, Color color, Color color2)
 	{
 		Ogre::TextAreaOverlayElement* elem = static_cast<Ogre::TextAreaOverlayElement*>(
 			Ogre::OverlayManager::getSingletonPtr()->getOverlayElement(element));

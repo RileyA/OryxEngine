@@ -22,7 +22,7 @@
 #include "Oryx.h"
 #include "OgreSubsystem/Ogredllmain.h"
 #include "OryxEngineSubsystem.h"
-#include "OryxColour.h"
+#include "OryxColor.h"
 #include "OryxTimeManager.h"
 
 #include "SceneNode.h"
@@ -75,10 +75,10 @@ namespace Oryx
 		void restart();
 		/** Sets the background color of the viewport
 			@param bc The desired color*/
-		void setBackgroundColor(Colour bc);
+		void setBackgroundColor(Color bc);
 		/** Gets the background color of the vieport
 			@return The color */
-		Colour getBackgroundColor();
+		Color getBackgroundColor();
 
 		/** Returns a pointer to the GUI system 
 			@return A pointer to the GUI system */
@@ -131,7 +131,7 @@ namespace Oryx
 		void clearScene();
 
 		/** Sets fog parameters */
-		void setLinearFog(float start, float end, Colour color);
+		void setLinearFog(float start, float end, Color color);
 
 		/** Takes a screenshot */
 		void takeScreenshot(String name = "OryxShot", String target="NULL");
@@ -190,8 +190,8 @@ namespace Oryx
 
 		void setOverlayEnabled(String name, bool enabled);
 		void setOverlayText(String element, String text);
-		void setOverlayTextColour(String element, Colour color);
-		void setOverlayTextColour(String element, Colour color, Colour color2);
+		void setOverlayTextColor(String element, Color color);
+		void setOverlayTextColor(String element, Color color, Color color2);
 		void loadFont(String name);
 		void setMaterialScheme(String scheme);
 		String getMaterialScheme();

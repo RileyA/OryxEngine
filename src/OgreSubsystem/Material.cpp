@@ -39,7 +39,7 @@ namespace Oryx
 	}
 	//-----------------------------------------------------------------------
 
-	void Material::setTexture(size_t index, Colour colour)
+	void Material::setTexture(size_t index, Color colour)
 	{
 		mMaterial->getTechnique(0)->getPass(0)->getTextureUnitState(index)->setColourOperationEx(
 			Ogre::LBX_MODULATE,Ogre::LBS_MANUAL,Ogre::LBS_CURRENT,convertOgre(colour));
