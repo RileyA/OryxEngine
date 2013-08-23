@@ -86,8 +86,16 @@ namespace Oryx
 			miscP["colourDepth"] = "32";
 			miscP["monitorIndex"] = "0";
 
-			mWindow = mRoot->createRenderWindow("OryxEngine Application",
-				mResolutionX,mResolutionY,mFullscreen,&miscP);
+      for (std::map<String, String>::iterator it = mParams.begin();
+        it != mParams.end(); ++it) {
+        miscP[it->first] = it->second;
+      }
+
+      mCurrentParams = mParams;
+
+      mWindow = mRoot->createRenderWindow((getGfxParameter("window_name") != "")
+        ? getGfxParameter("window_name") : "OryxEngine Application",
+        mResolutionX,mResolutionY,mFullscreen,&miscP);
 
 			mWindow->setActive(true);
 
@@ -258,12 +266,20 @@ namespace Oryx
 
 		// and make a new one
 		Ogre::NameValuePairList miscP;
+
 		miscP["vsync"] = "false";
 		miscP["FSAA"] = "0";
 		miscP["gamma"] = "false";
 		miscP["border"] = "fixed";
 		miscP["colourDepth"] = "32";
 		miscP["monitorIndex"] = "0";
+
+    for (std::map<String, String>::iterator it = mParams.begin();
+      it != mParams.end(); ++it) {
+      miscP[it->first] = it->second;
+    }
+
+    mCurrentParams = mParams;
     
 		mWindow = mRoot->createRenderWindow((getGfxParameter("window_name") != "")
       ? getGfxParameter("window_name") : "OryxEngine Application",
