@@ -264,7 +264,9 @@ namespace Oryx
 		miscP["border"] = "fixed";
 		miscP["colourDepth"] = "32";
 		miscP["monitorIndex"] = "0";
-		mWindow = mRoot->createRenderWindow("OryxEngine Application",
+    
+		mWindow = mRoot->createRenderWindow((getGfxParameter("window_name") != "")
+      ? getGfxParameter("window_name") : "OryxEngine Application",
 			mResolutionX,mResolutionY,mFullscreen,&miscP);
 		mWindow->setActive(true);
 
